@@ -1,3 +1,4 @@
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
@@ -7,6 +8,7 @@ import CreateHouseholdScreen from "../screens/CreateHouseholdScreen";
 import JoinHouseholdScreen from "../screens/JoinHouseholdScreen";
 import LoginScreen from "../screens/LoginScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import ChoresStatisticsNavigator from "./ChoresStatisticsNavigator";
 
 export type RootStackParamList = {
   Login: undefined;
@@ -14,7 +16,7 @@ export type RootStackParamList = {
   CreateHousehold: undefined;
   JoinHousehold: undefined;
   Profile: undefined;
-  Chores: undefined;
+  ChoresStatisticsNavigator: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -41,10 +43,17 @@ const RootNavigator = () => {
         />
         <Stack.Screen name="JoinHousehold" component={JoinHouseholdScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="Chores" component={ChoresScreen} />
+        <Stack.Screen name="ChoresStatisticsNavigator" component={ChoresStatisticsNavigator} />
       </Stack.Navigator>
+      
     </NavigationContainer>
   );
 };
+
+      // <Stack.Screen
+      //   name="Root"
+      //   component={TabBistroMapNavigator}
+      //   options={{ headerShown: false }}
+      // />
 
 export default RootNavigator;

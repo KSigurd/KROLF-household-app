@@ -3,7 +3,7 @@ import React from "react";
 import { View, Text, Button } from "react-native";
 import { RootStackParamList } from "../navigation/RootNavigator";
 
-type Props = NativeStackScreenProps<RootStackParamList, "Login">;
+type Props = NativeStackScreenProps<RootStackParamList, "ChoresStatisticsNavigator">;
 
 const ProfileScreen = ({navigation}: Props) => {
   return (
@@ -11,7 +11,7 @@ const ProfileScreen = ({navigation}: Props) => {
       <Text>PROFILE SCREEN</Text>
       <Button
         title="tryck mig"
-        onPress={() => navigation.navigate("Login")}
+        onPress={() => navigation.navigate("ChoresStatisticsNavigator")}
       /> 
     </View>
   );
