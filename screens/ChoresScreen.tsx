@@ -1,18 +1,18 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React from "react";
-import { View, Text, Button } from "react-native";
+import React, { FC } from "react";
+import { View, Text } from "react-native";
+import { Button } from "react-native-paper";
+import ChoreButton from "../components/ChoreButton";
 import { RootStackParamList } from "../navigation/RootNavigator";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Profile">;
 
-const ChoresScreen = ({navigation}: Props) => {
+const ChoresScreen: FC<Props> = ({ navigation }: Props) => {
   return (
     <View>
       <Text>CHORES SCREEN</Text>
-      <Button
-        title="tryck mig"
-        onPress={() => navigation.navigate("Profile")}
-      /> 
+      <ChoreButton buttonText="Laga Mat" completedBy={["e"]} daysSinceLast={"y"} isLate={false}>
+        </ChoreButton>
     </View>
   );
 };
