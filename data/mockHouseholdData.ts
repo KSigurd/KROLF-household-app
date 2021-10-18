@@ -30,6 +30,10 @@ export const householdUser: HouseholdUser[] = [
         choreId: 1,
         date: new Date(),
       },
+      {
+        choreId: 0,
+        date: new Date(),
+      },
     ],
   },
 ];
