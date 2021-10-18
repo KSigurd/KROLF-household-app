@@ -4,4 +4,10 @@ export interface Chore {
   description: string;
   points: number;
   repeatability: number;
+  householdId: number;
+}
+
+export interface CompletedChore {
+  choreId: number;
+  date: Date;
 }

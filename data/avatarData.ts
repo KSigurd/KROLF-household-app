@@ -1,10 +1,6 @@
-export interface AvatarData {
-  id: number;
-  avatar: string;
-  color: string;
-}
+import { Avatar } from "../interfaces/avatar";
 
-export const avatars: AvatarData[] = [
+export const avatars: Avatar[] = [
   {
     id: 0,
     avatar: "🦊",

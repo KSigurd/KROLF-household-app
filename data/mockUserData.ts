@@ -1,46 +1,39 @@
-import { UserData } from "../types/user";
+import { User } from "../interfaces/user";
 
-export const users: UserData[] = [
+export const users: User[] = [
   {
     id: 0,
-    name: "Kalle Bodén",
-    userName: "kalleboden@gmail.com",
+    email: "kalleboden@gmail.com",
     password: "ankeborg",
   },
   {
     id: 1,
-    name: "Tony Nilsson",
-    userName: "tonynilsson1969@gmail.com",
+    email: "tonynilsson1969@gmail.com",
     password: "trandared1969",
   },
   {
     id: 2,
-    name: "Olivia Bodén",
-    userName: "olibod@gmail.com",
+    email: "olibod@gmail.com",
     password: "v-fors",
   },
   {
     id: 3,
-    name: "Hasse Nilsson",
-    userName: "hassenilsson@gmail.com",
+    email: "hassenilsson@gmail.com",
     password: "hassesbullar",
   },
   {
     id: 4,
-    name: "Mikael Andersson",
-    userName: "mikaelandersson@gmail.com",
+    email: "mikaelandersson@gmail.com",
     password: "mikaelshallon",
   },
   {
     id: 5,
-    name: "Rasmus Andersson",
-    userName: "rasmusandersson@gmail.com",
+    email: "rasmusandersson@gmail.com",
     password: "lösenord",
   },
   {
     id: 6,
-    name: "Stina Nilsson",
-    userName: "stinaandersson@gmail.com",
+    email: "stinaandersson@gmail.com",
     password: "goochglad",
   },
 ];

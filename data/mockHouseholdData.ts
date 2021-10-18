@@ -1,85 +1,60 @@
-import { HouseholdData } from "../types/households";
+import { Household, HouseholdUser } from "../interfaces/households";
 import { avatars } from "./avatarData";
-import { Chores } from "./mockChoresData";
+import { chores } from "./mockChoresData";
 import { users } from "./mockUserData";
 
-export const households: HouseholdData[] = [
+
+
+export const householdUser: HouseholdUser[] = [
+  {
+    id: 0,
+    user: users[0],
+    name: "Kallis",
+    isAdmin: true,
+    avatar: avatars[1],
+    choresDone: [
+      {
+        choreId: 0,
+        date: new Date(),
+      },
+    ],
+  },
+  {
+    id: 1,
+    user: users[1],
+    name: "TONY",
+    isAdmin: false,
+    avatar: avatars[2],
+    choresDone: [
+      {
+        choreId: 1,
+        date: new Date(),
+      },
+    ],
+  },
+];
+
+
+export const households: Household[] = [
   {
     id: 0,
     inviteCode: 756598,
     name: "Bodéns",
-    users: [
-      {
-        user: users[0],
-        avatar: avatars[4],
-        choresDone: [Chores[0], Chores[4]],
-      },
-    ],
-    admins: [
-      {
-        id: 2,
-        name: "Olivia Bodén",
-        userName: "olibod@gmail.com",
-        password: "v-fors",
-      },
-    ],
-    chores: Chores,
+    users: [householdUser[1], householdUser[0]],
+    chores: [chores[2], chores[4]],
   },
   {
     id: 1,
     inviteCode: 659984,
     name: "Nilssons",
-    users: [
-      {
-        user: users[0],
-        avatar: avatars[4],
-        choresDone: [Chores[0], Chores[4]],
-      },
-      {
-        user: users[4],
-        avatar: avatars[5],
-        choresDone: [Chores[0], Chores[4]],
-      },
-    ],
-    admins: [
-      {
-        id: 3,
-        name: "Hasse Nilsson",
-        userName: "hassenilsson@gmail.com",
-        password: "hassesbullar",
-      },
-    ],
-    chores: [],
+    users: [householdUser[0]],
+    chores: [chores[0], chores[3]],
   },
   {
     id: 2,
     inviteCode: 458855,
     name: "Anderssons",
-    users: [
-      {
-        user: users[0],
-        avatar: avatars[4],
-        choresDone: [Chores[0], Chores[4]],
-      },
-      {
-        user: users[3],
-        avatar: avatars[1],
-        choresDone: [Chores[0], Chores[4]],
-      },
-      {
-        user: users[2],
-        avatar: avatars[5],
-        choresDone: [Chores[0], Chores[4]],
-      },
-    ],
-    admins: [
-      {
-        id: 4,
-        name: "Mikael Andersson",
-        userName: "mikaelandersson@gmail.com",
-        password: "mikaelshallon",
-      },
-    ],
-    chores: [],
+    users: [householdUser[0], householdUser[1]],
+    chores: [chores[1], chores[0], chores[3]],
   },
 ];
