@@ -1,4 +1,4 @@
-import { Avatar } from "../data/avatarData";
+import { Avatar } from "./avatar";
 import { Chore, CompletedChore } from "./chore";
 import { User } from "./user";
 
