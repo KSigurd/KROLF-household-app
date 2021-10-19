@@ -27,7 +27,7 @@ const ProfileScreen = ({ navigation }: Props) => {
         <View>
           <Text style={styles.title}>Välj hushåll:</Text>
           {households.map((prop, key) => {
-            return <HouseholdSurface householdObject={prop} />;
+            return <HouseholdSurface key={key} householdObject={prop} />;
           })}
         </View>
       </View>
