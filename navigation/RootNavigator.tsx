@@ -29,7 +29,7 @@ const RootNavigator = () => {
           headerStyle: {
             backgroundColor: "blue",
           },
-          contentStyle: { backgroundColor: "red" },
+          contentStyle: { backgroundColor: "#f0f0f0" },
           headerTitleAlign: "center",
           headerTitleStyle: { color: "white" },
           headerTintColor: "white",
