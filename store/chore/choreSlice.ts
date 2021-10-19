@@ -3,11 +3,11 @@ import { chores } from "../../data/mockChoresData";
 import { households } from "../../data/mockHouseholdData";
 import { Chore } from "../../interfaces/chore";
 
-interface choreState {
+interface ChoreState {
     chores: Chore[];
 }
 
-const initialState: choreState = {
+const initialState: ChoreState = {
     chores: [],
 };
 

@@ -1,29 +1,63 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { households } from "../../data/mockHouseholdData";
-import { Household, HouseholdUser } from "../../interfaces/households";
+import { Household } from "../../interfaces/households";
+import { HouseholdUser } from "../../interfaces/householdUser";
+import { ThunkConfig } from "../store";
+
+const joinHouseHoldAction = createAsyncThunk<HouseholdUser, number, ThunkConfig>('household/joinhousehold', async (code, { getState }) => {
+
+    const respone = await fetch('/api/household/join', {
+        method: 'POST',
+        body: JSON.stringify({
+            code,
+            userId: getState().user.user.id
+        })
+    });
+    
+    const result = await respone.json();
+    return result
+})
 
 interface HouseholdState {
-    household: Household[];
+    households: Household[];
 }
 
 const initialState: HouseholdState = {
-    household: households,
+    households: households,
 };
 
 const householdSlice = createSlice({
     name: 'household',
     initialState,
     reducers: {
+        // createHousehold
+        // updateHousehold
+        // leaveHousehold
+        // joinHousehold: (state, action) => 
+
         // deposit: (state, { payload }: PayloadAction<number>) => {
         //     state.balance += payload;
         //     state.transactions.push(payload);
-        //     return state;
         // },
         // withdrawal: (state, { payload }: PayloadAction<number>) => {
         //     state.balance -= payload;
         //     state.transactions.push(-payload);
-        //     return state;
         // }
+    },
+    extraReducers: (builder) => {
+        /* JOIN HOUSEHOLD */
+        builder.addCase(joinHouseHoldAction.fulfilled, (state, action) => {
+            
+        });
+        builder.addCase(joinHouseHoldAction.pending, (state, action) => {
+
+        });
+        builder.addCase(joinHouseHoldAction.rejected, (state, action) => {
+
+        });
+
+        /* LEAVE HOUSEHOLD */
+        
     }
 });
 

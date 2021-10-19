@@ -16,6 +16,10 @@ const store = configureStore({
 /* Derive types from our store */
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+export type ThunkConfig = {
+    state: RootState;
+    dispatch: AppDispatch;
+}
 
 /* Redefine hooks with our types */
 export const useAppDispatch = () => useDispatch<AppDispatch>();
