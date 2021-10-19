@@ -4,7 +4,7 @@ import { View, Text, Button, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { RootStackParamList } from "../navigation/RootNavigator";
 
-type Props = NativeStackScreenProps<RootStackParamList, "Profile">;
+type Props = NativeStackScreenProps<RootStackParamList, "CreateHousehold">;
 
 const LoginScreen = ({ navigation }: Props) => {
   return (
@@ -13,7 +13,11 @@ const LoginScreen = ({ navigation }: Props) => {
       <Button
         title="tryck mig"
         onPress={() => navigation.navigate("Profile")}
-      /> 
+      />
+      <Button
+        title="Create household"
+        onPress={() => navigation.navigate("CreateHousehold")}
+      />
     </SafeAreaView>
   );
 };
