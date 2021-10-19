@@ -2,13 +2,17 @@ import { Button as NPbutton } from "react-native-paper";
 import React, { FC } from "react";
 import { StyleSheet } from "react-native";
 
-const JoinHouseholdButton: FC = () => {
+interface Props {
+  onJoinHousehold: () => void;
+}
+
+const JoinHouseholdButton = ({ onJoinHousehold }: Props) => {
   return (
     <NPbutton
           icon="account-plus-outline"
           mode="contained"
           style={styles.NPbutton}
-          onPress={() => console.log("Pressed")}
+          onPress={() => onJoinHousehold()}
         >
           Gå med
         </NPbutton>

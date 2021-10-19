@@ -15,8 +15,8 @@ const LoginScreen = ({ navigation }: Props) => {
         onPress={() => navigation.navigate("Profile")}
       />
       <Button
-        title="Create household"
-        onPress={() => navigation.navigate("CreateHousehold")}
+        title="Create account"
+        onPress={() => navigation.navigate("CreateAccount")}
       />
     </SafeAreaView>
   );
