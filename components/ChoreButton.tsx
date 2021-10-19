@@ -11,28 +11,40 @@ interface Props {
 }
 
 const ChoreButton: FC<Props> = (props: Props) => {
-
   return (
-    <TouchableRipple style={styles.fullscreenButton} onPress={() => {}}>
-      <Surface style={[styles.buttonInnerContainer, styles.buttonOutlined]}>
-        <Title style={[styles.choresButtonTitle, styles.buttonText]}>
-          {props.buttonText}
-        </Title>
-        {props.completedBy.length ? (
-          <Text
-            style={[styles.buttonText, styles.choresButtonAdditions]}
-          >
-            {props.completedBy.map((user) => user.avatar.avatar)}
-          </Text>
-        ) : (
-          <Surface style={[styles.repeatabilityCircle, props.isLate ? styles.isLateBackground : styles.isNotLateBackground]}>
-            <Text style={props.isLate ? styles.isLateText : styles.isNotLateText} >
-              {props.daysSinceLast}
+    <Surface style={[styles.fullscreenButton, styles.buttonOutlined]}>
+      <TouchableRipple
+        borderless={true}
+        style={styles.fillParent}
+        onPress={() => {}} //TODO
+      >
+        <Surface style={styles.buttonInnerContainer}>
+          <Title style={[styles.choresButtonTitle, styles.buttonText]}>
+            {props.buttonText}
+          </Title>
+          {props.completedBy.length ? (
+            <Text style={[styles.buttonText, styles.choresButtonAdditions]}>
+              {props.completedBy.map((user) => user.avatar.avatar)}
             </Text>
-          </Surface>
-        )}
-      </Surface>
-    </TouchableRipple>
+          ) : (
+            <Surface
+              style={[
+                styles.repeatabilityCircle,
+                props.isLate
+                  ? styles.isLateBackground
+                  : styles.isNotLateBackground,
+              ]}
+            >
+              <Text
+                style={props.isLate ? styles.isLateText : styles.isNotLateText}
+              >
+                {props.daysSinceLast}
+              </Text>
+            </Surface>
+          )}
+        </Surface>
+      </TouchableRipple>
+    </Surface>
   );
 };
 

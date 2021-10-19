@@ -7,6 +7,11 @@ export const styles = StyleSheet.create(
             padding: 16,
             alignItems: 'center'
         },
+        fillParent: {
+            width: "100%",
+            height: "100%",
+            borderRadius: 10
+        },
         fullscreenButton: {
             width: "100%",
             height: 60,
@@ -15,13 +20,28 @@ export const styles = StyleSheet.create(
             marginTop: 8,
             marginBottom: 8,
         },
-        buttonInnerContainer: {
+        smallButton: {
+            height: 60,
+            justifyContent: 'center',
+            borderStyle: "solid",
+            elevation: 4,
+            borderRadius: 30,
+            backgroundColor: "white",
+            padding: 10
+        },
+        bottomButtonRow: {
+            flex: 1,
             width: "100%",
-            height: "100%",
+            flexDirection: "row",
+            alignItems: "flex-end",
+            justifyContent: "space-between",
+        },
+        buttonInnerContainer: {
+            flex: 1,
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
-            padding: 20
+            padding: 20,
         },
         choresButtonTitle: {
             textAlign: "left",
@@ -31,6 +51,7 @@ export const styles = StyleSheet.create(
         },
         buttonText: {
             fontSize: 18,
+            fontWeight: "bold",
             textAlign: "center",
         },
         repeatabilityCircle: {
@@ -42,9 +63,8 @@ export const styles = StyleSheet.create(
             elevation: 4,
         },
         buttonOutlined: {
-            borderStyle: "solid",
             borderRadius: 10,
-            elevation: 4
+            elevation: 4,
         },
         isLateBackground: {
             backgroundColor: "#CD5D6F"
@@ -59,6 +79,9 @@ export const styles = StyleSheet.create(
         isNotLateText: {
             fontSize: 18,
             color: "black"
+        },
+        buttonIconSize: {
+            fontSize: 25
         }
     }
 )
