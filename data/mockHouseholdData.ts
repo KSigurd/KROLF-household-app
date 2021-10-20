@@ -30,6 +30,7 @@ export const householdUser: HouseholdUser[] = [
   {
     id: 0,
     userId: 0,
+    householdId: 0,
     name: "Kallis",
     isAdmin: true,
     avatarId: 1,
@@ -37,6 +38,7 @@ export const householdUser: HouseholdUser[] = [
   {
     id: 1,
     userId: 1,
+    householdId: 1,
     name: "TONY",
     isAdmin: false,
     avatarId: 2,
@@ -49,18 +51,15 @@ export const households: Household[] = [
     id: 0,
     inviteCode: 756598,
     name: "Bodéns",
-    householdUserId: [0]
   },
   {
     id: 1,
     inviteCode: 659984,
     name: "Nilssons",
-    householdUserId: [1],
   },
   {
     id: 2,
     inviteCode: 458855,
     name: "Anderssons",
-    householdUserId: [0,1],
   },
 ];
