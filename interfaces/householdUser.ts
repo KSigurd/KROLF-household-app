@@ -5,5 +5,5 @@ export interface HouseholdUser {
     userId: number;
     name: string;
     isAdmin: boolean;
-    avatar: Avatar;
+    avatarId: number;
   }

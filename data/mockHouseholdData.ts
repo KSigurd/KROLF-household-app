@@ -32,14 +32,14 @@ export const householdUser: HouseholdUser[] = [
     userId: 0,
     name: "Kallis",
     isAdmin: true,
-    avatar: avatars[1],
+    avatarId: 1,
   },
   {
     id: 1,
     userId: 1,
     name: "TONY",
     isAdmin: false,
-    avatar: avatars[2],
+    avatarId: 2,
   },
 ];
 

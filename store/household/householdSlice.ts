@@ -4,7 +4,7 @@ import { Household } from "../../interfaces/households";
 import { HouseholdUser } from "../../interfaces/householdUser";
 import { ThunkConfig } from "../store";
 
-const joinHouseHoldAction = createAsyncThunk<HouseholdUser, number, ThunkConfig>('household/joinhousehold', async (code, { getState }) => {
+export const joinHouseHoldAction = createAsyncThunk<HouseholdUser, number, ThunkConfig>('household/joinhousehold', async (code, { dispatch, getState }) => {
 
     const respone = await fetch('/api/household/join', {
         method: 'POST',
