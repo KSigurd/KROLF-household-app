@@ -3,20 +3,25 @@ import React from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
 import { RootStackParamList } from "../navigation/RootNavigator";
 import { Button as NPbutton, Surface, TextInput } from "react-native-paper";
+import { users } from "../data/mockUserData";
+import LoginForm from "../components/LoginForm";
 
 type Props = NativeStackScreenProps<RootStackParamList, "CreateHousehold">;
 
-const handleSubmit = () => {
-  console.log("Verifiera user");
+// const handleSubmit = () => {
+//   console.log("Verifiera user");
 
-  //TODO: Validate user. if login succeded, navigate to household
-};
+//   //TODO: Validate user. if login succeded, navigate to household
+// };
 
 const LoginScreen = ({ navigation }: Props) => {
   return (
     <View style={styles.root}>
       <View>
-        <Text style={styles.text}>Email</Text>
+        <View>
+          <LoginForm loginSucceded={() => navigation.navigate("Profile")} />
+        </View>
+        {/* <Text style={styles.text}>Email</Text>
         <TextInput
           mode="outlined"
           theme={{ roundness: 10 }}
@@ -28,27 +33,28 @@ const LoginScreen = ({ navigation }: Props) => {
           mode="outlined"
           theme={{ roundness: 10 }}
           style={styles.input}
-        />
+          
+        /> */}
 
         <View style={styles.noAccountContainer}>
           <Text style={styles.noAccountText}>Inget konto? Registrera dig </Text>
           <Text
-            style={styles.test}
+            style={styles.createAccountText}
             onPress={() => navigation.navigate("CreateAccount")}
           >
             här
           </Text>
         </View>
       </View>
-      <NPbutton
+      {/* <NPbutton
         //CHANGE ICON?
-        icon="minus-circle-outline"
+        icon="account-key-outline"
         mode="contained"
         style={styles.NPbutton}
         onPress={() => handleSubmit()}
       >
         Logga in
-      </NPbutton>
+      </NPbutton> */}
       {/* <Button
         title="tryck mig"
         onPress={() => navigation.navigate("Profile")}
@@ -95,7 +101,7 @@ const styles = StyleSheet.create({
     //alignSelf: "center",
     marginVertical: 30,
   },
-  test: {
+  createAccountText: {
     fontWeight: "bold",
     alignSelf: "center",
     color: "#B8B8B8",

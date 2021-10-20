@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     padding: 10,
     alignSelf: "center",
+    marginTop:30
   },
   input: {
     elevation: 4,
