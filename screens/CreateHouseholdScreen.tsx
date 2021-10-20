@@ -2,6 +2,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Surface, Text, TextInput, useTheme } from "react-native-paper";
+import CreateHouseholdCode from "../components/CreateHouseholdCode";
 import { RootStackParamList } from "../navigation/RootNavigator";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Profile">;
@@ -11,15 +12,14 @@ const CreateHouseholdScreen = ({ navigation }: Props) => {
     <View style={styles.root}>
       <Text style={styles.title}>Hushållets namn</Text>
       {/* TODO: Use Formic and Yup.  */}
-      <TextInput 
+      <TextInput
         mode="outlined"
         theme={{ roundness: 10 }}
         style={styles.inputField}
       />
       <Text style={styles.title}>Hushållets kod</Text>
       <Surface style={styles.codeBox}>
-        {/* TODO: Add implementation of random code-generator for householdcode and show generated code */}
-        <Text style={styles.code}>Kod</Text>
+         <CreateHouseholdCode/>
       </Surface>
       <View style={styles.buttonContainer}>
         <Surface style={styles.buttonBox}>
@@ -56,18 +56,16 @@ const styles = StyleSheet.create({
   },
   inputField: {
     backgroundColor: "#fff",
+    textAlign: "center",
   },
   codeBox: {
     marginTop: 7,
-    paddingLeft: 17,
+    // paddingLeft: 17,
     justifyContent: "center",
     borderRadius: 10,
     height: 58,
     borderColor: "#000",
     elevation: 3,
-  },
-  code: {
-    fontSize: 16,
   },
   buttonContainer: {
     flex: 1,
