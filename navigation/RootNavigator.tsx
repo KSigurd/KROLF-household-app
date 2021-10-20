@@ -35,7 +35,7 @@ const RootNavigator = () => {
           headerTintColor: "white",
         }}
       >
-        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Login" component={LoginScreen}  options={{title:"Logga in"}}/>
         <Stack.Screen name="CreateAccount" component={CreateAccountScreen} />
         <Stack.Screen
           name="CreateHousehold"
