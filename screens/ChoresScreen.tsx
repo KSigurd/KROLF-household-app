@@ -3,6 +3,7 @@ import React, { FC } from "react";
 import { View, Text } from "react-native";
 import { Button } from "react-native-paper";
 import ChoreButton from "../components/ChoreButton";
+import { chores } from "../data/mockChoresData";
 import { households } from "../data/mockHouseholdData";
 import { RootStackParamList } from "../navigation/RootNavigator";
 
@@ -30,12 +31,12 @@ const ChoresScreen: FC<Props> = ({ navigation }: Props) => {
 
   return (
     <View style={styles.root}>
-      {household.chores.map((prop, key) => {
+      {/* {household.chores.map((prop, key) => {
         return (
           <ChoreButton  //TODO: Move this props-logic somewhere else
             key={key}
             buttonText={prop.title}
-            completedBy={household.users.filter(
+            completedBy={users.filter(
               (user) =>
                 user.choresDone.filter((chore) => chore.choreId === prop.id)
                   .length
@@ -44,7 +45,7 @@ const ChoresScreen: FC<Props> = ({ navigation }: Props) => {
             isLate={false}
           />
         );
-      })}
+      })} */}
       <View style={styles.bottomButtonRow}>
         <Button
           icon="plus-circle-outline"
