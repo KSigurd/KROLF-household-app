@@ -35,25 +35,36 @@ const RootNavigator = () => {
           headerTintColor: "white",
         }}
       >
-        <Stack.Screen name="Login" component={LoginScreen}  options={{title:"Logga in"}}/>
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ title: "Logga in" }}
+        />
         <Stack.Screen name="CreateAccount" component={CreateAccountScreen} />
         <Stack.Screen
           name="CreateHousehold"
           component={CreateHouseholdScreen}
         />
         <Stack.Screen name="JoinHousehold" component={JoinHouseholdScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="ChoresStatisticsNavigator" component={ChoresStatisticsNavigator} />
+        {/* TODO: CHECK THIS */}
+        <Stack.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{ presentation: "fullScreenModal" }}
+        />
+        <Stack.Screen
+          name="ChoresStatisticsNavigator"
+          component={ChoresStatisticsNavigator}
+        />
       </Stack.Navigator>
-      
     </NavigationContainer>
   );
 };
 
-      // <Stack.Screen
-      //   name="Root"
-      //   component={TabBistroMapNavigator}
-      //   options={{ headerShown: false }}
-      // />
+// <Stack.Screen
+//   name="Root"
+//   component={TabBistroMapNavigator}
+//   options={{ headerShown: false }}
+// />
 
 export default RootNavigator;
