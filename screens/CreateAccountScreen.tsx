@@ -1,50 +1,17 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { RootStackParamList } from "../navigation/RootNavigator";
-import { Button as NPbutton, Surface, TextInput } from "react-native-paper";
+import CreateUserForm from "../components/CreateUserForm";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Profile">;
-
-const handleSubmit = () => {
-  console.log("bekräfta account");
-  
-  //TODO: lägg in i user med value från input
-  //TODO: navigate to loginScreen
-}
 
 const CreateAccountScreen = ({ navigation }: Props) => {
   return (
     <View style={styles.root}>
-      <Text style={styles.title}>Skapa konto</Text>
-      {/* <Button
-        title="tryck mig"
-        onPress={() => navigation.navigate("Profile")}
-      /> */}
-      <View>
-        <Text style={styles.text}>Email :</Text>
-        <TextInput
-          mode="outlined"
-          theme={{ roundness: 10 }}
-          style={styles.input}
-        />
-
-        <Text style={styles.text}>Lösenord :</Text>
-        <TextInput
-          mode="outlined"
-          theme={{ roundness: 10 }}
-          style={styles.input}
-        />
-      </View>
-
-      <NPbutton
-        icon="plus-circle-outline"
-        mode="contained"
-        style={styles.NPbutton}
-        onPress={() => handleSubmit()}
-      >
-        Bekräfta
-      </NPbutton>
+      <CreateUserForm
+        onCreateAccountSucceded={() => navigation.navigate("Login")}
+      />
     </View>
   );
 };
@@ -63,7 +30,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     padding: 10,
     alignSelf: "center",
-    marginTop:30
+    marginTop: 30,
   },
   input: {
     elevation: 4,
@@ -77,6 +44,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: "bold",
-    alignSelf: "center"
-  }
+    alignSelf: "center",
+  },
 });
