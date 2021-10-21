@@ -6,6 +6,7 @@ import ChoreButton from "../components/ChoreButton";
 import { chores } from "../data/mockChoresData";
 import { households } from "../data/mockHouseholdData";
 import { RootStackParamList } from "../navigation/RootNavigator";
+import { styles } from "../styles/styles";
 
 // import { useAppSelector } from "../store/store";
 
@@ -21,13 +22,16 @@ import { RootStackParamList } from "../navigation/RootNavigator";
   // const chores = useAppSelector(selectChores)
 
 
-import { styles } from "../styles/styles";
+  
+  
+  type Props = NativeStackScreenProps<RootStackParamList, "Profile">;
+  
+  const household = households[2];
+  
+  const ChoresScreen: FC<Props> = ({ navigation }: Props) => {
 
-type Props = NativeStackScreenProps<RootStackParamList, "Profile">;
 
-const household = households[2];
-
-const ChoresScreen: FC<Props> = ({ navigation }: Props) => {
+  const [isVisible, setIsVisible] = React.useState(false);
 
   return (
     <View style={styles.root}>
@@ -46,6 +50,9 @@ const ChoresScreen: FC<Props> = ({ navigation }: Props) => {
           />
         );
       })} */}
+
+      {/* <CreateChore setVisibleModal= {(isVisible)} /> */}
+
       <View style={styles.bottomButtonRow}>
         <Button
           icon="plus-circle-outline"
@@ -53,7 +60,7 @@ const ChoresScreen: FC<Props> = ({ navigation }: Props) => {
           color={"#000"}
           uppercase={false}
           style={styles.smallButton}
-          onPress={() => {}} //TODO
+          onPress={() => navigation.navigate("CreateChoreModalScreen")} //TODO
         >
           <Text style={styles.buttonText}>Lägg till</Text>
         </Button>
