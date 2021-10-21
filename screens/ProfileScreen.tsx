@@ -1,12 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import { View, Text, Button, StyleSheet, FlatList } from "react-native";
-import {
-  Surface,
-  Button as NPbutton,
-  TouchableRipple,
-} from "react-native-paper";
-import { lightBlue100 } from "react-native-paper/lib/typescript/styles/colors";
 import AddHouseholdButton from "../components/AddHouseholdButton";
 import HouseholdSurface from "../components/HouseholdSurface";
 import JoinHouseholdButton from "../components/JoinHouseHoldButton";
@@ -33,8 +27,8 @@ const ProfileScreen = ({ navigation }: Props) => {
       </View>
 
       <View style={styles.NPbuttonRoot}>
-        <AddHouseholdButton/>
-        <JoinHouseholdButton/>
+        <AddHouseholdButton onAddHousehold={() => navigation.navigate("CreateHousehold")}/>
+        <JoinHouseholdButton onJoinHousehold={() => navigation.navigate("JoinHousehold")}/>
       </View>
 
       <Button
@@ -65,10 +59,5 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignSelf: "center",
     marginVertical: 20,
-  },
-  NPbutton: {
-    width: 150,
-    borderRadius: 100,
-    padding: 10,
   },
 });

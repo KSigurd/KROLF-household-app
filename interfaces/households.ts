@@ -1,4 +1,3 @@
-
 export interface Household {
   id: number;
   inviteCode: number;

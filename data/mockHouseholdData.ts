@@ -42,6 +42,7 @@ export const householdUser: HouseholdUser[] = [
     name: "TONY",
     isAdmin: false,
     avatarId: 2,
+
   },
 ];
 

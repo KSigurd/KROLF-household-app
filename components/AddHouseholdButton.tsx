@@ -2,13 +2,17 @@ import { Button as NPbutton } from "react-native-paper";
 import React, { FC } from "react";
 import { StyleSheet } from "react-native";
 
-const AddHouseholdButton: FC = () => {
+interface Props {
+  onAddHousehold: () => void;
+}
+
+const AddHouseholdButton = ({ onAddHousehold }: Props) => {
   return (
     <NPbutton
       icon="plus-circle-outline"
       mode="contained"
       style={styles.NPbutton}
-      onPress={() => console.log("Pressed")}
+      onPress={() => onAddHousehold()}
     >
       Lägg till
     </NPbutton>

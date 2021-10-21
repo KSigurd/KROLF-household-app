@@ -29,13 +29,13 @@ const RootNavigator = () => {
           headerStyle: {
             backgroundColor: "blue",
           },
-          contentStyle: { backgroundColor: "red" },
+          contentStyle: { backgroundColor: "#f0f0f0" },
           headerTitleAlign: "center",
           headerTitleStyle: { color: "white" },
           headerTintColor: "white",
         }}
       >
-        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Login" component={LoginScreen}  options={{title:"Logga in"}}/>
         <Stack.Screen name="CreateAccount" component={CreateAccountScreen} />
         <Stack.Screen
           name="CreateHousehold"
