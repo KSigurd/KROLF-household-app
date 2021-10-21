@@ -1,42 +1,51 @@
 import React from "react";
-import { Formik } from "formik";
+import { Formik, yupToFormErrors } from "formik";
 import * as Yup from "yup";
 import { View, StyleSheet, Alert } from "react-native";
 import { Button as NPbutton } from "react-native-paper";
 import ThemedTextInput from "./ThemedTextInput";
-
 import { users } from "../data/mockUserData";
+import { User } from "../interfaces/user";
 
-interface User {
-  email: string;
-  password: string;
-}
+const initialValues: User = { email: "", password: "", id: 0 };
 
 interface Props {
-  onLoginSucceded: () => void;
+  onCreateAccountSucceded: () => void;
 }
-
-const initialValues: User = { email: "", password: "" };
 
 type PostSchemaType = Record<keyof User, Yup.AnySchema>;
 
 const validationSchema = Yup.object().shape<PostSchemaType>({
+  id: Yup.number(),
   email: Yup.string()
     .email("Mejladressen måste innehålla @ och .com eller .se")
-    .required("Fyll i din mejladress"),
-  password: Yup.string().required("Du måste ange ditt lösenord").min(1),
+    .required("Fyll i en giltlig mejladress"),
+  //ADD VALIDATION
+  password: Yup.string().required("Du måste ange ett lösenord"),
 });
 
-const LoginForm = ({ onLoginSucceded }: Props) => {
-  const handleSubmit = (user: User) => {
-    const findUser = users.find(
-      (registredUser) =>
-        registredUser.email === user.email.toLowerCase() &&
-        registredUser.password === user.password
+const CreateUserForm = ({ onCreateAccountSucceded }: Props) => {
+  const handleSubmit = (newUser: User) => {
+    //MOVE FUNCTIONALITY TO API
+    const existingUser = users.find(
+      (registredUser) => registredUser.email === newUser.email.toLowerCase()
     );
-    if (findUser) {
-      onLoginSucceded();
-    } else Alert.alert("Oooops!", "Felaktigt användarnamn eller lösenord");
+
+    if (!existingUser) {
+      //TODO: FÅ NOTIS SKAPANDE AV ANVÄNDARE LYCKADES
+
+      const index = users.slice(-1).pop();
+      if (index) {
+        const userId = index.id + 1;
+        newUser = { ...newUser, id: userId };
+        users.push(newUser);
+        onCreateAccountSucceded();
+      }
+    } else
+      Alert.alert(
+        "Oooops!",
+        "Användaren finns redan. Gå tillbaka till inloggningsidan för att logga in!"
+      );
   };
 
   return (
@@ -76,12 +85,12 @@ const LoginForm = ({ onLoginSucceded }: Props) => {
           <NPbutton
             //TODO: CHECK THIS
             disabled={!values.password === true || !values.email === true}
-            icon="account-key-outline"
+            icon="plus-circle-outline"
             mode="contained"
             style={styles.NPbutton}
             onPress={() => handleSubmit()}
           >
-            Logga in
+            Bekräfta
           </NPbutton>
         </View>
       )}
@@ -89,7 +98,7 @@ const LoginForm = ({ onLoginSucceded }: Props) => {
   );
 };
 
-export default LoginForm;
+export default CreateUserForm;
 
 const styles = StyleSheet.create({
   root: {
