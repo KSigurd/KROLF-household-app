@@ -5,6 +5,21 @@ import { Button } from "react-native-paper";
 import ChoreButton from "../components/ChoreButton";
 import { households } from "../data/mockHouseholdData";
 import { RootStackParamList } from "../navigation/RootNavigator";
+
+// import { useAppSelector } from "../store/store";
+
+// type Props = NativeStackScreenProps<RootStackParamList, "Profile">;
+
+// export const selectChores = (state: RootState) => {
+//   // const result = state.chore.chores.filter();
+//   // if {} else {}
+//   // return chores;
+// }
+
+//const ChoresScreen = ({navigation}: Props) => {
+  // const chores = useAppSelector(selectChores)
+
+
 import { styles } from "../styles/styles";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Profile">;
@@ -12,6 +27,7 @@ type Props = NativeStackScreenProps<RootStackParamList, "Profile">;
 const household = households[2];
 
 const ChoresScreen: FC<Props> = ({ navigation }: Props) => {
+
   return (
     <View style={styles.root}>
       {household.chores.map((prop, key) => {

@@ -7,7 +7,4 @@ export interface Chore {
   householdId: number;
 }
 
-export interface CompletedChore {
-  choreId: number;
-  date: Date;
-}
+
