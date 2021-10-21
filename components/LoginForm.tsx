@@ -1,33 +1,31 @@
 import React from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { View, StyleSheet, Text, Alert } from "react-native";
-import { Button as NPbutton, TextInput } from "react-native-paper";
-import UserDetailsInput from "./userDetailsInput";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../navigation/RootNavigator";
+import { View, StyleSheet, Alert } from "react-native";
+import { Button as NPbutton } from "react-native-paper";
+import ThemedTextInput from "./ThemedTextInput";
+
 import { users } from "../data/mockUserData";
 
 interface User {
   email: string;
   password: string;
 }
+
+interface Props {
+  loginSucceded: () => void;
+}
+
 const initialValues: User = { email: "", password: "" };
 
 type PostSchemaType = Record<keyof User, Yup.AnySchema>;
 
 const validationSchema = Yup.object().shape<PostSchemaType>({
   email: Yup.string()
-    .email("Invalid email format")
+    .email("Mejladressen måste innehålla @ och .com eller .se")
     .required("Fyll i din mejladress"),
-  password: Yup.string().required("Du måste skriva in ditt lösenord"),
+  password: Yup.string().required("Du måste ange ditt lösenord"),
 });
-
-// type Props = NativeStackScreenProps<RootStackParamList, "CreateHousehold">;
-
-interface Props {
-  loginSucceded: () => void;
-}
 
 const LoginForm = ({ loginSucceded }: Props) => {
   const handleSubmit = (user: User) => {
@@ -42,19 +40,6 @@ const LoginForm = ({ loginSucceded }: Props) => {
       loginSucceded();
     } else Alert.alert("Oooops!", "Felaktigt användarnamn eller lösenord");
   };
-  // const noAccountText = () => {
-  //   return (
-  //     <View style={styles.noAccountContainer}>
-  //       <Text style={styles.noAccountText}>Inget konto? Registrera dig </Text>
-  //       <Text
-  //         style={styles.createAccountText}
-  //         onPress={() => navigation.navigate("CreateAccount")}
-  //       >
-  //         här
-  //       </Text>
-  //     </View>
-  //   );
-  // };
 
   return (
     <Formik
@@ -70,34 +55,29 @@ const LoginForm = ({ loginSucceded }: Props) => {
         touched,
         errors,
       }) => (
-        <View>
-          <UserDetailsInput
-            style={styles.input}
-            //mode="outlined"
-            //theme={{ roundness: 10 }}
-            placeholder="email"
-            label="Email"
-            onChangeText={handleChange<keyof User>("email")}
-            onBlur={handleBlur<keyof User>("email")}
-            value={values.email}
-            helperText={touched.email && errors.email}
-          />
-          <UserDetailsInput
-            //      mode="outlined"
-            //      theme={{ roundness: 10 }}
-            style={styles.input}
-            //mode="outlined"
-            //theme={{ roundness: 10 }}
-            placeholder="password"
-            label="Password"
-            onChangeText={handleChange<keyof User>("password")}
-            onBlur={handleBlur<keyof User>("password")}
-            value={values.password}
-            helperText={touched.password && errors.password}
-          />
+        <View style={styles.root}>
+          <View>
+            <ThemedTextInput
+              style={styles.input}
+              label="Användarnamn"
+              onChangeText={handleChange<keyof User>("email")}
+              onBlur={handleBlur<keyof User>("email")}
+              value={values.email}
+              helperText={touched.email && errors.email}
+            />
+            <ThemedTextInput
+              style={styles.input}
+              secureTextEntry={true}
+              label="Lösenord"
+              onChangeText={handleChange<keyof User>("password")}
+              onBlur={handleBlur<keyof User>("password")}
+              value={values.password}
+              helperText={touched.password && errors.password}
+            />
+          </View>
           <NPbutton
             //ADD DISABLE IF FIELD NOT FILLED
-            //CHANGE ICON?
+            disabled={!values.password}
             icon="account-key-outline"
             mode="contained"
             style={styles.NPbutton}
@@ -116,8 +96,6 @@ export default LoginForm;
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    marginHorizontal: 10,
-    marginVertical: 25,
     justifyContent: "space-between",
   },
   NPbutton: {
@@ -125,29 +103,9 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     padding: 10,
     alignSelf: "center",
-    marginVertical: 70,
+    marginVertical: 10,
   },
   input: {
     elevation: 4,
-  },
-  text: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginTop: 12,
-    marginBottom: 5,
-  },
-  noAccountContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  noAccountText: {
-    fontWeight: "bold",
-    //alignSelf: "center",
-    marginVertical: 30,
-  },
-  createAccountText: {
-    fontWeight: "bold",
-    alignSelf: "center",
-    color: "#B8B8B8",
   },
 });
