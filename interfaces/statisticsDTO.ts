@@ -1,12 +1,13 @@
 import { CompletedChore } from "./completedChore";
 
-export interface UserStatisticsDTO {
-  avatarId: number;
-  householdUserId: string;
-  completedChores: ChoreStatisticsDTO[];
+export interface ChoreStatisticsDTO {
+  choreId: string;
+  points: number;
+  completedChores: CompletedChoresByUserDTO[];
 }
 
-export interface ChoreStatisticsDTO {
-  completedChore: CompletedChore;
-  points: number
+export interface CompletedChoresByUserDTO {
+  completedChores: CompletedChore[];
+  housholdUserId: string;
+  avatarId: string;
 }

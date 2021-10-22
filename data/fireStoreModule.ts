@@ -2,7 +2,7 @@ import { Chore, ChoreOmit } from "../interfaces/chore";
 import { CompletedChore } from "../interfaces/completedChore";
 import { Household, HouseholdOmit } from "../interfaces/households";
 import { HouseholdUser, HouseholdUserOmit } from "../interfaces/householdUser";
-import { ChoreStatisticsDTO, UserStatisticsDTO } from "../interfaces/statisticsDTO";
+import { ChoreStatisticsDTO, CompletedChoresByUserDTO } from "../interfaces/statisticsDTO";
 import { User, UserOmit } from "../interfaces/user";
 import { firebase } from "./fireBaseConfig";
 import { completedChores } from "./mockHouseholdData";
@@ -290,46 +290,48 @@ export async function removeHouseholdUser(userId: string, householdId: string) {
  * Takes a householdId of type string and gather statistics information from FireStore
  * @requires householdId
  */
- export async function getStatisticsThisWeek(userId: string, householdId: string) {
-  let statisticsDTOs: UserStatisticsDTO[] = [];
+ export async function getStatistics(householdId: string) {
+  let statisticsDTOs: ChoreStatisticsDTO[] = [];
 
   firebase
     .firestore()
-    .collection("householdUsers")
+    .collection("chores")
     .where("householdId", "==", householdId)
     .get()
     .then(query => {
       query.forEach(doc => {
-        let statisticsDTO: UserStatisticsDTO = {} as UserStatisticsDTO;
-        statisticsDTO.avatarId = doc.data().avatarId;
-        statisticsDTO.householdUserId = doc.id;
+        let choreStatistics: ChoreStatisticsDTO = {} as ChoreStatisticsDTO;
+        choreStatistics.choreId = doc.id;
+        choreStatistics.points = doc.data().points;
         firebase
           .firestore()
-          .collection("completedChores")
-          .where("householdUserId", "==", doc.id)
+          .collection("householdUsers")
+          .where("householdId", "==", householdId)
           .get()
           .then(query => {
             query.forEach(doc => {
-              let choreDTO: ChoreStatisticsDTO = {} as ChoreStatisticsDTO;
-              choreDTO.completedChore = doc.data() as CompletedChore;
+              let userStatistics: CompletedChoresByUserDTO = {} as CompletedChoresByUserDTO;
+              userStatistics.avatarId = doc.data().avatarId;
+              userStatistics.housholdUserId = doc.id;
               firebase
                 .firestore()
-                .collection("chores")
-                .doc(doc.data().choreId)
+                .collection("completedChores")
+                .where("householdUserId", "==", userStatistics.housholdUserId)
+                .where("choreId", "==", choreStatistics.choreId)
                 .get()
-                .then(doc => {
-                  if(doc.exists) {
-                    choreDTO.points = doc.data()!.points;
-                  }
+                .then(query => {
+                  query.forEach(doc => {
+                    userStatistics.completedChores.push(doc.data() as CompletedChore);
+                  })
                 })
                 .catch(err => console.log(err));
 
-              statisticsDTO.completedChores.push(choreDTO);
+              choreStatistics.completedChores.push(userStatistics);
             })
           })
           .catch(err => console.log(err));
 
-        statisticsDTOs.push(statisticsDTO);
+        statisticsDTOs.push(choreStatistics);
       })
     })
     .catch(err => console.log(err));
