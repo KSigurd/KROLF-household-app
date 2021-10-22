@@ -1,5 +1,5 @@
 export interface Avatar {
-  id: number;
+  id: string;
   avatar: string;
   color: string;
 }
