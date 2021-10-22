@@ -1,5 +1,7 @@
 export interface Household {
-  id: number;
+  id: string;
   inviteCode: number;
   name: string;
 }
+
+export interface HouseholdOmit extends Omit<Household, "id">{};
