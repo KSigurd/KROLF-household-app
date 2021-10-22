@@ -20,10 +20,12 @@ export const joinHouseHoldAction = createAsyncThunk<HouseholdUser, number, Thunk
 
 interface HouseholdState {
     households: Household[];
+    activeHousehold: string;
 }
 
 const initialState: HouseholdState = {
     households: households,
+    activeHousehold: '0'
 };
 
 const householdSlice = createSlice({

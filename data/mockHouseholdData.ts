@@ -49,17 +49,17 @@ export const householdUser: HouseholdUser[] = [
 
 export const households: Household[] = [
   {
-    id: 0,
+    id: '0',
     inviteCode: 756598,
     name: "Bodéns",
   },
   {
-    id: 1,
+    id: '1',
     inviteCode: 659984,
     name: "Nilssons",
   },
   {
-    id: 2,
+    id: '2',
     inviteCode: 458855,
     name: "Anderssons",
   },

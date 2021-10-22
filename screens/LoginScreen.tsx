@@ -1,8 +1,11 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Button } from "react-native";
 import { RootStackParamList } from "../navigation/RootNavigator";
 import LoginForm from "../components/LoginForm";
+import { Title } from "react-native-paper";
+import { Button as NPbutton } from "react-native-paper";
+
 
 type Props = NativeStackScreenProps<RootStackParamList, "CreateHousehold">;
 
@@ -18,7 +21,15 @@ const LoginScreen = ({ navigation }: Props) => {
         >
           här
         </Text>
+
       </View>
+
+      <NPbutton
+          mode="contained"
+          onPress={() => navigation.navigate("ChoresStatisticsNavigator")}
+        >
+          Gå till statistik
+        </NPbutton>
     </View>
   );
 };

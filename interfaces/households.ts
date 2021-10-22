@@ -1,5 +1,5 @@
 export interface Household {
-  id: number;
+  id: string;
   inviteCode: number;
   name: string;
 }

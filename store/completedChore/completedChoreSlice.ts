@@ -3,11 +3,11 @@ import { completedChores } from "../../data/mockHouseholdData";
 import { CompletedChore } from "../../interfaces/completedChore";
 
 interface CompletedChoreState {
-    compltedChore: CompletedChore[];
+    completedChore: CompletedChore[];
 }
 
 const initialState: CompletedChoreState = {
-    compltedChore: completedChores
+    completedChore: completedChores
 };
 
 const completedChoreSlice = createSlice({
