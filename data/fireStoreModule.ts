@@ -285,10 +285,10 @@ export async function removeHouseholdUser(userId: string, householdId: string) {
     .catch(err => console.log(err));
 }
 
-//TODO: Filtrera efter datum
 /** 
  * Takes a householdId of type string and gather statistics information from FireStore
  * @requires householdId
+ * @returns {ChoreStatisticsDTO}
  */
  export async function getStatistics(householdId: string) {
   let statisticsDTOs: ChoreStatisticsDTO[] = [];
@@ -335,4 +335,6 @@ export async function removeHouseholdUser(userId: string, householdId: string) {
       })
     })
     .catch(err => console.log(err));
+
+  return statisticsDTOs;
 }
