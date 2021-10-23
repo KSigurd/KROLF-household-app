@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { getChores } from "../../data/fireStoreModule";
 import { chores } from "../../data/mockChoresData";
 import { households } from "../../data/mockHouseholdData";
 import { Chore } from "../../interfaces/chore";
@@ -8,7 +9,7 @@ interface ChoreState {
 }
 
 const initialState: ChoreState = {
-    chores: [],
+    chores: []
 };
 
 const choreSlice = createSlice({
