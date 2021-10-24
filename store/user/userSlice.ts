@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { addUser, loginUser } from "../../data/fireStoreModule";
 import { User } from "../../interfaces/user";
+import { ThunkConfig } from "../store";
 
 interface UserState {
   user: User;
@@ -10,18 +11,18 @@ interface UserState {
 
 const initialState: UserState = {
   user: {
-      id: "",
-      email: "",
-      password: "",
+    id: "",
+    email: "",
+    password: "",
   } as User,
   loggedIn: false,
   error: undefined,
 };
 
-export const loginHouseholdUser = createAsyncThunk<
+export const loginUserAction = createAsyncThunk<
   { user: User; response: boolean },
   User,
-  { rejectValue: boolean }
+  ThunkConfig
 >("loginUser", async (user, { rejectWithValue }) => {
   try {
     const response = await loginUser(user);
@@ -31,10 +32,10 @@ export const loginHouseholdUser = createAsyncThunk<
   }
 });
 
-export const addHouseholdUser = createAsyncThunk<
+export const addUserAction = createAsyncThunk<
   { user: User; response: boolean },
   User,
-  { rejectValue: boolean }
+  ThunkConfig
 >("addUser", async (user, { rejectWithValue }) => {
   try {
     const response = await addUser(user);
@@ -49,33 +50,31 @@ const userSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(loginHouseholdUser.fulfilled, (state, action) => {
+    builder.addCase(loginUserAction.fulfilled, (state, action) => {
       state.loggedIn = action.payload.response;
-      if(action.payload.response) {
-          state.user = action.payload.user;
+      if (action.payload.response) {
+        state.user = action.payload.user;
+      } else {
+        state.error = "Felaktigt användarnamn eller lösenord";
       }
-      else {
-          state.error = "Felaktigt användarnamn eller lösenord";
-    }
-      
     }),
-    builder.addCase(loginHouseholdUser.rejected, (state, action) => {
+      builder.addCase(loginUserAction.rejected, (state, action) => {
         state.loggedIn = action.meta.rejectedWithValue;
         state.user = {} as User;
         state.error = "Något gick fel";
       }),
-    builder.addCase(addHouseholdUser.fulfilled, (state, action) => {
+      builder.addCase(addUserAction.fulfilled, (state, action) => {
         state.user.email = action.payload.user.email;
-        if(action.payload.response) {
-            //TODO: Något som talar om att användaren lagts till?
+        if (action.payload.response) {
+          //TODO: Något som talar om att användaren lagts till?
+        } else {
+          state.error =
+            "Användaren finns redan. Gå tillbaka till inloggningsidan för att logga in!";
         }
-        else {
-            state.error = "Användaren finns redan. Gå tillbaka till inloggningsidan för att logga in!";
-        }
-    }),
-    builder.addCase(addHouseholdUser.rejected, (state, action) => {
-        state.error = "Något gick fel"
-    })
+      }),
+      builder.addCase(addUserAction.rejected, (state, action) => {
+        state.error = "Något gick fel";
+      });
   },
 });
 

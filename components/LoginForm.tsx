@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { View, StyleSheet, Alert } from "react-native";
 import { Button as NPbutton } from "react-native-paper";
 import ThemedTextInput from "./ThemedTextInput";
-import { loginHouseholdUser } from "../store/user/userSlice";
+import { loginUserAction } from "../store/user/userSlice";
 import { User } from "../interfaces/user";
 import { useAppDispatch, useAppSelector } from "../store/store";
 
@@ -29,7 +29,7 @@ const LoginForm: FC<Props> = ({ onLoginSucceded }: Props) => {
   const initialValues = userState.user;
   const loggedIn = userState.loggedIn;
   const handleSubmit = async (user: User) => {
-    await dispatch(loginHouseholdUser(user)).then(() => {
+    await dispatch(loginUserAction(user)).then(() => {
       if (loggedIn) {
       onLoginSucceded();
     } else Alert.alert("Oooops!", userState.error);

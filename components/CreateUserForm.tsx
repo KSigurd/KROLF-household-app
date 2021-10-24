@@ -6,7 +6,7 @@ import { Button as NPbutton } from "react-native-paper";
 import ThemedTextInput from "./ThemedTextInput";
 import { User } from "../interfaces/user";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { addHouseholdUser } from "../store/user/userSlice";
+import { addUserAction } from "../store/user/userSlice";
 
 
 
@@ -31,7 +31,7 @@ const CreateUserForm: FC<Props> = ({ onCreateAccountSucceded }: Props) => {
   const initialValues = userState.user;
 
   const handleSubmit = async (newUser: User) => {
-    await dispatch(addHouseholdUser(newUser)).then(() => {
+    await dispatch(addUserAction(newUser)).then(() => {
       if(!userState.error) {
         onCreateAccountSucceded();
       }else
