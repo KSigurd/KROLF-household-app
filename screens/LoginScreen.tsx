@@ -12,7 +12,7 @@ type Props = NativeStackScreenProps<RootStackParamList, "CreateHousehold">;
 const LoginScreen = ({ navigation }: Props) => {
   return (
     <View style={styles.root}>
-      <LoginForm loginSucceded={() => navigation.navigate("Profile")} />
+      <LoginForm onLoginSucceded={() => navigation.navigate("Profile")} />
       <View style={styles.noAccountContainer}>
         <Text style={styles.noAccountText}>Inget konto? Registrera dig </Text>
         <Text

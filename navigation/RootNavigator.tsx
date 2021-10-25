@@ -40,7 +40,11 @@ const RootNavigator = () => {
           component={LoginScreen}
           options={{ title: "Logga in" }}
         />
-        <Stack.Screen name="CreateAccount" component={CreateAccountScreen} />
+        <Stack.Screen
+          name="CreateAccount"
+          component={CreateAccountScreen}
+          options={{ title: "Skapa konto" }}
+        />
         <Stack.Screen
           name="CreateHousehold"
           component={CreateHouseholdScreen}

@@ -6,14 +6,13 @@ import householdReducer from "./household/householdSlice";
 import completedChoreReducer from "./completedChore/completedChoreSlice";
 import householdUserReducer from "./householdUser/householdUserSlice";
 
-
 const store = configureStore({
     reducer: {
        user: userReducer,
+       householdUser: householdUserReducer,
        chore: choreReducer,
        completedChore: completedChoreReducer,
        household: householdReducer,
-       householdUser: householdUserReducer,
     }
 });
 

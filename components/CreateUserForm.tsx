@@ -4,37 +4,42 @@ import * as Yup from "yup";
 import { View, StyleSheet, Alert } from "react-native";
 import { Button as NPbutton } from "react-native-paper";
 import ThemedTextInput from "./ThemedTextInput";
-import { loginUserAction } from "../store/user/userSlice";
 import { User } from "../interfaces/user";
 import { useAppDispatch, useAppSelector } from "../store/store";
+import { addUserAction } from "../store/user/userSlice";
+
 
 
 interface Props {
-  onLoginSucceded: () => void;
+  onCreateAccountSucceded: () => void;
 }
 
 type PostSchemaType = Record<keyof User, Yup.AnySchema>;
 
 const validationSchema = Yup.object().shape<PostSchemaType>({
-  id: Yup.string(),
+  id: Yup.number(),
   email: Yup.string()
     .email("Mejladressen måste innehålla @ och .com eller .se")
-    .required("Fyll i din mejladress"),
-  password: Yup.string().required("Du måste ange ditt lösenord").min(1),
+    .required("Fyll i en giltlig mejladress"),
+  //ADD VALIDATION
+  password: Yup.string().required("Du måste ange ett lösenord"),
 });
 
-const LoginForm: FC<Props> = ({ onLoginSucceded }: Props) => {
+const CreateUserForm: FC<Props> = ({ onCreateAccountSucceded }: Props) => {
   const dispatch = useAppDispatch();
   const userState = useAppSelector(state => state.user);
   const initialValues = userState.user;
-  const loggedIn = userState.loggedIn;
-  const handleSubmit = async (user: User) => {
-    await dispatch(loginUserAction(user)).then(() => {
-      if (loggedIn) {
-      onLoginSucceded();
-    } else Alert.alert("Oooops!", userState.error);
-    });
-    
+
+  const handleSubmit = async (newUser: User) => {
+    await dispatch(addUserAction(newUser)).then(() => {
+      if(!userState.error) {
+        onCreateAccountSucceded();
+      }else
+      Alert.alert(
+        "Oooops!",
+        userState.error
+      );
+    })
   };
 
   return (
@@ -74,12 +79,12 @@ const LoginForm: FC<Props> = ({ onLoginSucceded }: Props) => {
           <NPbutton
             //TODO: CHECK THIS
             disabled={!values.password === true || !values.email === true}
-            icon="account-key-outline"
+            icon="plus-circle-outline"
             mode="contained"
             style={styles.NPbutton}
             onPress={() => handleSubmit()}
           >
-            Logga in
+            Bekräfta
           </NPbutton>
         </View>
       )}
@@ -87,7 +92,7 @@ const LoginForm: FC<Props> = ({ onLoginSucceded }: Props) => {
   );
 };
 
-export default LoginForm;
+export default CreateUserForm;
 
 const styles = StyleSheet.create({
   root: {
