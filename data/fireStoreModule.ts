@@ -313,52 +313,67 @@ export async function removeHouseholdUser(userId: string, householdId: string) {
  */
 export async function getStatistics(householdId: string) {
   let statisticsDTOs: ChoreStatisticsDTO[] = [];
-
-  await firebase
-    .firestore()
-    .collection("chores")
-    .where("householdId", "==", householdId)
-    .get()
-    .then((query) => {
-      query.forEach(async (doc) => {
+//  console.log("household id: ", householdId)
+ console.log("innan firebase ")
+ await firebase
+ .firestore()
+ .collection("chores")
+ .where("householdId", "==", householdId)
+ .get()
+ .then((query) => {
+   query.forEach(async (chores) => {
+        console.log("hämtat #1 så många gånger som chores finns ")
+        // console.log("choresID: " + chores.id)
         let choreStatistics: ChoreStatisticsDTO = {} as ChoreStatisticsDTO;
-        choreStatistics.choreId = doc.id;
-        choreStatistics.points = doc.data().points;
+        let tempCompletedChoresByUsers: CompletedChoresByUserDTO[] = [];
+        choreStatistics.choreTitle = chores.data().title;
+        choreStatistics.points = chores.data().points;
         await firebase
-          .firestore()
-          .collection("householdUsers")
-          .where("householdId", "==", householdId)
-          .get()
-          .then((query) => {
-            query.forEach(async (doc) => {
+        .firestore()
+        .collection("householdUsers")
+        .where("householdId", "==", householdId)
+        .get()
+        .then((query) => {
+          query.forEach(async (doc) => {
+              console.log("hämtat #2 för varje householdUser ")
+              // console.log("doc : " + doc.id)
               let userStatistics: CompletedChoresByUserDTO =
                 {} as CompletedChoresByUserDTO;
-              userStatistics.avatarId = doc.data().avatarId;
-              userStatistics.housholdUserId = doc.id;
+                let tempCompletedChores: CompletedChore[] = []
+                userStatistics.avatarId = doc.data().avatarId;
+                userStatistics.housholdUserId = doc.id;
               await firebase
-                .firestore()
+              .firestore()
                 .collection("completedChores")
                 .where("householdUserId", "==", userStatistics.housholdUserId)
-                .where("choreId", "==", choreStatistics.choreId)
+                .where("choreId", "==", chores.id)
                 .get()
                 .then((query) => {
                   query.forEach((doc) => {
-                    userStatistics.completedChores.push(
-                      doc.data() as CompletedChore
-                    );
-                  });
-                })
-                .catch((err) => console.log(err));
-
-              choreStatistics.completedChores.push(userStatistics);
+                    console.log("hämtat #3 för varje completed Chores ")
+                    
+                    // console.log("completedchores:" + doc.id)
+                    tempCompletedChores.push(
+                      doc.data()! as CompletedChore
+                      );
+                      // console.log("efter pusch:" + tempCompletedChores[0].choreId)
+                    });
+                  })
+                  .catch((err) => console.log(err));
+                  
+                  userStatistics.completedChores = tempCompletedChores;
+                  // console.log("userStatistics:" + userStatistics.avatarId)
+              tempCompletedChoresByUsers.push(userStatistics!);
             });
           })
           .catch((err) => console.log(err));
-
-        statisticsDTOs.push(choreStatistics);
+        choreStatistics.completedChores = tempCompletedChoresByUsers;
+        statisticsDTOs.push(choreStatistics!);
       });
+      console.log("kommer vi hit? inne i firebase??? ")
     })
-    .catch((err) => console.log(err));
-
-  return statisticsDTOs;
+    .catch((err) => {throw err});
+    
+    console.log("kommer vi hit?: ")
+    return statisticsDTOs;
 }

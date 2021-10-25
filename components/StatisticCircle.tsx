@@ -1,20 +1,15 @@
 import { StyleSheet, View, Text } from "react-native";
-import React from "react";
+import React, { FC } from "react";
 import { PieChart } from "react-native-svg-charts";
-
-interface StatisticsData {
-  avatar: string;
-  color: string;
-  points: number;
-}
+import { ChoreStatisticsDTO } from "../interfaces/statisticsDTO";
+import { avatars } from "../data/avatarData";
 
 interface Props {
-    title: string;
     height: number;
-    data: StatisticsData;
+    data: ChoreStatisticsDTO;
 }
 
-const StatisticCircle = ({title, height, data}: Props) => {
+const StatisticCircle: FC<Props> = ({ height, data }: Props) => {
   
   const datatest = [
     {
@@ -49,29 +44,52 @@ const StatisticCircle = ({title, height, data}: Props) => {
     },
   ];
 
+ 
+  
+
   //Hämta totala antal points i chore av en viss houseHoldUser
   //ChoresCompleted
-
-  const pieData = data
-    .filter((dataObject) => dataObject.totalPoints > 0)
-    .map((dataObject, index) => ({
-      value: dataObject.totalPoints,
+const pieDataa = {
+  value: (data.points * data.completedChores.length),
       svg: {
-        fill: dataObject.avatarColor,
-        onPress: () => console.log("press", index),
+        fill: avatars.filter(avatar => avatar.id === data.completedChores[0].avatarId),
+        onPress: () => console.log("press"),
       },
-      key: `pie-${index}`,
+}
+
+
+  const pieData = data.completedChores.map((dataObject, index) => ({
+    key: index,
+      value: (data.points * dataObject.completedChores.length),
+      svg: {
+        fill: avatars.filter(avatar => avatar.id === dataObject.avatarId).pop()?.color
+      },
     }));
+
+
+
+
+  // const pajbitar = data.completedChores[0].housholdUserId
+  //   .filter((dataObject) => (dataObject.points * dataObject.completedChores.length) > 0)
+  //   .map((dataObject, index) => ({
+  //     value: (dataObject.points * dataObject.completedChores.length),
+  //     svg: {
+  //       fill: dataObject.avatarColor,
+  //       onPress: () => console.log("press", index),
+  //     },
+  //     key: `pie-${index}`,
+  //   }));
 
   return (
     <View>
-      <Text>{title}</Text>
+      <Text>HALLLÅÅÅÅ? # 2</Text>
+      <Text>{data.choreTitle}</Text>
       <PieChart
         style={{ height: height || 200 }}
         data={pieData}
         innerRadius="0%"
         padAngle={0}
-        valueAccessor="2"
+        // valueAccessor="2"
       />
     </View>
   );
