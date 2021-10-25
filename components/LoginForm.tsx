@@ -1,42 +1,40 @@
-import React from "react";
+import React, { FC } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { View, StyleSheet, Alert } from "react-native";
 import { Button as NPbutton } from "react-native-paper";
 import ThemedTextInput from "./ThemedTextInput";
+import { loginUserAction } from "../store/user/userSlice";
+import { User } from "../interfaces/user";
+import { useAppDispatch, useAppSelector } from "../store/store";
 
-import { users } from "../data/mockUserData";
-
-interface User {
-  email: string;
-  password: string;
-}
 
 interface Props {
   onLoginSucceded: () => void;
 }
 
-const initialValues: User = { email: "", password: "" };
-
 type PostSchemaType = Record<keyof User, Yup.AnySchema>;
 
 const validationSchema = Yup.object().shape<PostSchemaType>({
+  id: Yup.string(),
   email: Yup.string()
     .email("Mejladressen måste innehålla @ och .com eller .se")
     .required("Fyll i din mejladress"),
   password: Yup.string().required("Du måste ange ditt lösenord").min(1),
 });
 
-const LoginForm = ({ onLoginSucceded }: Props) => {
-  const handleSubmit = (user: User) => {
-    const findUser = users.find(
-      (registredUser) =>
-        registredUser.email === user.email.toLowerCase() &&
-        registredUser.password === user.password
-    );
-    if (findUser) {
+const LoginForm: FC<Props> = ({ onLoginSucceded }: Props) => {
+  const dispatch = useAppDispatch();
+  const userState = useAppSelector(state => state.user);
+  const initialValues = userState.user;
+  const loggedIn = userState.loggedIn;
+  const handleSubmit = async (user: User) => {
+    await dispatch(loginUserAction(user)).then(() => {
+      if (loggedIn) {
       onLoginSucceded();
-    } else Alert.alert("Oooops!", "Felaktigt användarnamn eller lösenord");
+    } else Alert.alert("Oooops!", userState.error);
+    });
+    
   };
 
   return (

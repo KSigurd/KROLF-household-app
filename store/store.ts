@@ -3,13 +3,16 @@ import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
 import userReducer from "./user/userSlice";
 import choreReducer from "./chore/choreSlice";
 import householdReducer from "./household/householdSlice";
-
+import completedChoreReducer from "./completedChore/completedChoreSlice";
+import householdUserReducer from "./householdUser/householdUserSlice";
 
 const store = configureStore({
     reducer: {
        user: userReducer,
+       householdUser: householdUserReducer,
        chore: choreReducer,
-       household: householdReducer
+       completedChore: completedChoreReducer,
+       household: householdReducer,
     }
 });
 

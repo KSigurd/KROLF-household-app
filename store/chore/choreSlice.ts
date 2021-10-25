@@ -1,33 +1,61 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { chores } from "../../data/mockChoresData";
-import { households } from "../../data/mockHouseholdData";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { addChore, getChores } from "../../data/fireStoreModule";
 import { Chore } from "../../interfaces/chore";
+import { ThunkConfig } from "../store";
 
 interface ChoreState {
-    chores: Chore[];
+  chores: Chore[];
+  error: string | undefined;
 }
 
 const initialState: ChoreState = {
-    chores: [],
+  chores: [],
+  error: undefined,
 };
 
-const choreSlice = createSlice({
-    name: 'chores',
-    initialState,
-    reducers: {
-        // deposit: (state, { payload }: PayloadAction<number>) => {
-        //     state.balance += payload;
-        //     state.transactions.push(payload);
-        //     return state;
-        // },
-        // withdrawal: (state, { payload }: PayloadAction<number>) => {
-        //     state.balance -= payload;
-        //     state.transactions.push(-payload);
-        //     return state;
-        // }
-    }
+export const getChoresAction = createAsyncThunk<
+  { response: Chore[] },
+  string,
+  ThunkConfig
+>("getChores", async (householdId, { rejectWithValue }) => {
+  try {
+    const response = await getChores(householdId);
+    return { response };
+  } catch (e) {
+    return rejectWithValue(false);
+  }
 });
 
-// export const { deposit, withdrawal } = userSlice.actions;
+export const addChoreAction = createAsyncThunk<Chore, Chore, ThunkConfig>(
+  "addChore",
+  async (newChore, { rejectWithValue }) => {
+    try {
+      await addChore(newChore);
+      return newChore;
+    } catch (e) {
+      return rejectWithValue(false);
+    }
+  }
+);
+
+const choreSlice = createSlice({
+  name: "chores",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getChoresAction.fulfilled, (state, action) => {
+      state.chores = action.payload.response;
+    }),
+      builder.addCase(getChoresAction.rejected, (state, action) => {
+        state.error = "Något gick fel";
+      }),
+      builder.addCase(addChoreAction.fulfilled, (state, action) => {
+        state.chores.push(action.payload);
+      }),
+      builder.addCase(addChoreAction.rejected, (state, action) => {
+        state.error = "Något gick fel";
+      });
+  },
+});
 
 export default choreSlice.reducer;

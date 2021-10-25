@@ -1,13 +1,14 @@
-import React from "react";
-import { Formik, yupToFormErrors } from "formik";
+import React, { FC } from "react";
+import { Formik } from "formik";
 import * as Yup from "yup";
 import { View, StyleSheet, Alert } from "react-native";
 import { Button as NPbutton } from "react-native-paper";
 import ThemedTextInput from "./ThemedTextInput";
-import { users } from "../data/mockUserData";
 import { User } from "../interfaces/user";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import { addUserAction } from "../store/user/userSlice";
 
-const initialValues: User = { email: "", password: "", id: 0 };
+
 
 interface Props {
   onCreateAccountSucceded: () => void;
@@ -24,28 +25,21 @@ const validationSchema = Yup.object().shape<PostSchemaType>({
   password: Yup.string().required("Du måste ange ett lösenord"),
 });
 
-const CreateUserForm = ({ onCreateAccountSucceded }: Props) => {
-  const handleSubmit = (newUser: User) => {
-    //MOVE FUNCTIONALITY TO API
-    const existingUser = users.find(
-      (registredUser) => registredUser.email === newUser.email.toLowerCase()
-    );
+const CreateUserForm: FC<Props> = ({ onCreateAccountSucceded }: Props) => {
+  const dispatch = useAppDispatch();
+  const userState = useAppSelector(state => state.user);
+  const initialValues = userState.user;
 
-    if (!existingUser) {
-      //TODO: FÅ NOTIS SKAPANDE AV ANVÄNDARE LYCKADES
-
-      const index = users.slice(-1).pop();
-      if (index) {
-        const userId = index.id + 1;
-        newUser = { ...newUser, id: userId };
-        users.push(newUser);
+  const handleSubmit = async (newUser: User) => {
+    await dispatch(addUserAction(newUser)).then(() => {
+      if(!userState.error) {
         onCreateAccountSucceded();
-      }
-    } else
+      }else
       Alert.alert(
         "Oooops!",
-        "Användaren finns redan. Gå tillbaka till inloggningsidan för att logga in!"
+        userState.error
       );
+    })
   };
 
   return (
