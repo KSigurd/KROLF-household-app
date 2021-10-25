@@ -9,42 +9,45 @@ import { HouseholdUser } from "../interfaces/householdUser";
 import { useAppSelector } from "../store/store";
 
 export interface UserStatisticsDTO {
-  avtarId: string;
-  householdUserId: string;
+  choreId: string;
+  points: number;
   completedChores: ChoreStatisticsDTO[];
 }
 
 export interface ChoreStatisticsDTO {
-  completedChore: CompletedChore;
-  points: number;
+  completedChore: CompletedChore[];
+  householdUserId: string;
+  avatarId: string
 }
 
 const mockStatistics: UserStatisticsDTO[] = [
   {
-    avtarId: "0",
-    householdUserId: "0",
+    choreId: "0",
+    points: 0,
     completedChores: [
       {
-        completedChore: {
+        completedChore: [{
           choreId: 0,
           userId: 0,
           date: new Date(),
-        },
-        points: 6,
+        }],
+        householdUserId: "6",
+        avatarId: "2"
       },
     ],
   },
   {
-    avtarId: "1",
-    householdUserId: "1",
+    choreId: "2",
+    points: 1,
     completedChores: [
       {
-        completedChore: {
-          choreId: 0,
+        completedChore: [{
+          choreId: 3,
           userId: 1,
           date: new Date(),
-        },
-        points: 6,
+        }],
+        householdUserId: "3",
+        avatarId: "3"
       },
     ],
   },
@@ -53,7 +56,8 @@ const mockStatistics: UserStatisticsDTO[] = [
 const StatisticsScreen = () => {
   const statistics = useAppSelector((state) => {
 
-    const activeHouseholdId = state.household.activeHousehold;
+    //const activeHouseholdId = state.household.activeHousehold;
+    const activeHouseholdId = "1";
 
     const chores = state.chore.chores.filter(
       (c) => String(c.householdId) == activeHouseholdId
