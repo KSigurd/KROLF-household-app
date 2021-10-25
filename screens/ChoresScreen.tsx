@@ -1,12 +1,13 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { FC } from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { Button } from "react-native-paper";
 import ChoreButton from "../components/ChoreButton";
 import { chores } from "../data/mockChoresData";
 import { households } from "../data/mockHouseholdData";
 import { RootStackParamList } from "../navigation/RootNavigator";
 import { styles } from "../styles/styles";
+import CreateChoreInfo from "../components/CreateChoreInfo"
 
 // import { useAppSelector } from "../store/store";
 
@@ -20,9 +21,6 @@ import { styles } from "../styles/styles";
 
 //const ChoresScreen = ({navigation}: Props) => {
   // const chores = useAppSelector(selectChores)
-
-
-  
   
   type Props = NativeStackScreenProps<RootStackParamList, "Profile">;
   
@@ -30,29 +28,11 @@ import { styles } from "../styles/styles";
   
   const ChoresScreen: FC<Props> = ({ navigation }: Props) => {
 
-
   const [isVisible, setIsVisible] = React.useState(false);
 
   return (
-    <View style={styles.root}>
-      {/* {household.chores.map((prop, key) => {
-        return (
-          <ChoreButton  //TODO: Move this props-logic somewhere else
-            key={key}
-            buttonText={prop.title}
-            completedBy={users.filter(
-              (user) =>
-                user.choresDone.filter((chore) => chore.choreId === prop.id)
-                  .length
-            )}
-            daysSinceLast={String(7)}
-            isLate={false}
-          />
-        );
-      })} */}
-
-      {/* <CreateChore setVisibleModal= {(isVisible)} /> */}
-
+    // TODO: flytta till styles.css
+    <View style={{backgroundColor: "red", flex: 1}}>   
       <View style={styles.bottomButtonRow}>
         <Button
           icon="plus-circle-outline"
@@ -80,3 +60,21 @@ import { styles } from "../styles/styles";
 };
 
 export default ChoresScreen;
+
+      {/* {household.chores.map((prop, key) => {
+        return (
+          <ChoreButton  //TODO: Move this props-logic somewhere else
+            key={key}
+            buttonText={prop.title}
+            completedBy={users.filter(
+              (user) =>
+                user.choresDone.filter((chore) => chore.choreId === prop.id)
+                  .length
+            )}
+            daysSinceLast={String(7)}
+            isLate={false}
+          />
+        );
+      })} */}
+
+      {/* <CreateChore setVisibleModal= {(isVisible)} /> */}

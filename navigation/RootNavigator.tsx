@@ -57,11 +57,16 @@ const RootNavigator = () => {
         <Stack.Screen
           name="ChoresStatisticsNavigator"
           component={ChoresStatisticsNavigator}
+          options={{ title: "Hushållet" }}
         />
         <Stack.Screen
           name="CreateChoreModalScreen"
           component={CreateChoreModalScreen}
-          options={{presentation: "fullScreenModal"}}
+          options={{
+            presentation: "transparentModal",
+            contentStyle: { backgroundColor: "transparent" },
+            headerShown: false,
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>
