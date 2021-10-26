@@ -1,8 +1,6 @@
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import ChoresScreen from "../screens/ChoresScreen";
 import CreateAccountScreen from "../screens/CreateAccountScreen";
 import CreateHouseholdScreen from "../screens/CreateHouseholdScreen";
 import JoinHouseholdScreen from "../screens/JoinHouseholdScreen";
@@ -35,25 +33,39 @@ const RootNavigator = () => {
           headerTintColor: "white",
         }}
       >
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="CreateAccount" component={CreateAccountScreen} />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ title: "Logga in" }}
+        />
+        <Stack.Screen
+          name="CreateAccount"
+          component={CreateAccountScreen}
+          options={{ title: "Skapa konto" }}
+        />
         <Stack.Screen
           name="CreateHousehold"
           component={CreateHouseholdScreen}
+          options={{ title: "Skapa hushåll" }}
         />
-        <Stack.Screen name="JoinHousehold" component={JoinHouseholdScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="ChoresStatisticsNavigator" component={ChoresStatisticsNavigator} />
+        <Stack.Screen
+          name="JoinHousehold"
+          component={JoinHouseholdScreen}
+          options={{ title: "Gå med" }}
+        />
+        <Stack.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{ title: "Profil" }}
+        />
+        <Stack.Screen
+          name="ChoresStatisticsNavigator"
+          component={ChoresStatisticsNavigator}
+          options={{ title: "Hushållet", headerBackVisible: false }}
+        />
       </Stack.Navigator>
-      
     </NavigationContainer>
   );
 };
-
-      // <Stack.Screen
-      //   name="Root"
-      //   component={TabBistroMapNavigator}
-      //   options={{ headerShown: false }}
-      // />
 
 export default RootNavigator;
