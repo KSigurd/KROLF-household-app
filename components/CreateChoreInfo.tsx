@@ -86,35 +86,33 @@ const CreateChoreInfo = ({ onClosed }: Props) => {
 
   const displayEnergyValues = () => {
     return (
-      <View style={styles.cardRow}>
-        <Card.Actions style={styles.cardAction}>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: "row",
-              alignContent: "flex-end",
-            }}
-          >
-            {values.map((value, index) => {
-              return (
-                <Text
-                  key={index}
-                  style={[
-                    styles.energyValues,
-                    { backgroundColor: value.color },
-                  ]}
-                  onPress={() => {
-                    (initialValues.points = value.points),
-                      setIsEnergyvaluePressed(true);
-                  }}
-                >
-                  {value.points}
-                </Text>
-              );
-            })}
-          </View>
-        </Card.Actions>
-      </View>
+      <Card.Actions style={styles.cardAction}>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            alignContent: "flex-end",
+          }}
+        >
+          {values.map((value, index) => {
+            return (
+              <Text
+                key={index}
+                style={[
+                  styles.energyValues,
+                  { backgroundColor: value.color, marginLeft: 10 },
+                ]}
+                onPress={() => {
+                  (initialValues.points = value.points),
+                    setIsEnergyvaluePressed(true);
+                }}
+              >
+                {value.points}
+              </Text>
+            );
+          })}
+        </View>
+      </Card.Actions>
     );
   };
 
@@ -212,7 +210,13 @@ const CreateChoreInfo = ({ onClosed }: Props) => {
                     </Card.Actions>
                   </View>
                 ) : (
-                  displayEnergyValues()
+                  <ScrollView
+                    style={{
+                      flexDirection: "row",
+                    }}
+                  >
+                    {displayEnergyValues()}
+                  </ScrollView>
                 )}
               </TouchableRipple>
             </Card>

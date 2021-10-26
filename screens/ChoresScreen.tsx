@@ -31,8 +31,25 @@ import CreateChoreInfo from "../components/CreateChoreInfo"
   const [isVisible, setIsVisible] = React.useState(false);
 
   return (
-    // TODO: flytta till styles.css
     <View style={{backgroundColor: "red", flex: 1}}>   
+
+        {/* {household.chores.map((prop, key) => {
+        return (
+          <ChoreButton  //TODO: Move this props-logic somewhere else
+            key={key}
+            buttonText={prop.title}
+            completedBy={users.filter(
+              (user) =>
+                user.choresDone.filter((chore) => chore.choreId === prop.id)
+                  .length
+            )}
+            daysSinceLast={String(7)}
+            isLate={false}
+          />
+        );
+      })} */}
+
+     {/* TODO: flytta till styles.css */}
       <View style={styles.bottomButtonRow}>
         <Button
           icon="plus-circle-outline"
