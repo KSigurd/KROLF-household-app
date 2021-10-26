@@ -344,3 +344,24 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 25,
   },
 });
+
+//TODO 
+
+//BRYT UT FUNKTIONALITET
+
+// Elevation - titel & beskrivning
+
+// höjd-diff på värde och "1 2 4 6 8"
+
+// Saknas text "spara & stäng" på IOS
+
+// fade höger sida inne i scrollview i reoccurence
+
+// siffran på värde-cardet är fyrkantig på IOS
+
+// samma ställe - siffran centrering höjdled, nu för högt (IOS)
+
+// justera transparensnivån vid sidan av "modalen"
+
+// Justera modalens hög när man skriver i input. den går för högt
+
