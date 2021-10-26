@@ -1,11 +1,12 @@
 import React, { FC, useEffect } from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import { PieChart } from "react-native-svg-charts";
 import StatisticCircle from "../components/StatisticCircle";
 import { avatars } from "../data/avatarData";
 import { Chore } from "../interfaces/chore";
 import { CompletedChore } from "../interfaces/completedChore";
 import { HouseholdUser } from "../interfaces/householdUser";
+import { ChoreStatisticsDTO } from "../interfaces/statisticsDTO";
 import { getStatisticsAction } from "../store/completedChore/completedChoreSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 
@@ -59,7 +60,11 @@ const StatisticsScreen: FC = () => {
   const activeHouseholdState = useAppSelector(state => state.household.activeHouseholdId);
   const statisticsState = useAppSelector(state => state.completedChore.statistics)
 
-
+ const blaa = statisticsState.map(chore => {
+   if(chore.completedChores.find(completedChore => completedChore.completedChores.length != 0)) {
+     return chore;
+   }
+ })
 
 
   // const statistics = useAppSelector((state) => {
@@ -124,15 +129,22 @@ const StatisticsScreen: FC = () => {
   // 1. Hämta alla Completed Chores
   // 2. Filtera på datum
   // 3. Mappa över
+  function calcTotal() {
+    let total: 
+    statisticsState.forEach((chore) => {
+      // return chore.points * chore.completedChores.length
+    }
+  }
 
   return (
-    <View>
-      <Text>HALLLÅÅÅÅ?</Text>
-      {/* <StatisticCircle title="Total" height={200} data={statisticsState} /> */}
-      <View>
-        {statisticsState.filter((chore) => (chore.points * chore.completedChores.length) > 0)
+    <View style={styles.root}>
+      <StatisticCircle title="Total" height={200} data={...statisticsState.++
+      } />
+      <View style={styles.circles}>
+        {statisticsState.filter((chore) => (chore.points * chore.completedChores.length > 0))
         .map(s => (
           <StatisticCircle
+            key={s.choreTitle}
             height={100}
             data={s}
           />
@@ -146,3 +158,18 @@ const StatisticsScreen: FC = () => {
 
 
 export default StatisticsScreen;
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    alignItems: "flex-start",
+    justifyContent: "center",
+    
+    
+  },
+  circles: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    overflow: "hidden",
+  }
+});
