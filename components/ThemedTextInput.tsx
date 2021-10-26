@@ -19,7 +19,6 @@ const ThemedTextInput = ({ label, helperText, ...textInputProps }: Props) => {
       )}
       <Surface style={styles.surface}>
         <NPTextInput
-        
           mode="outlined"
           //mode="flat"
           //theme={{ roundness: 10}}
@@ -54,10 +53,8 @@ const styles = StyleSheet.create({
   input: {
     elevation: 4,
     borderColor: "transparent",
-    borderRadius: 10, 
-    // backgroundColor: "green",
-    // width: "100%",
-    //height: 20,
+    borderRadius: 10,
+    backgroundColor: "white",
   },
   helperText: {
     color: "red",
@@ -66,11 +63,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
-  surface: {  
-    
+  surface: {
     backgroundColor: "#f2f2f2",
-    // // elevation: 4,
-    // borderRadius: 10,   
-    // backgroundColor: "transparent"
+    borderRadius: 10,
   },
 });
