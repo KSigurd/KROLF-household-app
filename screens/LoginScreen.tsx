@@ -18,12 +18,6 @@ const LoginScreen = ({ navigation }: Props) => {
         >
           här
         </Text>
-        <Text
-          style={styles.createAccountText}
-          onPress={() => navigation.navigate("ChoresStatisticsNavigator")}
-        >
-          STATISTIK
-        </Text>
       </View>
     </View>
   );
@@ -40,7 +34,7 @@ const styles = StyleSheet.create({
   },
   noAccountContainer: {
     flexDirection: "row",
-    justifyContent: "center",   
+    justifyContent: "center",
   },
   noAccountText: {
     fontWeight: "bold",
