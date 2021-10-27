@@ -1,13 +1,12 @@
 export interface Chore {
-  id: number;
+  id: string;
   title: string;
   description: string;
   points: number;
   repeatability: number;
-  householdId: number;
+  householdId: string;
 }
 
-export interface CompletedChore {
-  choreId: number;
-  date: Date;
-}
+export interface ChoreOmit extends Omit<Chore, "id">{};
+
+

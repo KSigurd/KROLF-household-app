@@ -27,7 +27,7 @@ const RootNavigator = () => {
           headerStyle: {
             backgroundColor: "blue",
           },
-          contentStyle: { backgroundColor: "red" },
+          contentStyle: { backgroundColor: "#f0f0f0" },
           headerTitleAlign: "center",
           headerTitleStyle: { color: "white" },
           headerTintColor: "white",
@@ -53,10 +53,11 @@ const RootNavigator = () => {
           component={JoinHouseholdScreen}
           options={{ title: "Gå med" }}
         />
+        {/* TODO: CHECK THIS */}
         <Stack.Screen
           name="Profile"
           component={ProfileScreen}
-          options={{ title: "Profil" }}
+          options={{ presentation: "fullScreenModal", title: "Profil" }}
         />
         <Stack.Screen
           name="ChoresStatisticsNavigator"

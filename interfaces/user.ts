@@ -1,5 +1,7 @@
 export interface User {
-  id: number;
+  id: string;
   email: string;
   password: string;
 }
+
+export interface UserOmit extends Omit<User, "id">{};
