@@ -36,15 +36,6 @@ const LoginScreen = ({ navigation }: Props) => {
         </Text>
 
       </View>
-
-      <NPbutton
-          mode="contained"
-          onPress={() => {
-            dispatch(getStatisticsAction(activeHouseholdState))
-            navigation.navigate("ChoresStatisticsNavigator")}}
-        >
-          Gå till statistik
-        </NPbutton>
     </View>
   );
 };

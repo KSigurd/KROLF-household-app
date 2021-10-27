@@ -129,18 +129,18 @@ const StatisticsScreen: FC = () => {
   // 1. Hämta alla Completed Chores
   // 2. Filtera på datum
   // 3. Mappa över
-  function calcTotal() {
-    let total: 
-    statisticsState.forEach((chore) => {
-      // return chore.points * chore.completedChores.length
-    }
-  }
+  // function calcTotal() {
+  //   let total: 
+  //   statisticsState.forEach((chore) => {
+  //     // return chore.points * chore.completedChores.length
+  //   }
+  // }
 
   return (
     <View style={styles.root}>
-      <StatisticCircle title="Total" height={200} data={...statisticsState.++
-      } />
-      <View style={styles.circles}>
+      {/* <StatisticCircle title="Total" height={200} data={...statisticsState.++
+      } /> */}
+      {/* <View style={styles.circles}>
         {statisticsState.filter((chore) => (chore.points * chore.completedChores.length > 0))
         .map(s => (
           <StatisticCircle
@@ -149,7 +149,7 @@ const StatisticsScreen: FC = () => {
             data={s}
           />
         ))}
-      </View>
+      </View> */}
     </View>
   
   );
