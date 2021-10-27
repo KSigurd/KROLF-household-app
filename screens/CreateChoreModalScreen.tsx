@@ -1,11 +1,9 @@
-import React, { FC } from "react";
-import { Modal, Portal, Text, Provider } from "react-native-paper";
-import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
-import { Button as NPbutton } from "react-native-paper";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../navigation/RootNavigator";
-import { TabParamList } from "../navigation/ChoresStatisticsNavigator";
+import React from "react";
+import { SafeAreaView, StyleSheet, View } from "react-native";
+import { Text } from "react-native-paper";
 import CreateChoreInfo from "../components/CreateChoreInfo";
+import { TabParamList } from "../navigation/ChoresStatisticsNavigator";
 
 type Props = NativeStackScreenProps<TabParamList>;
 

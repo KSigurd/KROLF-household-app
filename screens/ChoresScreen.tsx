@@ -33,7 +33,7 @@ import CreateChoreInfo from "../components/CreateChoreInfo"
   return (
     <View style={{backgroundColor: "red", flex: 1}}>   
 
-        {/* {household.chores.map((prop, key) => {
+         {/* {household.chores.map((prop, key) => {
         return (
           <ChoreButton  //TODO: Move this props-logic somewhere else
             key={key}

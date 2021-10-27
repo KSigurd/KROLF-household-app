@@ -12,11 +12,7 @@ interface Props extends Omit<TextInputProps, "theme"> {
 const ThemedTextInput = ({ label, helperText, ...textInputProps }: Props) => {
   return (
     <View style={styles.root}>
-      {label !== "undefined" ? (
-        <Text style={styles.text}>{label}</Text>
-      ) : (
-        <Text style={styles.text}>SKA EJ SYNAS</Text>
-      )}
+      {label ? <Text style={styles.text}>{label}</Text> : null}
       <Surface style={styles.surface}>
         <NPTextInput
           mode="outlined"
@@ -47,8 +43,7 @@ export default ThemedTextInput;
 const styles = StyleSheet.create({
   root: {
     marginHorizontal: 10,
-    marginVertical: 5,
-    justifyContent: "space-between",
+    marginVertical: 8,
   },
   input: {
     borderColor: "transparent",
@@ -65,6 +60,7 @@ const styles = StyleSheet.create({
   },
   surface: {
     backgroundColor: "#f2f2f2",
-    borderRadius: 10
+    borderRadius: 10,
+    elevation: 4,
   },
 });

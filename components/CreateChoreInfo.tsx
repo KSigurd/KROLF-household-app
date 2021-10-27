@@ -1,38 +1,42 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { Button as NPbutton, Card, TouchableRipple } from "react-native-paper";
+import {
+  Button as NPbutton,
+  Card,
+  Surface,
+  Title,
+  TouchableRipple,
+} from "react-native-paper";
 import * as Yup from "yup";
 import { chores } from "../data/mockChoresData";
+import { Chore } from "../interfaces/chore";
+import { styles as style } from "../styles/styles";
 import ThemedTextInput from "./ThemedTextInput";
-
-//CHANGE TO CHORE INTERFACE
-interface ChoreTitle {
-  title: string;
-  description: string;
-  points: number;
-  reoccurenceNumber: number;
-}
 
 interface Props {
   onClosed: () => void;
 }
 
 //DEFAULT VALUES
-const initialValues: ChoreTitle = {
+const initialValues: Chore = {
   title: "",
   description: "",
   points: 2,
-  reoccurenceNumber: 7,
+  repeatability: 7,
+  id: 0,
+  householdId: 0,
 };
 
-type PostSchemaType = Record<keyof ChoreTitle, Yup.AnySchema>;
+type PostSchemaType = Record<keyof Chore, Yup.AnySchema>;
 
 const validationSchema = Yup.object().shape<PostSchemaType>({
   title: Yup.string().required("Fyll i en titel").min(2),
   description: Yup.string().required("Fyll i en beskrivning av syssla").min(2),
   points: Yup.number().required(),
-  reoccurenceNumber: Yup.number().required(),
+  repeatability: Yup.number().required(),
+  id: Yup.number(),
+  householdId: Yup.number(),
 });
 
 const CreateChoreInfo = ({ onClosed }: Props) => {
@@ -47,10 +51,9 @@ const CreateChoreInfo = ({ onClosed }: Props) => {
     { points: 8, color: "#d9d9d9" },
   ];
 
-  const handleSubmit = (chore: ChoreTitle) => {
+  const handleSubmit = (chore: Chore) => {
     //ADD CHANGES TO FIREBASE
-    //chores.push(chore)
-    console.log("chore");
+    chores.push({ ...chore, id: 50 });
     console.log(chore);
 
     //CLOSES MODAL
@@ -75,7 +78,7 @@ const CreateChoreInfo = ({ onClosed }: Props) => {
                 value === 30 ? { marginRight: 10 } : { marginRight: 0 },
               ]}
               onPress={() => {
-                (initialValues.reoccurenceNumber = value),
+                (initialValues.repeatability = value),
                   setIsReoccurencePressed(true);
               }}
             >
@@ -92,7 +95,7 @@ const CreateChoreInfo = ({ onClosed }: Props) => {
       <Card.Actions style={styles.cardAction}>
         <View
           style={{
-            width: '100%',
+            width: "100%",
             flex: 1,
             flexDirection: "row",
             justifyContent: "space-between",
@@ -102,10 +105,7 @@ const CreateChoreInfo = ({ onClosed }: Props) => {
             return (
               <Text
                 key={index}
-                style={[
-                  styles.energyValues,
-                  { backgroundColor: value.color },
-                ]}
+                style={[styles.energyValues, { backgroundColor: value.color }]}
                 onPress={() => {
                   (initialValues.points = value.points),
                     setIsEnergyvaluePressed(true);
@@ -139,8 +139,8 @@ const CreateChoreInfo = ({ onClosed }: Props) => {
             style={styles.input}
             placeholder="Titel"
             placeholderTextColor="#d3d3d3"
-            onChangeText={handleChange<keyof ChoreTitle>("title")}
-            onBlur={handleBlur<keyof ChoreTitle>("title")}
+            onChangeText={handleChange<keyof Chore>("title")}
+            onBlur={handleBlur<keyof Chore>("title")}
             value={values.title}
             helperText={touched.title && errors.title}
           />
@@ -150,50 +150,57 @@ const CreateChoreInfo = ({ onClosed }: Props) => {
             placeholder="Beskrivning"
             numberOfLines={4}
             multiline={true}
-            onChangeText={handleChange<keyof ChoreTitle>("description")}
-            onBlur={handleBlur<keyof ChoreTitle>("description")}
+            onChangeText={handleChange<keyof Chore>("description")}
+            onBlur={handleBlur<keyof Chore>("description")}
             value={values.description}
             helperText={touched.description && errors.description}
           />
-          <View>
-            <Card style={styles.card}>
-              <TouchableRipple
-                rippleColor="rgba(0,0,0,0)"
-                onPress={() =>
-                  isReoccurencePressed
-                    ? setIsReoccurencePressed(false)
-                    : setIsReoccurencePressed(true)
-                }
-              >
-                {isReoccurencePressed ? (
-                  <View style={styles.cardRow}>
-                    <Card.Title style={styles.cardTitle} title="Återkommer: " />
-                    <Card.Actions style={styles.cardAction}>
-                      <Text style={{ fontSize: 16 }}>var </Text>
-                      <Text style={styles.reoccurenceValue}>
-                        {initialValues.reoccurenceNumber}
-                        {/* {initialValues.points} */}
-                      </Text>
-                      <Text style={{ fontSize: 16 }}> dag</Text>
-                    </Card.Actions>
-                  </View>
-                ) : (
-                  <ScrollView
-                    horizontal={true}
-                    style={{
-                      flexDirection: "row",
-                    }}
+
+          <Surface style={[style.fullscreenButton, style.buttonOutlined]}>
+            <TouchableRipple
+              borderless={true}
+              style={style.fillParent}
+              onPress={() =>
+                isReoccurencePressed
+                  ? setIsReoccurencePressed(false)
+                  : setIsReoccurencePressed(true)
+              }
+            >
+              {isReoccurencePressed ? (
+                <Surface style={style.buttonInnerContainer}>
+                  <Title style={[style.choresButtonTitle, style.buttonText]}>
+                    Återkommer:
+                  </Title>
+                  <Text style={{ fontSize: 16 }}>var </Text>
+                  <Text
+                    style={[
+                      style.buttonText,
+                      style.choresButtonAdditions,
+                      styles.reoccurenceValue,
+                    ]}
                   >
-                    {displayReoccurenceValues()}
-                  </ScrollView>
-                )}
-              </TouchableRipple>
-            </Card>
-          </View>
+                    {initialValues.repeatability}
+                  </Text>
+                  <Text style={{ fontSize: 16 }}> dag</Text>
+                </Surface>
+              ) : (
+                <ScrollView
+                  horizontal={true}
+                  style={{
+                    flexDirection: "row",
+                  }}
+                >
+                  {displayReoccurenceValues()}
+                </ScrollView>
+              )}
+            </TouchableRipple>
+          </Surface>
+
           <View>
-            <Card style={[styles.card, styles.marginBottom]}>
+            <Surface style={[style.fullscreenButton, style.buttonOutlined]}>
               <TouchableRipple
-                rippleColor="rgba(0,0,0,0)"
+                borderless={true}
+                style={style.fillParent}
                 onPress={() =>
                   isEnergyValuePressed
                     ? setIsEnergyvaluePressed(false)
@@ -223,11 +230,11 @@ const CreateChoreInfo = ({ onClosed }: Props) => {
                   </View>
                 )}
               </TouchableRipple>
-            </Card>
+            </Surface>
           </View>
           <View style={styles.buttonContainer}>
             <NPbutton
-              labelStyle={{ fontSize: 25, color: 'black' }}
+              labelStyle={{ fontSize: 25, color: "black" }}
               icon="plus-circle-outline"
               style={styles.NPbutton}
               uppercase={false}
@@ -236,7 +243,7 @@ const CreateChoreInfo = ({ onClosed }: Props) => {
               <Text style={{ fontSize: 15 }}>Spara</Text>
             </NPbutton>
             <NPbutton
-              labelStyle={{ fontSize: 25, color: 'black' }}
+              labelStyle={{ fontSize: 25, color: "black" }}
               icon="close-circle-outline"
               style={styles.NPbutton}
               uppercase={false}
@@ -255,19 +262,14 @@ export default CreateChoreInfo;
 
 const styles = StyleSheet.create({
   root: {
-    justifyContent: "space-between",
+    marginTop: 8,
   },
   NPbutton: {
     flex: 1,
-    height: '100%',
+    height: "100%",
     borderRadius: 25,
-    justifyContent: 'center'
+    justifyContent: "center",
   },
-  // NPbutton: {
-  //   width: 150,
-  //   borderRadius: 100,
-  //   padding: 10,
-  // },
   input: {
     marginTop: 0,
   },
@@ -309,11 +311,8 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
   },
   reoccurenceNumbers: {
-    // backgroundColor: "#cd5d6f",
     color: "black",
-    // borderRadius: 100,
     fontSize: 18,
-    // width: 20,
     marginLeft: 10,
     height: 70,
     textAlign: "center",
@@ -332,7 +331,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   buttonContainer: {
-    overflow: 'hidden',
+    overflow: "hidden",
     flexDirection: "row",
     backgroundColor: "white",
     justifyContent: "space-between",
@@ -340,6 +339,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 60,
     bottom: 0,
+    marginTop: 8,
     borderBottomLeftRadius: 25,
     borderBottomRightRadius: 25,
   },
