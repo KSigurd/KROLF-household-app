@@ -51,10 +51,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   input: {
-    elevation: 4,
     borderColor: "transparent",
     borderRadius: 10,
     backgroundColor: "white",
+    marginTop: -6,
   },
   helperText: {
     color: "red",
@@ -65,6 +65,6 @@ const styles = StyleSheet.create({
   },
   surface: {
     backgroundColor: "#f2f2f2",
-    borderRadius: 10,
+    borderRadius: 10
   },
 });

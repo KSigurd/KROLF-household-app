@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { Modal, Portal, Text, Provider } from "react-native-paper";
-import { StyleSheet, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import { Button as NPbutton } from "react-native-paper";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../navigation/RootNavigator";
@@ -15,26 +15,27 @@ const CreateChoreModalScreen = ({ navigation }: Props) => {
   };
 
   return (
-    <Provider>
-      <Portal>
-        <Modal
-          style={styles.modalBox}
-          visible={true}
-          onDismiss={() => {
-            navigation.navigate("Chores");
-          }}
-        >
-          <View style={styles.outerContainer}>
-            <View style={styles.topCointainer}>
-              <Text style={styles.titleText}>Skapa en ny syssla</Text>
-            </View>
-            <View style={styles.centerContainer}>
-              <CreateChoreInfo onClosed={onClosed} />
-            </View>
-          </View>
-        </Modal>
-      </Portal>
-    </Provider>
+    // <Provider>
+    //   <Portal>
+    //     <Modal
+    //       style={styles.modalBox}
+    //       visible={true}
+    //       onDismiss={() => {
+    //         navigation.navigate("Chores");
+    //       }}
+    //     >
+
+    <View style={styles.outerContainer}>
+      <SafeAreaView>
+        <View style={styles.topCointainer}>
+          <Text style={styles.titleText}>Skapa en ny syssla</Text>
+        </View>
+        <View style={styles.centerContainer}>
+          <CreateChoreInfo onClosed={onClosed} />
+        </View>
+      </SafeAreaView>
+    </View>
+    //     </Modal>w
   );
 };
 
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
   modalBox: {
     flex: 1,
     marginHorizontal: 25,
-    marginBottom: 25,
+    marginVertical: 25,
   },
   topCointainer: {
     borderTopLeftRadius: 25,
@@ -75,6 +76,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   outerContainer: {
-    elevation: 20,
+    backgroundColor: "#000000AA",
+    padding: 8,
+    flex: 1,
+    justifyContent: "center",
   },
 });

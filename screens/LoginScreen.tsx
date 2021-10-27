@@ -18,6 +18,12 @@ const LoginScreen = ({ navigation }: Props) => {
         >
           här
         </Text>
+        <Text
+          style={styles.createAccountText}
+          onPress={() => navigation.navigate("ChoresStatisticsNavigator")}
+        >
+          STATISTIK
+        </Text>
       </View>
     </View>
   );

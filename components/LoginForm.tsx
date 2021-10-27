@@ -58,7 +58,6 @@ const LoginForm = ({ loginSucceded }: Props) => {
         <View style={styles.root}>
           <View>
             <ThemedTextInput
-              style={styles.input}
               label="Användarnamn"
               onChangeText={handleChange<keyof User>("email")}
               onBlur={handleBlur<keyof User>("email")}
@@ -66,7 +65,6 @@ const LoginForm = ({ loginSucceded }: Props) => {
               helperText={touched.email && errors.email}
             />
             <ThemedTextInput
-              style={styles.input}
               secureTextEntry={true}
               label="Lösenord"
               onChangeText={handleChange<keyof User>("password")}
@@ -76,8 +74,6 @@ const LoginForm = ({ loginSucceded }: Props) => {
             />
           </View>
           <NPbutton
-            //ADD DISABLE IF FIELD NOT FILLED
-            disabled={!values.password}
             icon="account-key-outline"
             mode="contained"
             style={styles.NPbutton}
@@ -104,8 +100,5 @@ const styles = StyleSheet.create({
     padding: 10,
     alignSelf: "center",
     marginVertical: 10,
-  },
-  input: {
-    elevation: 4,
-  },
+  }
 });

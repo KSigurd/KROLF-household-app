@@ -3,8 +3,10 @@ import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Button as NPbutton, Card, TouchableRipple } from "react-native-paper";
 import * as Yup from "yup";
+import { chores } from "../data/mockChoresData";
 import ThemedTextInput from "./ThemedTextInput";
 
+//CHANGE TO CHORE INTERFACE
 interface ChoreTitle {
   title: string;
   description: string;
@@ -47,6 +49,7 @@ const CreateChoreInfo = ({ onClosed }: Props) => {
 
   const handleSubmit = (chore: ChoreTitle) => {
     //ADD CHANGES TO FIREBASE
+    //chores.push(chore)
     console.log("chore");
     console.log(chore);
 
@@ -55,15 +58,15 @@ const CreateChoreInfo = ({ onClosed }: Props) => {
   };
 
   const displayReoccurenceValues = () => {
-    let element: number[] = [];
+    let repeatabilityNumbers: number[] = [];
 
     for (let i = 1; i < 31; i++) {
-      element.push(i);
+      repeatabilityNumbers.push(i);
     }
 
     return (
       <View style={[{ flexDirection: "row", flex: 1 }]}>
-        {element.map((value, index) => {
+        {repeatabilityNumbers.map((value, index) => {
           return (
             <Text
               key={index}
@@ -89,9 +92,10 @@ const CreateChoreInfo = ({ onClosed }: Props) => {
       <Card.Actions style={styles.cardAction}>
         <View
           style={{
+            width: '100%',
             flex: 1,
             flexDirection: "row",
-            alignContent: "flex-end",
+            justifyContent: "space-between",
           }}
         >
           {values.map((value, index) => {
@@ -100,7 +104,7 @@ const CreateChoreInfo = ({ onClosed }: Props) => {
                 key={index}
                 style={[
                   styles.energyValues,
-                  { backgroundColor: value.color, marginLeft: 10 },
+                  { backgroundColor: value.color },
                 ]}
                 onPress={() => {
                   (initialValues.points = value.points),
@@ -210,23 +214,21 @@ const CreateChoreInfo = ({ onClosed }: Props) => {
                     </Card.Actions>
                   </View>
                 ) : (
-                  <ScrollView
+                  <View
                     style={{
                       flexDirection: "row",
                     }}
                   >
                     {displayEnergyValues()}
-                  </ScrollView>
+                  </View>
                 )}
               </TouchableRipple>
             </Card>
           </View>
           <View style={styles.buttonContainer}>
             <NPbutton
-              labelStyle={{ fontSize: 25 }}
+              labelStyle={{ fontSize: 25, color: 'black' }}
               icon="plus-circle-outline"
-              mode="text"
-              color="black"
               style={styles.NPbutton}
               uppercase={false}
               onPress={() => handleSubmit()}
@@ -234,10 +236,8 @@ const CreateChoreInfo = ({ onClosed }: Props) => {
               <Text style={{ fontSize: 15 }}>Spara</Text>
             </NPbutton>
             <NPbutton
-              labelStyle={{ fontSize: 25 }}
+              labelStyle={{ fontSize: 25, color: 'black' }}
               icon="close-circle-outline"
-              mode="text"
-              color="black"
               style={styles.NPbutton}
               uppercase={false}
               onPress={() => onClosed()}
@@ -258,11 +258,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   NPbutton: {
-    width: 150,
-    borderRadius: 100,
-    padding: 10,
-    alignSelf: "center",
-    marginVertical: 10,
+    flex: 1,
+    height: '100%',
+    borderRadius: 25,
+    justifyContent: 'center'
   },
   // NPbutton: {
   //   width: 150,
@@ -333,6 +332,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   buttonContainer: {
+    overflow: 'hidden',
     flexDirection: "row",
     backgroundColor: "white",
     justifyContent: "space-between",
@@ -345,7 +345,7 @@ const styles = StyleSheet.create({
   },
 });
 
-//TODO 
+//TODO
 
 //BRYT UT FUNKTIONALITET
 
@@ -364,4 +364,3 @@ const styles = StyleSheet.create({
 // justera transparensnivån vid sidan av "modalen"
 
 // Justera modalens hög när man skriver i input. den går för högt
-
