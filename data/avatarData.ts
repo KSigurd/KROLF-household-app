@@ -14,7 +14,7 @@ export const avatars: Avatar[] = [
   {
     id: "2",
     avatar: "🐳",
-    color: "#73aa24",
+    color: "#24a6aa",
   },
   {
     id: "3",
