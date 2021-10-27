@@ -25,12 +25,12 @@ const RootNavigator = () => {
       <Stack.Navigator
         screenOptions={{
           headerStyle: {
-            backgroundColor: "blue",
+            backgroundColor: "#fff",
           },
           contentStyle: { backgroundColor: "#f0f0f0" },
           headerTitleAlign: "center",
-          headerTitleStyle: { color: "white" },
-          headerTintColor: "white",
+          headerTitleStyle: { color: "#000" },
+          headerTintColor: "#000",
         }}
       >
         <Stack.Screen
