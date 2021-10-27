@@ -12,6 +12,7 @@ import * as Yup from "yup";
 import { chores } from "../data/mockChoresData";
 import { Chore } from "../interfaces/chore";
 import { styles as style } from "../styles/styles";
+import Repeatability from "./repeatability";
 import ThemedTextInput from "./ThemedTextInput";
 
 interface Props {
@@ -41,7 +42,6 @@ const validationSchema = Yup.object().shape<PostSchemaType>({
 
 const CreateChoreInfo = ({ onClosed }: Props) => {
   const [isEnergyValuePressed, setIsEnergyvaluePressed] = useState(true);
-  const [isReoccurencePressed, setIsReoccurencePressed] = useState(true);
 
   const values = [
     { points: 1, color: "#f2f2f2" },
@@ -58,36 +58,6 @@ const CreateChoreInfo = ({ onClosed }: Props) => {
 
     //CLOSES MODAL
     onClosed();
-  };
-
-  const displayReoccurenceValues = () => {
-    let repeatabilityNumbers: number[] = [];
-
-    for (let i = 1; i < 31; i++) {
-      repeatabilityNumbers.push(i);
-    }
-
-    return (
-      <View style={[{ flexDirection: "row", flex: 1 }]}>
-        {repeatabilityNumbers.map((value, index) => {
-          return (
-            <Text
-              key={index}
-              style={[
-                styles.reoccurenceNumbers,
-                value === 30 ? { marginRight: 10 } : { marginRight: 0 },
-              ]}
-              onPress={() => {
-                (initialValues.repeatability = value),
-                  setIsReoccurencePressed(true);
-              }}
-            >
-              {value}
-            </Text>
-          );
-        })}
-      </View>
-    );
   };
 
   const displayEnergyValues = () => {
@@ -155,47 +125,13 @@ const CreateChoreInfo = ({ onClosed }: Props) => {
             value={values.description}
             helperText={touched.description && errors.description}
           />
+          <Repeatability
+            getRepeatability={(repeatability) => {
+              initialValues.repeatability = repeatability;
+            }}
 
-          <Surface style={[style.fullscreenButton, style.buttonOutlined]}>
-            <TouchableRipple
-              borderless={true}
-              style={style.fillParent}
-              onPress={() =>
-                isReoccurencePressed
-                  ? setIsReoccurencePressed(false)
-                  : setIsReoccurencePressed(true)
-              }
-            >
-              {isReoccurencePressed ? (
-                <Surface style={style.buttonInnerContainer}>
-                  <Title style={[style.choresButtonTitle, style.buttonText]}>
-                    Återkommer:
-                  </Title>
-                  <Text style={{ fontSize: 16 }}>var </Text>
-                  <Text
-                    style={[
-                      style.buttonText,
-                      style.choresButtonAdditions,
-                      styles.reoccurenceValue,
-                    ]}
-                  >
-                    {initialValues.repeatability}
-                  </Text>
-                  <Text style={{ fontSize: 16 }}> dag</Text>
-                </Surface>
-              ) : (
-                <ScrollView
-                  horizontal={true}
-                  style={{
-                    flexDirection: "row",
-                  }}
-                >
-                  {displayReoccurenceValues()}
-                </ScrollView>
-              )}
-            </TouchableRipple>
-          </Surface>
-
+            // repeatability={getRepeatability(initialValues.repeatability)}
+          />
           <View>
             <Surface style={[style.fullscreenButton, style.buttonOutlined]}>
               <TouchableRipple
@@ -364,3 +300,75 @@ const styles = StyleSheet.create({
 // justera transparensnivån vid sidan av "modalen"
 
 // Justera modalens hög när man skriver i input. den går för högt
+
+// const displayReoccurenceValues = () => {
+//   let repeatabilityNumbers: number[] = [];
+
+//   for (let i = 1; i < 31; i++) {
+//     repeatabilityNumbers.push(i);
+//   }
+
+//   return (
+//     <View style={[{ flexDirection: "row", flex: 1 }]}>
+//       {repeatabilityNumbers.map((value, index) => {
+//         return (
+//           <Text
+//             key={index}
+//             style={[
+//               styles.reoccurenceNumbers,
+//               value === 30 ? { marginRight: 10 } : { marginRight: 0 },
+//             ]}
+//             onPress={() => {
+//               (initialValues.repeatability = value),
+//                 setIsReoccurencePressed(true);
+//             }}
+//           >
+//             {value}
+//           </Text>
+//         );
+//       })}
+//     </View>
+//   );
+// };
+
+{
+  /* <Surface style={[style.fullscreenButton, style.buttonOutlined]}>
+            <TouchableRipple
+              borderless={true}
+              style={style.fillParent}
+              onPress={() =>
+                isReoccurencePressed
+                  ? setIsReoccurencePressed(false)
+                  : setIsReoccurencePressed(true)
+              }
+            >
+              {isReoccurencePressed ? (
+                <Surface style={style.buttonInnerContainer}>
+                  <Title style={[style.choresButtonTitle, style.buttonText]}>
+                    Återkommer:
+                  </Title>
+                  <Text style={{ fontSize: 16 }}>var </Text>
+                  <Text
+                    style={[
+                      style.buttonText,
+                      style.choresButtonAdditions,
+                      styles.reoccurenceValue,
+                    ]}
+                  >
+                    {initialValues.repeatability}
+                  </Text>
+                  <Text style={{ fontSize: 16 }}> dag</Text>
+                </Surface>
+              ) : (
+                <ScrollView
+                  horizontal={true}
+                  style={{
+                    flexDirection: "row",
+                  }}
+                >
+                  {displayReoccurenceValues()}
+                </ScrollView>
+              )}
+            </TouchableRipple>
+          </Surface> */
+}
