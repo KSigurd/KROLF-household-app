@@ -1,8 +1,6 @@
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import ChoresScreen from "../screens/ChoresScreen";
 import CreateAccountScreen from "../screens/CreateAccountScreen";
 import CreateHouseholdScreen from "../screens/CreateHouseholdScreen";
 import JoinHouseholdScreen from "../screens/JoinHouseholdScreen";
@@ -29,12 +27,12 @@ const RootNavigator = () => {
       <Stack.Navigator
         screenOptions={{
           headerStyle: {
-            backgroundColor: "blue",
+            backgroundColor: "#fff",
           },
           contentStyle: { backgroundColor: "#f0f0f0" },
           headerTitleAlign: "center",
-          headerTitleStyle: { color: "white" },
-          headerTintColor: "white",
+          headerTitleStyle: { color: "#000" },
+          headerTintColor: "#000",
         }}
       >
         <Stack.Screen
@@ -50,18 +48,23 @@ const RootNavigator = () => {
         <Stack.Screen
           name="CreateHousehold"
           component={CreateHouseholdScreen}
+          options={{ title: "Skapa hushåll" }}
         />
-        <Stack.Screen name="JoinHousehold" component={JoinHouseholdScreen} />
+        <Stack.Screen
+          name="JoinHousehold"
+          component={JoinHouseholdScreen}
+          options={{ title: "Gå med" }}
+        />
         {/* TODO: CHECK THIS */}
         <Stack.Screen
           name="Profile"
           component={ProfileScreen}
-          options={{ presentation: "fullScreenModal" }}
+          options={{ presentation: "fullScreenModal", title: "Profil" }}
         />
         <Stack.Screen
           name="ChoresStatisticsNavigator"
           component={ChoresStatisticsNavigator}
-          options={{ title: "Hushållet" }}
+          options={{ title: "Hushållet", headerBackVisible: false }}
         />
         <Stack.Screen
           name="CreateChoreModalScreen"
@@ -76,11 +79,5 @@ const RootNavigator = () => {
     </NavigationContainer>
   );
 };
-
-// <Stack.Screen
-//   name="Root"
-//   component={TabBistroMapNavigator}
-//   options={{ headerShown: false }}
-// />
 
 export default RootNavigator;
