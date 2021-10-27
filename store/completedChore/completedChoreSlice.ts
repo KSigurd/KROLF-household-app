@@ -1,23 +1,88 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { completedChores } from "../../data/mockHouseholdData";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  addCompletedChore,
+  getCompletedChores,
+  getStatistics,
+} from "../../data/fireStoreModule";
 import { CompletedChore } from "../../interfaces/completedChore";
+import { ChoreStatisticsDTO } from "../../interfaces/statisticsDTO";
+import { ThunkConfig } from "../store";
 
 interface CompletedChoreState {
-    compltedChore: CompletedChore[];
+  compltedChores: CompletedChore[];
+  statistics: ChoreStatisticsDTO[];
+  error: string | undefined;
 }
 
 const initialState: CompletedChoreState = {
-    compltedChore: completedChores
+  compltedChores: [],
+  statistics: [],
+  error: undefined,
 };
 
-const completedChoreSlice = createSlice({
-    name: 'completedChore',
-    initialState,
-    reducers: {
-        
-    }
+export const getStatisticsAction = createAsyncThunk<
+  { response: ChoreStatisticsDTO[] },
+  string,
+  ThunkConfig
+>("getStatistics", async (householdId, { rejectWithValue }) => {
+  try {
+    const response = await getStatistics(householdId);
+    return { response };
+  } catch (e) {
+    return rejectWithValue(false);
+  }
 });
 
-// export const { metoder från reducer } = userSlice.actions;
+export const getCompletedChoresAction = createAsyncThunk<
+  { response: CompletedChore[] },
+  string,
+  ThunkConfig
+>("getCompletedChores", async (householdId, { rejectWithValue }) => {
+  try {
+    const response = await getCompletedChores(householdId);
+    return { response };
+  } catch (e) {
+    return rejectWithValue(false);
+  }
+});
+
+export const addCompletedChoreAction = createAsyncThunk<
+  CompletedChore,
+  CompletedChore,
+  ThunkConfig
+>("addCompletedChore", async (newCompletedChore, { rejectWithValue }) => {
+  try {
+    await addCompletedChore(newCompletedChore);
+    return newCompletedChore;
+  } catch (e) {
+    return rejectWithValue(false);
+  }
+});
+
+const completedChoreSlice = createSlice({
+  name: "completedChore",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getCompletedChoresAction.fulfilled, (state, action) => {
+      state.compltedChores = action.payload.response;
+    }),
+      builder.addCase(getCompletedChoresAction.rejected, (state, action) => {
+        state.error = "Något gick fel";
+      }),
+      builder.addCase(addCompletedChoreAction.fulfilled, (state, action) => {
+        state.compltedChores.push(action.payload);
+      }),
+      builder.addCase(addCompletedChoreAction.rejected, (state, action) => {
+        state.error = "Något gick fel";
+      }),
+      builder.addCase(getStatisticsAction.fulfilled, (state, action) => {
+        state.statistics = action.payload.response;
+      }),
+      builder.addCase(getStatisticsAction.rejected, (state, action) => {
+        state.error = "något gick fel";
+      })
+  },
+});
 
 export default completedChoreSlice.reducer;
