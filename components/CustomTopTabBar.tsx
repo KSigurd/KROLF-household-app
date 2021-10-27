@@ -1,6 +1,6 @@
-import { MaterialTopTabDescriptorMap } from "@react-navigation/material-top-tabs/lib/typescript/src/types";
+import { MaterialTopTabDescriptorMap, MaterialTopTabNavigationProp } from "@react-navigation/material-top-tabs/lib/typescript/src/types";
 import { NavigationState } from "@react-navigation/routers";
-import React, { Key } from "react";
+import React from "react";
 import { Animated, StyleSheet, TouchableOpacity, View } from "react-native";
 import { IconButton } from "react-native-paper";
 import { TabParamList } from "../navigation/ChoresStatisticsNavigator";
@@ -8,16 +8,14 @@ import { TabParamList } from "../navigation/ChoresStatisticsNavigator";
 type Props = {
   state: NavigationState;
   descriptors: MaterialTopTabDescriptorMap;
-  // navigation: MaterialTopTabNavigationProp<{}>;
-  navigation: any;
-  position: any;
-  routeName: TabParamList
+  navigation: MaterialTopTabNavigationProp<TabParamList>;
 }
-
 
 const CustomTopTabBar = (props: Props) => {
   //Define the values for index and routes. To be able to shift between the right screens, in the right order.
   const currentIndex = props.state.index;
+  const firstRoute = props.state.routes[0];
+  const lastRoute = props.state.routes[props.state.routes.length - 1];
   const prevRoute = props.state.routes[currentIndex - 1];
   const currentRoute = props.state.routes[currentIndex];
   const nextRoute = props.state.routes[currentIndex + 1];
@@ -28,22 +26,14 @@ const CustomTopTabBar = (props: Props) => {
   //OnPress functions for arrow buttons
   const onLeftPress = () => {
     prevRoute
-      ? props.navigation.navigate({
-          name: prevRoute.name,
-        })
-      : props.navigation.navigate({
-          name: "LastStatistics"
-        });
+      ? props.navigation.navigate(prevRoute.name as keyof TabParamList)
+      : props.navigation.navigate(lastRoute.name as keyof TabParamList);
   };
 
   const onRightPress = () => {
     nextRoute
-      ? props.navigation.navigate({
-          name: nextRoute.name,
-        })
-      : props.navigation.navigate({
-          name: "Home",
-        });
+      ? props.navigation.navigate(nextRoute.name as keyof TabParamList)
+      : props.navigation.navigate(firstRoute.name as keyof TabParamList);
   };
 
   return (
