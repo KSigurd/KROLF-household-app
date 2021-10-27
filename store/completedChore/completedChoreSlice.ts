@@ -2,19 +2,36 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   addCompletedChore,
   getCompletedChores,
+  getStatistics,
 } from "../../data/fireStoreModule";
 import { CompletedChore } from "../../interfaces/completedChore";
+import { ChoreStatisticsDTO } from "../../interfaces/statisticsDTO";
 import { ThunkConfig } from "../store";
 
 interface CompletedChoreState {
   compltedChores: CompletedChore[];
+  statistics: ChoreStatisticsDTO[];
   error: string | undefined;
 }
 
 const initialState: CompletedChoreState = {
   compltedChores: [],
+  statistics: [],
   error: undefined,
 };
+
+export const getStatisticsAction = createAsyncThunk<
+  { response: ChoreStatisticsDTO[] },
+  string,
+  ThunkConfig
+>("getStatistics", async (householdId, { rejectWithValue }) => {
+  try {
+    const response = await getStatistics(householdId);
+    return { response };
+  } catch (e) {
+    return rejectWithValue(false);
+  }
+});
 
 export const getCompletedChoresAction = createAsyncThunk<
   { response: CompletedChore[] },
@@ -58,7 +75,13 @@ const completedChoreSlice = createSlice({
       }),
       builder.addCase(addCompletedChoreAction.rejected, (state, action) => {
         state.error = "Något gick fel";
-      });
+      }),
+      builder.addCase(getStatisticsAction.fulfilled, (state, action) => {
+        state.statistics = action.payload.response;
+      }),
+      builder.addCase(getStatisticsAction.rejected, (state, action) => {
+        state.error = "något gick fel";
+      })
   },
 });
 
