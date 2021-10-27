@@ -3,7 +3,7 @@ import {
   addHouseholdUser,
   getHouseholdUsers,
 } from "../../data/fireStoreModule";
-import { HouseholdUser } from "../../interfaces/householdUser";
+import { HouseholdUser, HouseholdUserOmit } from "../../interfaces/householdUser";
 import { ThunkConfig } from "../store";
 
 interface HouseholdUserState {
@@ -31,12 +31,11 @@ export const getHouseholdUserAction = createAsyncThunk<
 
 export const addHouseholdUserAction = createAsyncThunk<
   HouseholdUser,
-  HouseholdUser,
+  {inviteCode: number, newHouseholdUser: HouseholdUserOmit},
   ThunkConfig
->("addUserToHousehold", async (newHouseholdUser, { rejectWithValue }) => {
+>("addUserToHousehold", async ({inviteCode, newHouseholdUser}, { rejectWithValue }) => {
   try {
-    await addHouseholdUser(newHouseholdUser);
-    return newHouseholdUser;
+    return await addHouseholdUser(inviteCode,newHouseholdUser);
   } catch (e) {
     return rejectWithValue(false);
   }

@@ -226,15 +226,44 @@ export async function getHouseHolds(userId: string) {
 }
 
 /**
- * Takes an object of type HouseholdUser and writes it to FireStore
- * @requires HouseholdUser
+ * Takes an object of type HouseholdUser and an invite code and writes it to FireStore
+ * @requires HouseholdUserOmit
+ * @requires InviteCode
  */
-export async function addHouseholdUser(newHouseHoldUser: HouseholdUserOmit) {
+export async function addHouseholdUser(inviteCode: number, newHouseHoldUser: HouseholdUserOmit) {
+  let householdUserWithId: HouseholdUser = {} as HouseholdUser;
+  const householdId = await firebase
+    .firestore()
+    .collection("households")
+    .where("inviteCode", "==", inviteCode)
+    .get()
+    .then(query => {
+      query.forEach(doc => {
+        newHouseHoldUser.householdId = doc.id;
+      })
+    })
+    .catch((err) => console.log(err));
+
   await firebase
     .firestore()
     .collection("householdUsers")
     .add(newHouseHoldUser)
     .catch((err) => console.log(err));
+
+  await firebase
+    .firestore()
+    .collection("householdUsers")
+    .where("userId", "==", newHouseHoldUser.userId)
+    .where("householdId", "==", householdId)
+    .get()
+    .then(query => {
+      query.forEach(doc => {
+        householdUserWithId = {id: doc.id, ...newHouseHoldUser} as HouseholdUser;
+      })
+    })
+    .catch((err) => console.log(err));
+
+  return householdUserWithId;
 }
 
 /**
