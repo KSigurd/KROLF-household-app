@@ -18,6 +18,13 @@ const LoginScreen = ({ navigation }: Props) => {
         >
           här
         </Text>
+
+        <Text
+          style={styles.createAccountText}
+          onPress={() => navigation.navigate("Profile")}
+        >
+          GÅ VIDARE UTAN INLOGG
+        </Text>
       </View>
     </View>
   );

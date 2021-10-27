@@ -21,7 +21,11 @@ const ProfileScreen = ({ navigation }: Props) => {
         <View>
           <Text style={styles.title}>Välj hushåll:</Text>
           {households.map((prop, key) => {
-            return <HouseholdSurface key={key} householdObject={prop} />;
+            return <
+              HouseholdSurface key={key} 
+              householdObject={prop} 
+              onChange={((householdId) => {navigation.navigate("ChoresStatisticsNavigator", {householdId}); console.log("test", householdId)})}
+              />;
           })}
         </View>
       </View>
@@ -31,10 +35,10 @@ const ProfileScreen = ({ navigation }: Props) => {
         <JoinHouseholdButton onJoinHousehold={() => navigation.navigate("JoinHousehold")}/>
       </View>
 
-      <Button
+      {/* <Button
         title="tryck mig vidare"
         onPress={() => navigation.navigate("ChoresStatisticsNavigator")}
-      />
+      /> */}
     </View>
   );
 };

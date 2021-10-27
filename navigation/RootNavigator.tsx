@@ -1,6 +1,6 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createNativeStackNavigator, NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import ChoresScreen from "../screens/ChoresScreen";
 import CreateAccountScreen from "../screens/CreateAccountScreen";
@@ -16,10 +16,14 @@ export type RootStackParamList = {
   CreateHousehold: undefined;
   JoinHousehold: undefined;
   Profile: undefined;
-  ChoresStatisticsNavigator: undefined;
+  ChoresStatisticsNavigator: { householdId: string };
 };
 
+export type StackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<RootStackParamList, Screen>;
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
+
 
 const RootNavigator = () => {
   return (

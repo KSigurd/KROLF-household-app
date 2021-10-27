@@ -1,15 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { addHoushold, getHouseHolds } from "../../data/fireStoreModule";
+import { households } from "../../data/mockHouseholdData";
 import { Household } from "../../interfaces/households";
 import { ThunkConfig } from "../store";
 
 interface HouseholdState {
   households: Household[];
+  activeHouseholdId: string,
   error: string | undefined;
 }
 
 const initialState: HouseholdState = {
   households: [],
+  activeHouseholdId: "",
   error: undefined,
 };
 
@@ -38,6 +41,21 @@ export const addHouseholdAction = createAsyncThunk<
     return rejectWithValue(false);
   }
 });
+
+
+// TODO: s'tt activehousehold i firestore, och kunna hämta ut det
+// export const setActiveHouseholdAction = createAsyncThunk<
+//   Household,
+//   Household,
+//   ThunkConfig
+// >("setActiveHousehold", async (newHousehold, { rejectWithValue }) => {
+//   try {
+//     await setActiveHousehold(newHousehold);
+//     return newHousehold;
+//   } catch (e) {
+//     return rejectWithValue(false);
+//   }
+// });
 
 const householdSlice = createSlice({
   name: "household",
