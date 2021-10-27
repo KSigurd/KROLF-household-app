@@ -1,15 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { addHoushold, getHouseHolds } from "../../data/fireStoreModule";
 import { Household } from "../../interfaces/households";
-import { ThunkConfig } from "../store";
+import { ThunkConfig, useAppSelector } from "../store";
 
 interface HouseholdState {
   households: Household[];
+  activeHouseholdId: string;
   error: string | undefined;
 }
 
 const initialState: HouseholdState = {
   households: [],
+  activeHouseholdId: "4oayIiPjYZyDcbtPEJ2J",
   error: undefined,
 };
 
@@ -21,6 +23,18 @@ export const getHouseholdsAction = createAsyncThunk<
   try {
     const response = await getHouseHolds(userId);
     return { response };
+  } catch (e) {
+    return rejectWithValue(false);
+  }
+});
+
+export const setActiveHousholdAction = createAsyncThunk<
+  string,
+  string,
+  ThunkConfig
+>("setActiveHousehold", async (householdId, { rejectWithValue }) => {
+  try {
+    return householdId
   } catch (e) {
     return rejectWithValue(false);
   }
@@ -55,8 +69,14 @@ const householdSlice = createSlice({
       }),
       builder.addCase(addHouseholdAction.rejected, (state, action) => {
         state.error = "Något gick fel";
-      });
-  },
+      }),
+      builder.addCase(setActiveHousholdAction.fulfilled, (state, action) => {
+        state.activeHouseholdId = action.payload;
+      }),
+      builder.addCase(setActiveHousholdAction.rejected, (state, action) => {
+        state.error = "Något gick fel";
+      })
+    },
 });
 
 export default householdSlice.reducer;

@@ -7,6 +7,7 @@ import JoinHouseholdScreen from "../screens/JoinHouseholdScreen";
 import LoginScreen from "../screens/LoginScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import ChoresStatisticsNavigator from "./ChoresStatisticsNavigator";
+import CreateChoreModalScreen from "../screens/CreateChoreModalScreen";
 
 export type RootStackParamList = {
   Login: undefined;
@@ -15,6 +16,7 @@ export type RootStackParamList = {
   JoinHousehold: undefined;
   Profile: undefined;
   ChoresStatisticsNavigator: undefined;
+  CreateChoreModalScreen: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -63,6 +65,15 @@ const RootNavigator = () => {
           name="ChoresStatisticsNavigator"
           component={ChoresStatisticsNavigator}
           options={{ title: "Hushållet", headerBackVisible: false }}
+        />
+        <Stack.Screen
+          name="CreateChoreModalScreen"
+          component={CreateChoreModalScreen}
+          options={{
+            presentation: "transparentModal",
+            contentStyle: { backgroundColor: "transparent" },
+            headerShown: false,
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

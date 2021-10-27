@@ -8,6 +8,7 @@ import {
 } from "../interfaces/statisticsDTO";
 import { User, UserOmit } from "../interfaces/user";
 import { firebase } from "./fireBaseConfig";
+import { householdUser } from "./mockHouseholdData";
 
 /**
  * Takes an object of type User and writes it to FireStore
@@ -313,52 +314,53 @@ export async function removeHouseholdUser(userId: string, householdId: string) {
  */
 export async function getStatistics(householdId: string) {
   let statisticsDTOs: ChoreStatisticsDTO[] = [];
-
-  await firebase
+  
+  const chores = await firebase
     .firestore()
     .collection("chores")
     .where("householdId", "==", householdId)
-    .get()
-    .then((query) => {
-      query.forEach(async (doc) => {
-        let choreStatistics: ChoreStatisticsDTO = {} as ChoreStatisticsDTO;
-        choreStatistics.choreId = doc.id;
-        choreStatistics.points = doc.data().points;
-        await firebase
-          .firestore()
-          .collection("householdUsers")
-          .where("householdId", "==", householdId)
-          .get()
-          .then((query) => {
-            query.forEach(async (doc) => {
-              let userStatistics: CompletedChoresByUserDTO =
-                {} as CompletedChoresByUserDTO;
-              userStatistics.avatarId = doc.data().avatarId;
-              userStatistics.housholdUserId = doc.id;
-              await firebase
-                .firestore()
-                .collection("completedChores")
-                .where("householdUserId", "==", userStatistics.housholdUserId)
-                .where("choreId", "==", choreStatistics.choreId)
-                .get()
-                .then((query) => {
-                  query.forEach((doc) => {
-                    userStatistics.completedChores.push(
-                      doc.data() as CompletedChore
-                    );
-                  });
-                })
-                .catch((err) => console.log(err));
+    .get();
 
-              choreStatistics.completedChores.push(userStatistics);
-            });
-          })
-          .catch((err) => console.log(err));
+  for (const chore of chores.docs) {
+    let choreStatisticsDTO: ChoreStatisticsDTO = {
+      choreTitle: chore.data().title,
+      points: chore.data().points,
+      completedChores: [],
+    };
 
-        statisticsDTOs.push(choreStatistics);
-      });
-    })
-    .catch((err) => console.log(err));
+    const householdUsers = await firebase
+      .firestore()
+      .collection("householdUsers")
+      .where("householdId", "==", householdId)
+      .get();
+    
 
+    for (const householdUser of householdUsers.docs) {
+      let completedChoresByUserDTO: CompletedChoresByUserDTO = {
+        completedChores: [],
+        housholdUserId: householdUser.id,
+        avatarId: householdUser.data().avatarId,
+      };
+
+      const completedChores = await firebase
+        .firestore()
+        .collection("completedChores")
+        .where("householdUserId", "==", householdUser.id)
+        .where("choreId", "==", chore.id)
+        .get();
+      
+
+      for (const completedChore of completedChores.docs) {
+        console.log(completedChore.data().date.toDate());
+        completedChoresByUserDTO.completedChores.push(
+          {choreId: completedChore.data().choreId, date: completedChore.data().date.toDate(), householdUserId: completedChore.data().householdUserId}
+        );
+      }
+      choreStatisticsDTO.completedChores.push(completedChoresByUserDTO);
+    }
+    statisticsDTOs.push(choreStatisticsDTO);
+  }
+
+  console.log("uuu" + statisticsDTOs);
   return statisticsDTOs;
 }

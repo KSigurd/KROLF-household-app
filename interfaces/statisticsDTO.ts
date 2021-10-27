@@ -1,7 +1,7 @@
 import { CompletedChore } from "./completedChore";
 
 export interface ChoreStatisticsDTO {
-  choreId: string;
+  choreTitle: string;
   points: number;
   completedChores: CompletedChoresByUserDTO[];
 }
