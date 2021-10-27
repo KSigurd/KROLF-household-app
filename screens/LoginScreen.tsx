@@ -1,12 +1,28 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useEffect } from "react";
+import { View, Text, StyleSheet, Button } from "react-native";
 import { RootStackParamList } from "../navigation/RootNavigator";
 import LoginForm from "../components/LoginForm";
+import { Title } from "react-native-paper";
+import { Button as NPbutton } from "react-native-paper";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import { getStatisticsAction } from "../store/completedChore/completedChoreSlice";
+
 
 type Props = NativeStackScreenProps<RootStackParamList, "CreateHousehold">;
 
 const LoginScreen = ({ navigation }: Props) => {
+  const dispatch = useAppDispatch();
+  const activeHouseholdState = useAppSelector(state => state.household.activeHouseholdId);
+  const statisticsState = useAppSelector(state => state.completedChore.statistics)
+
+//   useEffect(() => {
+    
+//     dispatch(getStatisticsAction(activeHouseholdState.id))
+//    console.log({statisticsState})
+//    console.log("hejsvejs")
+ 
+// })
   return (
     <View style={styles.root}>
       <LoginForm onLoginSucceded={() => navigation.navigate("Profile")} />
@@ -19,12 +35,14 @@ const LoginScreen = ({ navigation }: Props) => {
           här
         </Text>
 
+
         <Text
           style={styles.createAccountText}
           onPress={() => navigation.navigate("Profile")}
         >
           GÅ VIDARE UTAN INLOGG
         </Text>
+
       </View>
     </View>
   );
