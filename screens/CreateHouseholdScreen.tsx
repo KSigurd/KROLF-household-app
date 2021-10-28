@@ -3,6 +3,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Surface, Text, TextInput, useTheme } from "react-native-paper";
 import CreateHouseholdCode from "../components/CreateHouseholdCode";
+import ThemedTextInput from "../components/ThemedTextInput";
 import { RootStackParamList } from "../navigation/RootNavigator";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Profile">;
@@ -10,17 +11,10 @@ type Props = NativeStackScreenProps<RootStackParamList, "Profile">;
 const CreateHouseholdScreen = ({ navigation }: Props) => {
   return (
     <View style={styles.root}>
-      <Text style={styles.title}>Hushållets namn</Text>
-      {/* TODO: Use Formic and Yup.  */}
-      <TextInput
-        mode="outlined"
-        theme={{ roundness: 10 }}
-        style={styles.inputField}
-      />
-      <Text style={styles.title}>Hushållets kod</Text>
-      <Surface style={styles.codeBox}>
-         <CreateHouseholdCode/>
-      </Surface>
+      <ThemedTextInput label="Hushållets namn" />
+      <ThemedTextInput label="Hushållets kod" disabled={true} >
+        <CreateHouseholdCode />
+      </ThemedTextInput>
       <View style={styles.buttonContainer}>
         <Surface style={styles.buttonBox}>
           <Button
