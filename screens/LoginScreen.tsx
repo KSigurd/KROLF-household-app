@@ -7,22 +7,26 @@ import { Title } from "react-native-paper";
 import { Button as NPbutton } from "react-native-paper";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { getStatisticsAction } from "../store/completedChore/completedChoreSlice";
-
+import { getHouseholdsAction } from "../store/household/householdSlice";
 
 type Props = NativeStackScreenProps<RootStackParamList, "CreateHousehold">;
 
 const LoginScreen = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
-  const activeHouseholdState = useAppSelector(state => state.household.activeHouseholdId);
-  const statisticsState = useAppSelector(state => state.completedChore.statistics)
+  const activeHouseholdState = useAppSelector(
+    (state) => state.household.activeHouseholdId
+  );
+  const statisticsState = useAppSelector(
+    (state) => state.completedChore.statistics
+  );
 
-//   useEffect(() => {
-    
-//     dispatch(getStatisticsAction(activeHouseholdState.id))
-//    console.log({statisticsState})
-//    console.log("hejsvejs")
- 
-// })
+  //   useEffect(() => {
+
+  //     dispatch(getStatisticsAction(activeHouseholdState.id))
+  //    console.log({statisticsState})
+  //    console.log("hejsvejs")
+
+  // })
   return (
     <View style={styles.root}>
       <LoginForm onLoginSucceded={() => navigation.navigate("Profile")} />
@@ -35,14 +39,15 @@ const LoginScreen = ({ navigation }: Props) => {
           här
         </Text>
 
-
         <Text
           style={styles.createAccountText}
-          onPress={() => navigation.navigate("Profile")}
+          onPress={() => {
+            navigation.navigate("Profile"),
+              dispatch(getHouseholdsAction("AMHQtDvOpBThnBV2cfaM"));
+          }}
         >
           GÅ VIDARE UTAN INLOGG
         </Text>
-
       </View>
     </View>
   );

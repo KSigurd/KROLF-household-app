@@ -203,26 +203,26 @@ export async function updateHoushold(modifiedHousehold: Household) {
  */
 export async function getHouseHolds(userId: string) {
   const households: Household[] = [];
-  await firebase
+
+  const first = await firebase
     .firestore()
     .collection("householdUsers")
     .where("userId", "==", userId)
-    .get()
-    .then((query) => {
-      query.forEach(async (doc) => {
-        await firebase
-          .firestore()
-          .collection("households")
-          .doc(doc.data().householdId)
-          .get()
-          .then((doc) => {
-            households.push({ id: doc.id, ...doc.data() } as Household);
-          })
-          .catch((err) => console.log(err));
-      });
-    })
-    .catch((err) => console.log(err));
+    .get();
+  // .catch((err) => console.log(err));
 
+  for (var doc of first.docs) {
+    await firebase
+      .firestore()
+      .collection("households")
+      .doc(doc.data().householdId)
+      .get()
+      .then((doc) => {
+        households.push({ id: doc.id, ...doc.data() } as Household);
+      })
+      .catch((err) => console.log(err));
+  }
+  console.log("från databasen : ", households);
   return households;
 }
 
@@ -314,7 +314,7 @@ export async function removeHouseholdUser(userId: string, householdId: string) {
  */
 export async function getStatistics(householdId: string) {
   let statisticsDTOs: ChoreStatisticsDTO[] = [];
-  
+
   const chores = await firebase
     .firestore()
     .collection("chores")
@@ -333,7 +333,6 @@ export async function getStatistics(householdId: string) {
       .collection("householdUsers")
       .where("householdId", "==", householdId)
       .get();
-    
 
     for (const householdUser of householdUsers.docs) {
       let completedChoresByUserDTO: CompletedChoresByUserDTO = {
@@ -348,13 +347,14 @@ export async function getStatistics(householdId: string) {
         .where("householdUserId", "==", householdUser.id)
         .where("choreId", "==", chore.id)
         .get();
-      
 
       for (const completedChore of completedChores.docs) {
         console.log(completedChore.data().date.toDate());
-        completedChoresByUserDTO.completedChores.push(
-          {choreId: completedChore.data().choreId, date: completedChore.data().date.toDate(), householdUserId: completedChore.data().householdUserId}
-        );
+        completedChoresByUserDTO.completedChores.push({
+          choreId: completedChore.data().choreId,
+          date: completedChore.data().date.toDate(),
+          householdUserId: completedChore.data().householdUserId,
+        });
       }
       choreStatisticsDTO.completedChores.push(completedChoresByUserDTO);
     }
