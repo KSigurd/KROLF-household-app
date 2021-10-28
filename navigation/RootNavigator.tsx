@@ -68,7 +68,7 @@ const RootNavigator = () => {
         <Stack.Screen
           name="ChoresStatisticsNavigator"
           component={ChoresStatisticsNavigator}
-          options={{ title: "Hushållet", headerBackVisible: false }}
+          options={{ title: "Hushållet", headerBackVisible: true }}
         />
         <Stack.Screen
           name="CreateChoreModalScreen"

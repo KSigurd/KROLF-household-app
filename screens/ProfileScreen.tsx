@@ -1,12 +1,16 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, Button, StyleSheet, FlatList } from "react-native";
 import AddHouseholdButton from "../components/AddHouseholdButton";
 import HouseholdSurface from "../components/HouseholdSurface";
 import JoinHouseholdButton from "../components/JoinHouseHoldButton";
 import { households } from "../data/mockHouseholdData";
 import { RootStackParamList } from "../navigation/RootNavigator";
-import { setActiveHousholdAction } from "../store/household/householdSlice";
+import { selectHouseholdById } from "../store/household/hoseholdSelector";
+import {
+  getHouseholdsAction,
+  setActiveHousholdAction,
+} from "../store/household/householdSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 
 type Props = NativeStackScreenProps<
@@ -16,12 +20,8 @@ type Props = NativeStackScreenProps<
 
 const ProfileScreen = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
-  const statisticsState = useAppSelector(
-    (state) => state.completedChore.statistics
-  );
-
-  const activeHouseholdState = useAppSelector(
-    (state) => state.household.activeHouseholdId
+  const databaseHouseholds = useAppSelector(
+    (state) => state.household.households
   );
 
   const setHousholdAndNavigate = (householdId: string) => {
@@ -32,25 +32,19 @@ const ProfileScreen = ({ navigation }: Props) => {
   return (
     <View style={styles.root}>
       <View>
-        <Text style={styles.title}>Välkommen *användarnamn*</Text>
-
-        <View>
-          <Text style={styles.title}>Välj hushåll:</Text>
-          {/* TODO: Hämta data från databas istället för mockad data */}
-          {households.map((prop, key) => {
-            return (
-              <HouseholdSurface
-                key={key}
-                householdObject={prop}
-                onChange={(householdId) => {
-                  setHousholdAndNavigate(householdId);
-                }}
-              />
-            );
-          })}
-        </View>
+        <Text style={styles.title}>Välj hushåll:</Text>
+        {databaseHouseholds.map((prop, key) => {
+          return (
+            <HouseholdSurface
+              key={key}
+              householdObject={prop}
+              onChange={(householdId) => {
+                setHousholdAndNavigate(householdId);
+              }}
+            />
+          );
+        })}
       </View>
-
       <View style={styles.NPbuttonRoot}>
         <AddHouseholdButton
           onAddHousehold={() => navigation.navigate("CreateHousehold")}

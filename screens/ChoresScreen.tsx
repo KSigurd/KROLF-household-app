@@ -5,26 +5,32 @@ import { Button } from "react-native-paper";
 import ChoreButton from "../components/ChoreButton";
 import { chores } from "../data/mockChoresData";
 import { households } from "../data/mockHouseholdData";
-import { RootStackParamList, StackScreenProps } from "../navigation/RootNavigator";
+import {
+  RootStackParamList,
+  StackScreenProps,
+} from "../navigation/RootNavigator";
 import { selectHouseholdById } from "../store/household/hoseholdSelector";
 import { useAppSelector } from "../store/store";
 import { styles } from "../styles/styles";
-import CreateChoreInfo from "../components/CreateChoreInfo"
+import CreateChoreInfo from "../components/CreateChoreInfo";
 
-const ChoresScreen = ({ route, navigation } : StackScreenProps<"ChoresStatisticsNavigator">) => {
+const ChoresScreen = ({
+  route,
+  navigation,
+}: StackScreenProps<"ChoresStatisticsNavigator">) => {
+  
+  const activeHouseholdState = useAppSelector(
+    (state) => state.household.activeHouseholdId
+  );
 
-  const activeHouseholdState = useAppSelector(state => state.household.activeHouseholdId);
+  const household = useAppSelector(selectHouseholdById(activeHouseholdState));
 
-  const household = useAppSelector(selectHouseholdById(households[0].id)); //hårdkodat nu.
-    
   const [isVisible, setIsVisible] = React.useState(false);
-
 
   return (
     <View style={styles.root}>
-
-<Text>household ID who is active : {activeHouseholdState}</Text>
-<Text>Name : {household?.name}</Text>
+      <Text>household ID who is active : {activeHouseholdState}</Text>
+      <Text>Name : {household?.name}</Text>
 
       {/* {household.chores.map((prop, key) => {
         return (
@@ -42,7 +48,7 @@ const ChoresScreen = ({ route, navigation } : StackScreenProps<"ChoresStatistics
         );
       })} */}
 
-     {/* TODO: flytta till styles.css */}
+      {/* TODO: flytta till styles.css */}
       <View style={styles.bottomButtonRow}>
         <Button
           icon="plus-circle-outline"
@@ -71,7 +77,8 @@ const ChoresScreen = ({ route, navigation } : StackScreenProps<"ChoresStatistics
 
 export default ChoresScreen;
 
-      {/* {household.chores.map((prop, key) => {
+{
+  /* {household.chores.map((prop, key) => {
         return (
           <ChoreButton  //TODO: Move this props-logic somewhere else
             key={key}
@@ -85,6 +92,9 @@ export default ChoresScreen;
             isLate={false}
           />
         );
-      })} */}
+      })} */
+}
 
-      {/* <CreateChore setVisibleModal= {(isVisible)} /> */}
+{
+  /* <CreateChore setVisibleModal= {(isVisible)} /> */
+}
