@@ -54,7 +54,6 @@ const RootNavigator = () => {
           name="CreateHousehold"
           component={CreateHouseholdScreen}
         />
-        <Stack.Screen name="JoinHousehold" component={JoinHouseholdScreen} />
         {/* TODO: CHECK THIS */}
         <Stack.Screen
           name="Profile"

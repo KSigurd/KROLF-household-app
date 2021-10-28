@@ -14,7 +14,7 @@ const LoginScreen = ({ navigation }: Props) => {
         <Text style={styles.noAccountText}>Inget konto? Registrera dig </Text>
         <Text
           style={styles.createAccountText}
-          onPress={() => navigation.navigate("CreateAccount")}
+          onPress={() => navigation.navigate("JoinHousehold")}
         >
           här
         </Text>

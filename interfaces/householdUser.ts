@@ -4,7 +4,7 @@ export interface HouseholdUser {
   householdId: string;
   name: string;
   isAdmin: boolean;
-  avatarId: number;
+  avatarId: string;
 }
 
 export interface HouseholdUserOmit extends Omit<HouseholdUser, "id"> {}

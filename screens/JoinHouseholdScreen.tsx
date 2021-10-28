@@ -1,29 +1,43 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { View } from "react-native";
-import { Text, Button, Surface, Title } from "react-native-paper";
-import { HouseholdUser, HouseholdUserOmit } from "../interfaces/householdUser";
+import {
+  Text,
+  Button,
+  Surface,
+  Title,
+  TouchableRipple,
+} from "react-native-paper";
 import { styles } from "../styles/styles";
 import * as Yup from "yup";
-import { miniSerializeError } from "@reduxjs/toolkit";
 import ThemedTextInput from "../components/ThemedTextInput";
-import { householdUser } from "../data/mockHouseholdData";
 import { Formik } from "formik";
-import { addHouseholdUser } from "../data/fireStoreModule";
-import { useAppDispatch } from "../store/store";
+import { useAppDispatch, useAppSelector } from "../store/store";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { addHouseholdUserAction } from "../store/householdUser/householdUserSlice";
 import { RootStackParamList } from "../navigation/RootNavigator";
+import { avatars } from "../data/avatarData";
+import { Avatar } from "../interfaces/avatar";
 
 interface ParamsToValidate {
-  inviteCode: number;
+  inviteCode: string;
   name: string;
   avatarId: string;
 }
 
 type PostSchemaType = Record<keyof ParamsToValidate, Yup.AnySchema>;
 
+const isDigitsOnly = (value: string | undefined) => {
+  if (value) return /^\d+$/.test(value);
+  else return false;
+};
+
 const validationSchema = Yup.object().shape<PostSchemaType>({
-  inviteCode: Yup.number()
+  inviteCode: Yup.string()
+    .test(
+      "Digits only",
+      "Inbjudningskoden får endast innehålla siffror",
+      isDigitsOnly
+    )
     .min(6, "En inbjudningskod måste innehålla 6 siffror")
     .max(6, "En inbjudningskod måste innehålla 6 siffror")
     .required(),
@@ -33,75 +47,111 @@ const validationSchema = Yup.object().shape<PostSchemaType>({
 
 type Props = NativeStackScreenProps<RootStackParamList, "JoinHousehold">;
 
-const JoinHouseholdScreen: FC<Props> = ({navigation}: Props) => {
+const JoinHouseholdScreen: FC<Props> = ({ navigation }: Props) => {
+  const [avatar, setAvatar] = useState("");
   const dispatch = useAppDispatch();
-  const newHouseholdUser: HouseholdUserOmit = {} as HouseholdUserOmit;
-  let inviteCode: number = 0;
-  const handleSubmit = async (inviteCode: number, newHouseholdUser: HouseholdUserOmit) => {
-    await dispatch(addHouseholdUserAction({inviteCode, newHouseholdUser})).then(() => navigation.navigate("Profile"));
-  }
+  const userState = useAppSelector((state) => state.user);
+  const inputParams: ParamsToValidate = {
+    inviteCode: "",
+    name: "",
+    avatarId: avatar,
+  } as ParamsToValidate;
+
+  const handleSubmit = async (inputParams: ParamsToValidate) => {
+    await dispatch(
+      addHouseholdUserAction({
+        inviteCode: Number(inputParams.inviteCode),
+        newHouseholdUser: {
+          avatarId: inputParams.avatarId,
+          name: inputParams.name,
+          householdId: "",
+          isAdmin: false,
+          userId: userState.user.id,
+        },
+      })
+    ).then(() => {
+      setAvatar("");
+      navigation.navigate("Profile");
+    });
+  };
+
+  const chooseAvatar = (avatar: Avatar) => {
+    setAvatar(avatar.id);
+  };
+
   return (
     <Formik
-      initialValues={[undefined, newHouseholdUser.name, newHouseholdUser.avatarId]}
+      initialValues={inputParams}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
-      >
-        {({
-          handleChange,
+    >
+      {({
+        handleChange,
         handleBlur,
         handleSubmit,
         values,
         touched,
-        errors
+        errors,
       }) => (
-    <View style={styles.root}>
-      <Surface style={[styles.fullscreenButton, styles.buttonOutlined]}>
-          <ThemedTextInput
+        <View style={styles.root}>
+          <Surface style={[styles.fullscreenButton, styles.buttonOutlined]}>
+            <ThemedTextInput
               secureTextEntry={false}
               label="Inbjudningskod"
-              value={String(inviteCode)}
-              onChangeText={handleChange<number>(inviteCode)}
-              onBlur={handleBlur<number>(inviteCode)}
+              value={values.inviteCode}
+              onChangeText={handleChange<keyof ParamsToValidate>("inviteCode")}
+              onBlur={handleBlur<keyof ParamsToValidate>("inviteCode")}
               helperText={touched.inviteCode && errors.inviteCode}
             />
-      </Surface>
-      <Surface style={[styles.fullscreenButton, styles.buttonOutlined]}>
-          <ThemedTextInput
+          </Surface>
+          <Surface style={[styles.fullscreenButton, styles.buttonOutlined]}>
+            <ThemedTextInput
               secureTextEntry={false}
-              label="Namn för hushållet"
-              value={values.newHouseholdUser.name}
-              onChangeText={handleChange<keyof HouseholdUserOmit>("name")}
-              onBlur={handleBlur<keyof HouseholdUserOmit>("name")}
+              label="Ditt namn i hushållet"
+              value={values.name}
+              onChangeText={handleChange<keyof ParamsToValidate>("name")}
+              onBlur={handleBlur<keyof ParamsToValidate>("name")}
               helperText={touched.name && errors.name}
             />
-      </Surface>
-      <Surface style={[styles.fullscreenButton, styles.buttonOutlined]}>
-      </Surface>
-      <View style={styles.bottomButtonRow}>
-      <NPbutton
-            //TODO: CHECK THIS
-            disabled={!values.password === true || !values.email === true}
-            icon="account-key-outline"
-            mode="contained"
-            style={styles.NPbutton}
-            onPress={() => handleSubmit()}
-          >
-            Logga in
-          </NPbutton>
-        <Button
-        disabled={!values.password === true || !values.email === true}
-          icon="plus-circle-outline"
-          labelStyle={styles.buttonIconSize}
-          color={"#000"}
-          uppercase={false}
-          style={styles.smallButton}
-          onPress={() => handleSubmit()}
-        >
-          <Text style={styles.buttonText}>Gå med</Text>
-        </Button>
-      </View>
-    </View>
-    )}
+          </Surface>
+          <Surface style={[styles.avatarContainer]}>
+            <Title style={styles.buttonText}>Välj din avatar</Title>
+            <Surface style={[styles.buttonInnerContainer]}>
+              {avatars.map((prop, key) => {
+                return (
+                  <TouchableRipple
+                    key={key}
+                    borderless={true}
+                    style={[
+                      styles.repeatabilityCircle,
+                      styles.avatarButton,
+                      prop.id === avatar
+                        ? styles.selectedAvatarBackground
+                        : styles.unselectedAvatarBackground,
+                    ]}
+                    onPress={() => {values.avatarId = prop.id; chooseAvatar(prop)}}
+                  >
+                    <Text style={styles.buttonText}>{prop.avatar}</Text>
+                  </TouchableRipple>
+                );
+              })}
+            </Surface>
+          </Surface>
+          <View style={styles.bottomButtonRow}>
+            <Button
+            disabled={!values.inviteCode || !values.name || !values.avatarId}
+              icon="plus-circle-outline"
+              labelStyle={styles.buttonIconSize}
+              color={"#000"}
+              uppercase={false}
+              style={styles.smallButton}
+              onPress={() => handleSubmit()}
+            >
+              <Text style={[styles.buttonText]}>Gå med</Text>
+            </Button>
+          </View>
+        </View>
+      )}
     </Formik>
   );
 };

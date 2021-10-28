@@ -5,7 +5,7 @@ export const styles = StyleSheet.create(
         root: {
             flex: 1,
             padding: 16,
-            alignItems: 'center'
+            alignItems: 'center',
         },
         fillParent: {
             width: "100%",
@@ -82,6 +82,20 @@ export const styles = StyleSheet.create(
         },
         buttonIconSize: {
             fontSize: 25
+        },
+        avatarContainer: {
+            flex: 1,
+            width: "100%",
+        },
+        avatarButton: {
+            margin: 0,
+            elevation: 0
+        },
+        selectedAvatarBackground: {
+            backgroundColor: "#EDEDED"
+        },
+        unselectedAvatarBackground: {
+            backgroundColor: "white"
         }
     }
 )
