@@ -57,7 +57,7 @@ const LoginForm: FC<Props> = ({ onLoginSucceded }: Props) => {
               label="Användarnamn"
               onChangeText={handleChange<keyof User>("email")}
               onBlur={handleBlur<keyof User>("email")}
-              value={values.email}
+              value={values.email.trim()}
               helperText={touched.email && errors.email}
             />
             <ThemedTextInput
