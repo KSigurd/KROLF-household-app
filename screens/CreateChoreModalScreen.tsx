@@ -9,7 +9,7 @@ type Props = NativeStackScreenProps<TabParamList>;
 
 const CreateChoreModalScreen = ({ navigation }: Props) => {
   const onClosed = () => {
-    navigation.navigate("Chores");
+    navigation.navigate("Home");
   };
 
   return (
