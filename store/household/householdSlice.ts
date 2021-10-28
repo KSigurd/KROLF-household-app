@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { addHoushold, getHouseHolds } from "../../data/fireStoreModule";
-import { Household } from "../../interfaces/households";
+import { Household, HouseholdOmit } from "../../interfaces/households";
 import { ThunkConfig, useAppSelector } from "../store";
 
 interface HouseholdState {
@@ -42,12 +42,12 @@ export const setActiveHousholdAction = createAsyncThunk<
 
 export const addHouseholdAction = createAsyncThunk<
   Household,
-  Household,
+  HouseholdOmit,
   ThunkConfig
 >("addHousehold", async (newHousehold, { rejectWithValue }) => {
   try {
     await addHoushold(newHousehold);
-    return newHousehold;
+    return newHousehold as Household;
   } catch (e) {
     return rejectWithValue(false);
   }
