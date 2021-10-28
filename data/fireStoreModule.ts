@@ -19,14 +19,14 @@ export async function addUser(newUser: UserOmit) {
   await firebase
     .firestore()
     .collection("users")
-    .where("email", "==", newUser.email)
+    .where("email", "==", newUser.email.toLowerCase())
     .get()
     .then((query) => {
       if (query.empty) {
         firebase
           .firestore()
           .collection("users")
-          .add(newUser)
+          .add({email: newUser.email.toLowerCase(), password: newUser.password})
           .catch((err) => console.log(err));
 
         userAdded = true;
@@ -49,7 +49,7 @@ export async function loginUser(user: User) {
   await firebase
     .firestore()
     .collection("users")
-    .where("email", "==", user.email)
+    .where("email", "==", user.email.toLowerCase())
     .where("password", "==", user.password)
     .get()
     .then((query) => {
