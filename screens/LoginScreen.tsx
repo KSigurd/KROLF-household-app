@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   },
   noAccountContainer: {
     flexDirection: "row",
-    justifyContent: "center",   
+    justifyContent: "center",
   },
   noAccountText: {
     fontWeight: "bold",
