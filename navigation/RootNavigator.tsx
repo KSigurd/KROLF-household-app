@@ -16,7 +16,7 @@ export type RootStackParamList = {
   CreateHousehold: undefined;
   JoinHousehold: undefined;
   Profile: undefined;
-  ChoresStatisticsNavigator: { householdId: string };
+  ChoresStatisticsNavigator: undefined;
 };
 
 export type StackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<RootStackParamList, Screen>;

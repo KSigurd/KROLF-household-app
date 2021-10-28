@@ -6,9 +6,14 @@ import StatisticsScreen from "../screens/StatisticsScreen";
 export type TabParamList = {
   Chores: undefined;
   Statistics: undefined;
+  activeHousehold: undefined;
 };
 
 const Tab = createMaterialTopTabNavigator<TabParamList>();
+
+// export type NavigationTabProps <Screen extends keyof TabParamList> = NavigationTabProps<TabParamList, Screen>
+//TabScreenProps<TabParamList, Screen>;
+
 
 const ChoresStatisticsNavigator = () => {
   return (

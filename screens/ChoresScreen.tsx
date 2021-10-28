@@ -8,33 +8,19 @@ import { households } from "../data/mockHouseholdData";
 import { RootStackParamList, StackScreenProps } from "../navigation/RootNavigator";
 import { selectHouseholdById } from "../store/household/hoseholdSelector";
 import { useAppSelector } from "../store/store";
-
-// import { useAppSelector } from "../store/store";
-
-// type Props = NativeStackScreenProps<RootStackParamList, "Profile">;
-
-// export const selectChores = (state: RootState) => {
-//   // const result = state.chore.chores.filter();
-//   // if {} else {}
-//   // return chores;
-// }
-
-//const ChoresScreen = ({navigation}: Props) => {
-  // const chores = useAppSelector(selectChores)
-
-
 import { styles } from "../styles/styles";
 
-// const household = households[2];
+const ChoresScreen = ({ route, navigation } : StackScreenProps<"ChoresStatisticsNavigator">) => {
 
-const ChoresScreen = ({ route } : StackScreenProps<"ChoresStatisticsNavigator">) => {
+  const activeHouseholdState = useAppSelector(state => state.household.activeHouseholdId);
 
   const household = useAppSelector(selectHouseholdById(households[0].id)); //hårdkodat nu.
 
   return (
     <View style={styles.root}>
 
-<Text>household ID who is active : {household?.name}</Text>
+<Text>household ID who is active : {activeHouseholdState}</Text>
+<Text>Name : {household?.name}</Text>
 
       {/* {household.chores.map((prop, key) => {
         return (
