@@ -1,5 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createNativeStackNavigator, NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import CreateAccountScreen from "../screens/CreateAccountScreen";
 import CreateHouseholdScreen from "../screens/CreateHouseholdScreen";
@@ -19,7 +19,11 @@ export type RootStackParamList = {
   CreateChoreModalScreen: undefined;
 };
 
+export type StackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<RootStackParamList, Screen>;
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
+
 
 const RootNavigator = () => {
   return (

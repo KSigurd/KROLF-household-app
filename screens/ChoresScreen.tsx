@@ -5,35 +5,28 @@ import { Button } from "react-native-paper";
 import ChoreButton from "../components/ChoreButton";
 import { chores } from "../data/mockChoresData";
 import { households } from "../data/mockHouseholdData";
-import { RootStackParamList } from "../navigation/RootNavigator";
+import { RootStackParamList, StackScreenProps } from "../navigation/RootNavigator";
+import { selectHouseholdById } from "../store/household/hoseholdSelector";
+import { useAppSelector } from "../store/store";
 import { styles } from "../styles/styles";
 import CreateChoreInfo from "../components/CreateChoreInfo"
 
-// import { useAppSelector } from "../store/store";
+const ChoresScreen = ({ route, navigation } : StackScreenProps<"ChoresStatisticsNavigator">) => {
 
-// type Props = NativeStackScreenProps<RootStackParamList, "Profile">;
+  const activeHouseholdState = useAppSelector(state => state.household.activeHouseholdId);
 
-// export const selectChores = (state: RootState) => {
-//   // const result = state.chore.chores.filter();
-//   // if {} else {}
-//   // return chores;
-// }
-
-//const ChoresScreen = ({navigation}: Props) => {
-  // const chores = useAppSelector(selectChores)
-  
-  type Props = NativeStackScreenProps<RootStackParamList, "Profile">;
-  
-  const household = households[2];
-  
-  const ChoresScreen: FC<Props> = ({ navigation }: Props) => {
-
+  const household = useAppSelector(selectHouseholdById(households[0].id)); //hårdkodat nu.
+    
   const [isVisible, setIsVisible] = React.useState(false);
 
-  return (
-    <View style={{backgroundColor: "red", flex: 1}}>   
 
-         {/* {household.chores.map((prop, key) => {
+  return (
+    <View style={styles.root}>
+
+<Text>household ID who is active : {activeHouseholdState}</Text>
+<Text>Name : {household?.name}</Text>
+
+      {/* {household.chores.map((prop, key) => {
         return (
           <ChoreButton  //TODO: Move this props-logic somewhere else
             key={key}
