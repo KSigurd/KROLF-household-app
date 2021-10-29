@@ -19,8 +19,8 @@ const initialValues: Chore = {
   description: "",
   points: 2,
   repeatability: 7,
-  id: 0,
-  householdId: 0,
+  id: "0",
+  householdId: "0",
 };
 
 type PostSchemaType = Record<keyof Chore, Yup.AnySchema>;
@@ -30,14 +30,14 @@ const validationSchema = Yup.object().shape<PostSchemaType>({
   description: Yup.string().required("Fyll i en beskrivning av syssla").min(2),
   points: Yup.number().required(),
   repeatability: Yup.number().required(),
-  id: Yup.number(),
-  householdId: Yup.number(),
+  id: Yup.string(),
+  householdId: Yup.string()
 });
 
 const CreateChoreInfo = ({ onClosed }: Props) => {
   const handleSubmit = (chore: Chore) => {
     //ADD CHANGES TO FIREBASE
-    chores.push({ ...chore, id: 50 });
+    chores.push({ ...chore, id: "50" });
     console.log(chore);
 
     //CLOSES MODAL

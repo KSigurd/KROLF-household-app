@@ -5,17 +5,18 @@ import { Household } from "../interfaces/households"
 
 interface Props {
     householdObject: Household;
+    onChange: (householdId: string) => void;
 }
 
-const HouseholdSurface: FC<Props> = (props: Props) => {
+const HouseholdSurface: FC<Props> = ({householdObject, onChange}: Props) => {
 
 
   return (
     <View>
         <Surface style={styles.surface}>
-            <TouchableRipple style={styles.chip} onPress= {() => console.log("tryckt på hushåll")}>
-          <Text key={props.householdObject.id} style={styles.surfaceText}>
-            {props.householdObject.name}
+            <TouchableRipple style={styles.chip} onPress= {() => {onChange(householdObject.id); console.log(householdObject.name)}}>
+          <Text key={householdObject.id} style={styles.surfaceText}>
+            {householdObject.name}
           </Text>
           </TouchableRipple>
         </Surface>

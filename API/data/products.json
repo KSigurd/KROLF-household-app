@@ -1,0 +1,26 @@
+[
+  {
+    "id": "4b4e03b0-08cb-11ec-949c-ff4b6c6af5bd",
+    "productNumber": "NE4857",
+    "name": "Shoes",
+    "price": "899.00"
+  },
+  {
+    "id": "67cc0550-08cb-11ec-949c-ff4b6c6af5bd",
+    "productNumber": "EJ2554",
+    "name": "Socks",
+    "price": "49.90"
+  },
+  {
+    "id": "8350b2d0-08cb-11ec-949c-ff4b6c6af5bd",
+    "productNumber": "GE8534",
+    "name": "Pants",
+    "price": "455.00"
+  },
+  {
+    "id": "959dc1d0-08cb-11ec-949c-ff4b6c6af5bd",
+    "productNumber": "QE4755",
+    "name": "Shirt",
+    "price": "259.00"
+  }
+]
