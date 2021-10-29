@@ -63,7 +63,7 @@ const RootNavigator = () => {
         <Stack.Screen
           name="Profile"
           component={ProfileScreen}
-          options={{ presentation: "fullScreenModal", title: "Profil" }}
+          options={{ title: "Profil" }}
         />
         <Stack.Screen
           name="ChoresStatisticsNavigator"
