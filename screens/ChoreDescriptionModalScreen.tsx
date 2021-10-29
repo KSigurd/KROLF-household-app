@@ -2,6 +2,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
+import ChoreDescription from "../components/ChoreDescription";
 import CreateChoreInfo from "../components/CreateChoreInfo";
 import { TabParamList } from "../navigation/ChoresStatisticsNavigator";
 
@@ -13,27 +14,16 @@ const CreateChoreModalScreen = ({ navigation }: Props) => {
   };
 
   return (
-    // <Provider>
-    //   <Portal>
-    //     <Modal
-    //       style={styles.modalBox}
-    //       visible={true}
-    //       onDismiss={() => {
-    //         navigation.navigate("Chores");
-    //       }}
-    //     >
-
     <View style={styles.outerContainer}>
       <SafeAreaView>
         <View style={styles.topCointainer}>
           <Text style={styles.titleText}>Koppla sysslas namn?</Text>
         </View>
         <View style={styles.centerContainer}>
-          <CreateChoreInfo onClosed={onClosed} />
+          <ChoreDescription onClosed={onClosed} />
         </View>
       </SafeAreaView>
     </View>
-    //     </Modal>w
   );
 };
 

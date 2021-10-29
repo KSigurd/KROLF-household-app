@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Button, Surface, TouchableRipple } from "react-native-paper";
+import ChoreDescription from "../components/ChoreDescription";
 import { StackScreenProps } from "../navigation/RootNavigator";
 import { getChoresAction } from "../store/chore/choreSlice";
 import { selectHouseholdById } from "../store/household/hoseholdSelector";
@@ -34,7 +35,7 @@ const ChoresScreen = ({
                             <TouchableRipple
                                 
                                 style={stylesLocal.chip}
-                                onPress={() => console.log(prop)}
+                                onPress={() => navigation.navigate("ChoreDescriptionModalScreen")}
                             >
                                 <Text
                                     style={stylesLocal.surfaceText}

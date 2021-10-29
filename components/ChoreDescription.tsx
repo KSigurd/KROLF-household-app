@@ -5,8 +5,6 @@ import { Button as NPbutton } from "react-native-paper";
 import * as Yup from "yup";
 import { chores } from "../data/mockChoresData";
 import { Chore } from "../interfaces/chore";
-import Points from "./Points";
-import Repeatability from "./Repeatability";
 import ThemedTextInput from "./ThemedTextInput";
 
 interface Props {
