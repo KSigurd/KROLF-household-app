@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   surface: {
+    marginTop: 12,
     backgroundColor: "#f2f2f2",
     borderRadius: 10,
     elevation: 4,
