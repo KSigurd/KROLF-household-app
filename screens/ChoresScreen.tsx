@@ -26,17 +26,19 @@ const ChoresScreen = ({
             <Text>household ID who is active : {activeHouseholdState}</Text>
             <Text>Name : {household?.name}</Text>
 
-            {allHousoholdChores.map((prop, index) => {
+            {allHousoholdChores.map((prop) => {
                 return (
-                    <View>
+                    <View key={prop.id}>
                         <Surface style={stylesLocal.surface}>
                             {/* TODO: NAVIGATE TO NEW MODAL, FILMIL */}
                             <TouchableRipple
-                                key={index}
+                                
                                 style={stylesLocal.chip}
                                 onPress={() => console.log(prop)}
                             >
-                                <Text style={stylesLocal.surfaceText}>
+                                <Text
+                                    style={stylesLocal.surfaceText}
+                                >
                                     {prop.title}
                                 </Text>
                             </TouchableRipple>
