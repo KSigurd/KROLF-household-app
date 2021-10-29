@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 import * as Yup from "yup";
 import { generateHouseholdInviteCode } from "../functions/generateHouseholdInviteCode";
-import { HouseholdOmit } from "../interfaces/households";
+import { CreateHousehold } from "../interfaces/households";
 import { addHouseholdAction } from "../store/household/householdSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import ConfirmButton from "./ConfirmButton";
@@ -13,8 +13,9 @@ interface Props {
   onCreateSucceded: () => void;
 }
 
-type PostSchemaType = Record<keyof HouseholdOmit, Yup.AnySchema>;
+type PostSchemaType = Record<keyof CreateHousehold, Yup.AnySchema>;
 
+//Create Yup validation schema
 const validationSchema = Yup.object().shape<PostSchemaType>({
   inviteCode: Yup.string(),
   name: Yup.string()
@@ -23,17 +24,31 @@ const validationSchema = Yup.object().shape<PostSchemaType>({
     .required("Obligatoriskt fält"),
 });
 
-
 const CreateHouseholdForm: FC<Props> = ({ onCreateSucceded }: Props) => {
-  const householdInviteCode: number = generateHouseholdInviteCode();
+  //Define dispatch and states
   const dispatch = useAppDispatch();
   const householdState = useAppSelector((state) => state.household);
-  const initialValues: HouseholdOmit = {
+  const user = useAppSelector((state) => state.user.user);
+
+  //Get auto-generated invite code
+  const householdInviteCode: number = generateHouseholdInviteCode();
+
+  //Set initial values for form
+  const initialValues: CreateHousehold = {
     inviteCode: householdInviteCode,
     name: "",
   };
-  const handleSubmit = async (household: HouseholdOmit) => {
-    await dispatch(addHouseholdAction(household)).then(() => {
+
+  const handleSubmit = async (household: CreateHousehold) => {
+    const defaultHouseholdUser = {
+      userId: user.id,
+      name: "Admin",
+      isAdmin: true,
+      avatarId: "0",
+    };
+    await dispatch(
+      addHouseholdAction({ household, householdUser: defaultHouseholdUser })
+    ).then(() => {
       if (household) {
         onCreateSucceded();
       } else Alert.alert("Oooops!", householdState.error);
@@ -58,21 +73,21 @@ const CreateHouseholdForm: FC<Props> = ({ onCreateSucceded }: Props) => {
           <View>
             <ThemedTextInput
               label="Hushållets namn"
-              onChangeText={handleChange<keyof HouseholdOmit>("name")}
-              onBlur={handleBlur<keyof HouseholdOmit>("name")}
+              onChangeText={handleChange<keyof CreateHousehold>("name")}
+              onBlur={handleBlur<keyof CreateHousehold>("name")}
               value={values.name}
               helperText={touched.name && errors.name}
             />
             <ThemedTextInput
               label="Hushållets kod"
               editable={false}
-              onChangeText={handleChange<keyof HouseholdOmit>("inviteCode")}
-              onBlur={handleBlur<keyof HouseholdOmit>("inviteCode")}
+              onChangeText={handleChange<keyof CreateHousehold>("inviteCode")}
+              onBlur={handleBlur<keyof CreateHousehold>("inviteCode")}
               value={String(values.inviteCode)}
               helperText={touched.inviteCode && errors.inviteCode}
             />
           </View>
-          <ConfirmButton onConfirm={handleSubmit}/>
+          <ConfirmButton onConfirm={handleSubmit} />
         </View>
       )}
     </Formik>
