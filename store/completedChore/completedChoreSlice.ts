@@ -9,13 +9,13 @@ import { ChoreStatisticsDTO } from "../../interfaces/statisticsDTO";
 import { ThunkConfig } from "../store";
 
 interface CompletedChoreState {
-  compltedChores: CompletedChore[];
+  completedChores: CompletedChore[];
   statistics: ChoreStatisticsDTO[];
   error: string | undefined;
 }
 
 const initialState: CompletedChoreState = {
-  compltedChores: [],
+  completedChores: [],
   statistics: [],
   error: undefined,
 };
@@ -65,13 +65,13 @@ const completedChoreSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getCompletedChoresAction.fulfilled, (state, action) => {
-      state.compltedChores = action.payload.response;
+      state.completedChores = action.payload.response;
     }),
       builder.addCase(getCompletedChoresAction.rejected, (state, action) => {
         state.error = "Något gick fel";
       }),
       builder.addCase(addCompletedChoreAction.fulfilled, (state, action) => {
-        state.compltedChores.push(action.payload);
+        state.completedChores.push(action.payload);
       }),
       builder.addCase(addCompletedChoreAction.rejected, (state, action) => {
         state.error = "Något gick fel";

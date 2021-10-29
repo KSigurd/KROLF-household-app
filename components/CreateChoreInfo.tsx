@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { chores } from "../data/mockChoresData";
 import { Chore } from "../interfaces/chore";
 import Points from "./Points";
-import Repeatability from "./Repeatability";
+// import Repeatability from "./Repeatability";
 import ThemedTextInput from "./ThemedTextInput";
 
 interface Props {
@@ -19,8 +19,8 @@ const initialValues: Chore = {
   description: "",
   points: 2,
   repeatability: 7,
-  id: 0,
-  householdId: 0,
+  id: "0",
+  householdId: "0",
 };
 
 type PostSchemaType = Record<keyof Chore, Yup.AnySchema>;
@@ -37,7 +37,7 @@ const validationSchema = Yup.object().shape<PostSchemaType>({
 const CreateChoreInfo = ({ onClosed }: Props) => {
   const handleSubmit = (chore: Chore) => {
     //ADD CHANGES TO FIREBASE
-    chores.push({ ...chore, id: 50 });
+    chores.push({ ...chore, id: "50" });
     console.log(chore);
 
     //CLOSES MODAL
@@ -79,11 +79,11 @@ const CreateChoreInfo = ({ onClosed }: Props) => {
             value={values.description}
             helperText={touched.description && errors.description}
           />
-          <Repeatability
+          {/* <Repeatability
             getRepeatability={(repeatability) => {
               initialValues.repeatability = repeatability;
             }}
-          />
+          /> */}
           <Points
             onChange={(energy) => {
               initialValues.points = energy;

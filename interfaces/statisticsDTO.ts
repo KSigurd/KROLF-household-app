@@ -6,6 +6,7 @@ export interface ChoreStatisticsDTO {
   completedChores: CompletedChoresByUserDTO[];
 }
 
+
 export interface CompletedChoresByUserDTO {
   completedChores: CompletedChore[];
   housholdUserId: string;

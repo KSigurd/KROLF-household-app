@@ -35,7 +35,7 @@ const RootNavigator = () => {
           headerTintColor: "#000",
         }}
       >
-        <Stack.Screen
+        {/* <Stack.Screen
           name="Login"
           component={LoginScreen}
           options={{ title: "Logga in" }}
@@ -44,17 +44,17 @@ const RootNavigator = () => {
           name="CreateAccount"
           component={CreateAccountScreen}
           options={{ title: "Skapa konto" }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name="CreateHousehold"
           component={CreateHouseholdScreen}
           options={{ title: "Skapa hushåll" }}
-        />
-        <Stack.Screen
+        /> */}
+        {/* <Stack.Screen
           name="JoinHousehold"
           component={JoinHouseholdScreen}
           options={{ title: "Gå med" }}
-        />
+        /> */}
         {/* TODO: CHECK THIS */}
         <Stack.Screen
           name="Profile"
