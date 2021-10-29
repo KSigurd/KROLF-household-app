@@ -1,24 +1,13 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { FC } from "react";
-import { View, Text, StyleSheet, TouchableHighlight } from "react-native";
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
 import { Button, Surface, TouchableRipple } from "react-native-paper";
-import ChoreButton from "../components/ChoreButton";
-import { chores } from "../data/mockChoresData";
-import { households } from "../data/mockHouseholdData";
-import {
-    RootStackParamList,
-    StackScreenProps,
-} from "../navigation/RootNavigator";
+import { StackScreenProps } from "../navigation/RootNavigator";
+import { getChoresAction } from "../store/chore/choreSlice";
 import { selectHouseholdById } from "../store/household/hoseholdSelector";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { styles } from "../styles/styles";
-import CreateChoreInfo from "../components/CreateChoreInfo";
-import { getChores } from "../data/fireStoreModule";
-import { getChoresAction } from "../store/chore/choreSlice";
-import { users } from "../data/mockUserData";
 
 const ChoresScreen = ({
-    route,
     navigation,
 }: StackScreenProps<"ChoresStatisticsNavigator">) => {
     const dispatch = useAppDispatch();
@@ -30,8 +19,6 @@ const ChoresScreen = ({
     dispatch(getChoresAction(activeHouseholdState));
     const allHousoholdChores = useAppSelector((state) => state.chore.chores);
 
-    // console.log(allHousoholdChores);
-
     // const [isVisible, setIsVisible] = React.useState(false);
 
     return (
@@ -41,11 +28,6 @@ const ChoresScreen = ({
 
             {allHousoholdChores.map((prop, index) => {
                 return (
-                    // <TouchableHighlight style={{padding: 10}}key={index}>
-                    //   <Text onPress={() => alert(`GÅ NU OCH ${prop.title}`)}>
-                    //     {prop.title}
-                    //   </Text>
-                    // </TouchableHighlight>
                     <View>
                         <Surface style={stylesLocal.surface}>
                             {/* TODO: NAVIGATE TO NEW MODAL, FILMIL */}
@@ -60,20 +42,6 @@ const ChoresScreen = ({
                             </TouchableRipple>
                         </Surface>
                     </View>
-
-                    //SLÄNGA????
-                    // <ChoreButton  //TODO: Move this props-logic somewhere else
-                    //   key={key}
-                    //   buttonText={prop.title}
-                    //   completedBy={users.filter(
-                    //     (user) =>
-                    //       user.choresDone.filter((chore) => chore.choreId === prop.id)
-                    //         .length
-                    //   )}
-
-                    //   daysSinceLast={String(7)}
-                    //   isLate={false}
-                    // />
                 );
             })}
 
