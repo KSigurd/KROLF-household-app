@@ -1,7 +1,7 @@
 import { Chore, ChoreOmit } from "../interfaces/chore";
 import { CompletedChore } from "../interfaces/completedChore";
-import { Household, HouseholdOmit } from "../interfaces/households";
-import { HouseholdUser, HouseholdUserOmit } from "../interfaces/householdUser";
+import { Household, CreateHousehold } from "../interfaces/households";
+import { HouseholdUser, CreateHouseholdUser } from "../interfaces/householdUser";
 import {
   ChoreStatisticsDTO,
   CompletedChoresByUserDTO,
@@ -175,12 +175,12 @@ export async function getCompletedChores(householdId: string) {
  * Takes an object of type Household and writes it to FireStore
  * @requires Household
  */
-export async function addHoushold(newHousehold: HouseholdOmit) {
-  await firebase
+export async function addHoushold(newHousehold: CreateHousehold) {
+ const result = await firebase
     .firestore()
     .collection("households")
     .add(newHousehold)
-    .catch((err) => console.log(err));
+    return result.id
 }
 
 /**
@@ -192,7 +192,7 @@ export async function updateHoushold(modifiedHousehold: Household) {
     .firestore()
     .collection("households")
     .doc(modifiedHousehold.id)
-    .update(modifiedHousehold as HouseholdOmit)
+    .update(modifiedHousehold as CreateHousehold)
     .catch((err) => console.log(err));
 }
 
@@ -203,26 +203,26 @@ export async function updateHoushold(modifiedHousehold: Household) {
  */
 export async function getHouseHolds(userId: string) {
   const households: Household[] = [];
-  await firebase
+
+  const first = await firebase
     .firestore()
     .collection("householdUsers")
     .where("userId", "==", userId)
-    .get()
-    .then((query) => {
-      query.forEach(async (doc) => {
-        await firebase
-          .firestore()
-          .collection("households")
-          .doc(doc.data().householdId)
-          .get()
-          .then((doc) => {
-            households.push({ id: doc.id, ...doc.data() } as Household);
-          })
-          .catch((err) => console.log(err));
-      });
-    })
-    .catch((err) => console.log(err));
+    .get();
+  // .catch((err) => console.log(err));
 
+  for (var doc of first.docs) {
+    await firebase
+      .firestore()
+      .collection("households")
+      .doc(doc.data().householdId)
+      .get()
+      .then((doc) => {
+        households.push({ id: doc.id, ...doc.data() } as Household);
+      })
+      .catch((err) => console.log(err));
+  }
+  console.log("från databasen : ", households);
   return households;
 }
 
@@ -230,12 +230,12 @@ export async function getHouseHolds(userId: string) {
  * Takes an object of type HouseholdUser and writes it to FireStore
  * @requires HouseholdUser
  */
-export async function addHouseholdUser(newHouseHoldUser: HouseholdUserOmit) {
-  await firebase
+export async function addHouseholdUser(newHouseHoldUser: CreateHouseholdUser) {
+  const result = await firebase
     .firestore()
     .collection("householdUsers")
     .add(newHouseHoldUser)
-    .catch((err) => console.log(err));
+    return result.id;
 }
 
 /**
@@ -249,7 +249,7 @@ export async function updateHouseholdUser(
     .firestore()
     .collection("householdUsers")
     .doc(modifiedHouseholdUser.id)
-    .update(modifiedHouseholdUser as HouseholdUserOmit);
+    .update(modifiedHouseholdUser as CreateHouseholdUser);
 }
 
 /**
