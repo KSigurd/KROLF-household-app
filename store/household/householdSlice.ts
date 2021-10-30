@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { addHoushold, getHouseHolds } from "../../data/fireStoreModule";
-import { households } from "../../data/mockHouseholdData";
 import { Household } from "../../interfaces/households";
-import { ThunkConfig, useAppSelector } from "../store";
+import { resetErrorAction } from "../globalActions";
+import { ThunkConfig } from "../store";
 
 interface HouseholdState {
   households: Household[];
@@ -91,6 +91,9 @@ const householdSlice = createSlice({
       }),
       builder.addCase(setActiveHousholdAction.rejected, (state, action) => {
         state.error = "Något gick fel";
+      }),
+      builder.addCase(resetErrorAction, (state, action) => {
+        state.error = undefined;
       })
     },
 });

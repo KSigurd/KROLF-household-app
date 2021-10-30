@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { addUser, loginUser } from "../../data/fireStoreModule";
 import { User } from "../../interfaces/user";
+import { resetErrorAction } from "../globalActions";
 import { ThunkConfig } from "../store";
 
 interface UserState {
@@ -74,7 +75,10 @@ const userSlice = createSlice({
       }),
       builder.addCase(addUserAction.rejected, (state, action) => {
         state.error = "Något gick fel";
-      });
+      }),
+      builder.addCase(resetErrorAction, (state, action) => {
+        state.error = undefined;
+      })
   },
 });
 

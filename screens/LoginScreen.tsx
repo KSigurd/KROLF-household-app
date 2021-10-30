@@ -8,17 +8,29 @@ import { Button as NPbutton } from "react-native-paper";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { getStatisticsAction } from "../store/completedChore/completedChoreSlice";
 import { getHouseholdsAction } from "../store/household/householdSlice";
+import { User } from "../interfaces/user";
+import { loginUserAction } from "../store/user/userSlice";
 
 type Props = NativeStackScreenProps<RootStackParamList, "CreateHousehold">;
 
 const LoginScreen = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
+  const userState = useAppSelector(state => state.user);
+  //TODO: Kalla på logga-ut-funktion när denna screen laddas
   const activeHouseholdState = useAppSelector(
     (state) => state.household.activeHouseholdId
   );
   const statisticsState = useAppSelector(
     (state) => state.completedChore.statistics
   );
+
+  useEffect(() => {
+      if(userState.loggedIn) navigation.navigate("Profile")
+  },[userState.loggedIn])
+
+  const loginUser = async (user: User) => {
+    await dispatch(loginUserAction(user));
+  }
 
   //   useEffect(() => {
 
@@ -29,7 +41,7 @@ const LoginScreen = ({ navigation }: Props) => {
   // })
   return (
     <View style={styles.root}>
-      <LoginForm onLoginSucceded={() => navigation.navigate("Profile")} />
+      <LoginForm onSubmit={loginUser} />
       <View style={styles.noAccountContainer}>
         <Text style={styles.noAccountText}>Inget konto? Registrera dig </Text>
         <Text

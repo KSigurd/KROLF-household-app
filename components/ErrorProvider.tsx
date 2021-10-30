@@ -1,15 +1,18 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import React from "react";
-import { useAppSelector } from "../store/store";
+import { useAppDispatch, useAppSelector } from "../store/store";
 import {
   Button,
   Dialog,
   Paragraph,
+  Portal,
   Provider,
 } from "react-native-paper";
+import { resetErrorAction } from "../store/globalActions";
 
 const ErrorDialog: FC = (props) => {
-  let visible = false;
+  const [visible, setVisible] = useState(false);
+  const dispatch = useAppDispatch();
   const userState = useAppSelector((state) => state.user);
   const choreState = useAppSelector((state) => state.chore);
   const completedChoreState = useAppSelector((state) => state.completedChore);
@@ -17,23 +20,33 @@ const ErrorDialog: FC = (props) => {
   const householdUserState = useAppSelector((state) => state.householdUser);
 
   const resetErrors = () => {
-    userState.error = undefined;
-    choreState.error = undefined;
-    completedChoreState.error = undefined;
-    householdState.error = undefined;
-    householdUserState.error = undefined;
+    dispatch(resetErrorAction());
   };
 
-  const showDialog = () => (visible = true);
+  const showDialog = () => setVisible(true);
 
   const hideDialog = () => {
-    visible = false;
+    setVisible(false);
     resetErrors();
   };
 
-  if (userState.error) {
-    showDialog();
-  }
+  useEffect(() => {
+    if (
+      userState.error ||
+      choreState.error ||
+      completedChoreState.error ||
+      householdState.error ||
+      householdUserState.error
+    ) {
+      showDialog();
+    }
+  }, [
+    userState.error,
+    choreState.error,
+    completedChoreState.error,
+    householdState.error,
+    householdUserState.error,
+  ]);
 
   const getError = () => {
     if (userState.error) return userState.error;
@@ -45,16 +58,18 @@ const ErrorDialog: FC = (props) => {
 
   return (
     <Provider>
-      <Dialog visible={visible} onDismiss={hideDialog}>
-        <Dialog.Title>Ooops!</Dialog.Title>
-        <Dialog.Content>
-          <Paragraph>{getError()}</Paragraph>
-        </Dialog.Content>
-        <Dialog.Actions>
-          <Button onPress={hideDialog}>Done</Button>
-        </Dialog.Actions>
-      </Dialog>
-      {props.children}
+      <Portal>
+        <Dialog visible={visible} onDismiss={hideDialog} dismissable={false}>
+          <Dialog.Title>Ooops!</Dialog.Title>
+          <Dialog.Content>
+            <Paragraph>{getError()}</Paragraph>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={hideDialog}>Ok!</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+      <Portal.Host>{props.children}</Portal.Host>
     </Provider>
   );
 };
