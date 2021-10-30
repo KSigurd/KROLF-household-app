@@ -33,7 +33,7 @@ export const householdUser: HouseholdUser[] = [
     householdId: "0",
     name: "Kallis",
     isAdmin: true,
-    avatarId: 1,
+    avatarId: "1",
   },
   {
     id: "1",
@@ -41,7 +41,7 @@ export const householdUser: HouseholdUser[] = [
     householdId: "1",
     name: "TONY",
     isAdmin: false,
-    avatarId: 2,
+    avatarId: "2",
 
   },
 ];

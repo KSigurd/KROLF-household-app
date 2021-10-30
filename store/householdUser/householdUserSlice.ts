@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   addHouseholdUser,
-  getHouseholdUsers,
+  getHouseholdUsers
 } from "../../data/fireStoreModule";
-import { HouseholdUser } from "../../interfaces/householdUser";
 import { resetErrorAction } from "../globalActions";
+import { CreateHouseholdUser, HouseholdUser } from "../../interfaces/householdUser";
 import { ThunkConfig } from "../store";
 
 interface HouseholdUserState {
@@ -32,12 +32,16 @@ export const getHouseholdUserAction = createAsyncThunk<
 
 export const addHouseholdUserAction = createAsyncThunk<
   HouseholdUser,
-  HouseholdUser,
+  CreateHouseholdUser,
   ThunkConfig
 >("addUserToHousehold", async (newHouseholdUser, { rejectWithValue }) => {
   try {
-    await addHouseholdUser(newHouseholdUser);
-    return newHouseholdUser;
+    const householdUserId = await addHouseholdUser(newHouseholdUser);
+        const householdUser = {
+          ...newHouseholdUser,
+          id: householdUserId,
+        };
+    return householdUser;
   } catch (e) {
     return rejectWithValue(false);
   }

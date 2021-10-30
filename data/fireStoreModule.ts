@@ -1,7 +1,7 @@
 import { Chore, ChoreOmit } from "../interfaces/chore";
 import { CompletedChore } from "../interfaces/completedChore";
-import { Household, HouseholdOmit } from "../interfaces/households";
-import { HouseholdUser, HouseholdUserOmit } from "../interfaces/householdUser";
+import { Household, CreateHousehold } from "../interfaces/households";
+import { HouseholdUser, CreateHouseholdUser } from "../interfaces/householdUser";
 import {
   ChoreStatisticsDTO,
   CompletedChoresByUserDTO,
@@ -175,12 +175,12 @@ export async function getCompletedChores(householdId: string) {
  * Takes an object of type Household and writes it to FireStore
  * @requires Household
  */
-export async function addHoushold(newHousehold: HouseholdOmit) {
-  await firebase
+export async function addHoushold(newHousehold: CreateHousehold) {
+ const result = await firebase
     .firestore()
     .collection("households")
     .add(newHousehold)
-    .catch((err) => console.log(err));
+    return result.id
 }
 
 /**
@@ -192,7 +192,7 @@ export async function updateHoushold(modifiedHousehold: Household) {
     .firestore()
     .collection("households")
     .doc(modifiedHousehold.id)
-    .update(modifiedHousehold as HouseholdOmit)
+    .update(modifiedHousehold as CreateHousehold)
     .catch((err) => console.log(err));
 }
 
@@ -230,12 +230,12 @@ export async function getHouseHolds(userId: string) {
  * Takes an object of type HouseholdUser and writes it to FireStore
  * @requires HouseholdUser
  */
-export async function addHouseholdUser(newHouseHoldUser: HouseholdUserOmit) {
-  await firebase
+export async function addHouseholdUser(newHouseHoldUser: CreateHouseholdUser) {
+  const result = await firebase
     .firestore()
     .collection("householdUsers")
     .add(newHouseHoldUser)
-    .catch((err) => console.log(err));
+    return result.id;
 }
 
 /**
@@ -249,7 +249,7 @@ export async function updateHouseholdUser(
     .firestore()
     .collection("householdUsers")
     .doc(modifiedHouseholdUser.id)
-    .update(modifiedHouseholdUser as HouseholdUserOmit);
+    .update(modifiedHouseholdUser as CreateHouseholdUser);
 }
 
 /**

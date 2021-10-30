@@ -8,6 +8,7 @@ import LoginScreen from "../screens/LoginScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import ChoresStatisticsNavigator from "./ChoresStatisticsNavigator";
 import CreateChoreModalScreen from "../screens/CreateChoreModalScreen";
+import ChoreDescriptionModalScreen from "../screens/ChoreDescriptionModalScreen"
 
 export type RootStackParamList = {
   Login: undefined;
@@ -17,6 +18,7 @@ export type RootStackParamList = {
   Profile: undefined;
   ChoresStatisticsNavigator: undefined;
   CreateChoreModalScreen: undefined;
+  ChoreDescriptionModalScreen: undefined;
 };
 
 export type StackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<RootStackParamList, Screen>;
@@ -63,7 +65,7 @@ const RootNavigator = () => {
         <Stack.Screen
           name="Profile"
           component={ProfileScreen}
-          options={{ presentation: "fullScreenModal", title: "Profil" }}
+          options={{ title: "Profil" }}
         />
         <Stack.Screen
           name="ChoresStatisticsNavigator"
@@ -73,6 +75,15 @@ const RootNavigator = () => {
         <Stack.Screen
           name="CreateChoreModalScreen"
           component={CreateChoreModalScreen}
+          options={{
+            presentation: "transparentModal",
+            contentStyle: { backgroundColor: "transparent" },
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="ChoreDescriptionModalScreen"
+          component={ChoreDescriptionModalScreen}
           options={{
             presentation: "transparentModal",
             contentStyle: { backgroundColor: "transparent" },
