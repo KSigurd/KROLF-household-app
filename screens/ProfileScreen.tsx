@@ -1,42 +1,62 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
-import { View, Text, Button, StyleSheet, FlatList } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import AddHouseholdButton from "../components/AddHouseholdButton";
 import HouseholdSurface from "../components/HouseholdSurface";
 import JoinHouseholdButton from "../components/JoinHouseHoldButton";
-import { households } from "../data/mockHouseholdData";
 import { RootStackParamList } from "../navigation/RootNavigator";
+import {
+  setActiveHousholdAction
+} from "../store/household/householdSlice";
+import { useAppDispatch, useAppSelector } from "../store/store";
 
 type Props = NativeStackScreenProps<
   RootStackParamList,
   "ChoresStatisticsNavigator"
 >;
 
-const ProfileScreen = ({ navigation }: Props) => {
-  return (
-    <View style={styles.root}>
-      <View>
-        <Text style={styles.title}>Välkommen *användarnamn*</Text>
+const ProfileScreen = ({
+    navigation,
+}: Props) => {
+    const dispatch = useAppDispatch();
+    const databaseHouseholds = useAppSelector(
+        (state) => state.household.households
+    );
 
-        <View>
-          <Text style={styles.title}>Välj hushåll:</Text>
-          {households.map((prop, key) => {
-            return <HouseholdSurface key={key} householdObject={prop} />;
-          })}
+    const setHousholdAndNavigate = (householdId: string) => {
+      console.log("inne här")
+        dispatch(setActiveHousholdAction(householdId));
+        navigation.navigate("ChoresStatisticsNavigator");
+    };
+
+    return (
+        <View style={styles.root}>
+            <View>
+                <Text style={styles.title}>Välj hushåll:</Text>
+                {databaseHouseholds.map((prop, key) => {
+                    return (
+                        <HouseholdSurface
+                            key={key}
+                            householdObject={prop}
+                            onChange={(householdId) => {
+                                setHousholdAndNavigate(householdId);
+                            }}
+                        />
+                    );
+                })}
+            </View>
+            <View style={styles.NPbuttonRoot}>
+                <AddHouseholdButton
+                    onAddHousehold={() =>
+                        navigation.navigate("CreateHousehold")
+                    }
+                />
+                <JoinHouseholdButton
+                    onJoinHousehold={() => navigation.navigate("JoinHousehold")}
+                />
+            </View>
         </View>
-      </View>
-
-      <View style={styles.NPbuttonRoot}>
-        <AddHouseholdButton onAddHousehold={() => navigation.navigate("CreateHousehold")}/>
-        <JoinHouseholdButton onJoinHousehold={() => navigation.navigate("JoinHousehold")}/>
-      </View>
-
-      <Button
-        title="tryck mig vidare"
-        onPress={() => navigation.navigate("ChoresStatisticsNavigator")}
-      />
-    </View>
-  );
+    );
 };
 
 export default ProfileScreen;

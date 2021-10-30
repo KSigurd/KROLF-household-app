@@ -1,13 +1,14 @@
 import { Chore, ChoreOmit } from "../interfaces/chore";
 import { CompletedChore } from "../interfaces/completedChore";
-import { Household, HouseholdOmit } from "../interfaces/households";
-import { HouseholdUser, HouseholdUserOmit } from "../interfaces/householdUser";
+import { Household, CreateHousehold } from "../interfaces/households";
+import { HouseholdUser, CreateHouseholdUser } from "../interfaces/householdUser";
 import {
   ChoreStatisticsDTO,
   CompletedChoresByUserDTO,
 } from "../interfaces/statisticsDTO";
 import { User, UserOmit } from "../interfaces/user";
 import { firebase } from "./fireBaseConfig";
+import { householdUser } from "./mockHouseholdData";
 
 /**
  * Takes an object of type User and writes it to FireStore
@@ -18,14 +19,14 @@ export async function addUser(newUser: UserOmit) {
   await firebase
     .firestore()
     .collection("users")
-    .where("email", "==", newUser.email)
+    .where("email", "==", newUser.email.toLowerCase())
     .get()
     .then((query) => {
       if (query.empty) {
         firebase
           .firestore()
           .collection("users")
-          .add(newUser)
+          .add({email: newUser.email.toLowerCase(), password: newUser.password})
           .catch((err) => console.log(err));
 
         userAdded = true;
@@ -48,7 +49,7 @@ export async function loginUser(user: User) {
   await firebase
     .firestore()
     .collection("users")
-    .where("email", "==", user.email)
+    .where("email", "==", user.email.toLowerCase())
     .where("password", "==", user.password)
     .get()
     .then((query) => {
@@ -174,12 +175,12 @@ export async function getCompletedChores(householdId: string) {
  * Takes an object of type Household and writes it to FireStore
  * @requires Household
  */
-export async function addHoushold(newHousehold: HouseholdOmit) {
-  await firebase
+export async function addHoushold(newHousehold: CreateHousehold) {
+ const result = await firebase
     .firestore()
     .collection("households")
     .add(newHousehold)
-    .catch((err) => console.log(err));
+    return result.id
 }
 
 /**
@@ -191,7 +192,7 @@ export async function updateHoushold(modifiedHousehold: Household) {
     .firestore()
     .collection("households")
     .doc(modifiedHousehold.id)
-    .update(modifiedHousehold as HouseholdOmit)
+    .update(modifiedHousehold as CreateHousehold)
     .catch((err) => console.log(err));
 }
 
@@ -202,68 +203,55 @@ export async function updateHoushold(modifiedHousehold: Household) {
  */
 export async function getHouseHolds(userId: string) {
   const households: Household[] = [];
-  await firebase
+
+  const first = await firebase
     .firestore()
     .collection("householdUsers")
     .where("userId", "==", userId)
-    .get()
-    .then((query) => {
-      query.forEach(async (doc) => {
-        await firebase
-          .firestore()
-          .collection("households")
-          .doc(doc.data().householdId)
-          .get()
-          .then((doc) => {
-            households.push({ id: doc.id, ...doc.data() } as Household);
-          })
-          .catch((err) => console.log(err));
-      });
-    })
-    .catch((err) => console.log(err));
+    .get();
+  // .catch((err) => console.log(err));
 
+  for (var doc of first.docs) {
+    await firebase
+      .firestore()
+      .collection("households")
+      .doc(doc.data().householdId)
+      .get()
+      .then((doc) => {
+        households.push({ id: doc.id, ...doc.data() } as Household);
+      })
+      .catch((err) => console.log(err));
+  }
+  console.log("från databasen : ", households);
   return households;
 }
 
 /**
- * Takes an object of type HouseholdUser and an invite code and writes it to FireStore
+ * Takes an object of type HouseholdUser and an optional invite code and writes it to FireStore. Then returns the new householdUserId.
  * @requires HouseholdUserOmit
- * @requires InviteCode
+ * @optional InviteCode
  */
-export async function addHouseholdUser(inviteCode: number, newHouseHoldUser: HouseholdUserOmit) {
-  let householdUserWithId: HouseholdUser = {} as HouseholdUser;
-  const householdId = await firebase
+export async function addHouseholdUser(newHouseholdUser: CreateHouseholdUser, inviteCode?: number) {
+
+if(inviteCode) {
+  await firebase
     .firestore()
     .collection("households")
     .where("inviteCode", "==", inviteCode)
     .get()
     .then(query => {
       query.forEach(doc => {
-        newHouseHoldUser.householdId = doc.id;
+        newHouseholdUser.householdId = doc.id;
       })
     })
     .catch((err) => console.log(err));
-
-  await firebase
+}
+  
+  const result = await firebase
     .firestore()
     .collection("householdUsers")
-    .add(newHouseHoldUser)
-    .catch((err) => console.log(err));
-
-  await firebase
-    .firestore()
-    .collection("householdUsers")
-    .where("userId", "==", newHouseHoldUser.userId)
-    .where("householdId", "==", householdId)
-    .get()
-    .then(query => {
-      query.forEach(doc => {
-        householdUserWithId = {id: doc.id, ...newHouseHoldUser} as HouseholdUser;
-      })
-    })
-    .catch((err) => console.log(err));
-
-  return householdUserWithId;
+    .add(newHouseholdUser)
+    return result.id;
 }
 
 /**
@@ -277,7 +265,7 @@ export async function updateHouseholdUser(
     .firestore()
     .collection("householdUsers")
     .doc(modifiedHouseholdUser.id)
-    .update(modifiedHouseholdUser as HouseholdUserOmit);
+    .update(modifiedHouseholdUser as CreateHouseholdUser);
 }
 
 /**
@@ -343,51 +331,52 @@ export async function removeHouseholdUser(userId: string, householdId: string) {
 export async function getStatistics(householdId: string) {
   let statisticsDTOs: ChoreStatisticsDTO[] = [];
 
-  await firebase
+  const chores = await firebase
     .firestore()
     .collection("chores")
     .where("householdId", "==", householdId)
-    .get()
-    .then((query) => {
-      query.forEach(async (doc) => {
-        let choreStatistics: ChoreStatisticsDTO = {} as ChoreStatisticsDTO;
-        choreStatistics.choreId = doc.id;
-        choreStatistics.points = doc.data().points;
-        await firebase
-          .firestore()
-          .collection("householdUsers")
-          .where("householdId", "==", householdId)
-          .get()
-          .then((query) => {
-            query.forEach(async (doc) => {
-              let userStatistics: CompletedChoresByUserDTO =
-                {} as CompletedChoresByUserDTO;
-              userStatistics.avatarId = doc.data().avatarId;
-              userStatistics.housholdUserId = doc.id;
-              await firebase
-                .firestore()
-                .collection("completedChores")
-                .where("householdUserId", "==", userStatistics.housholdUserId)
-                .where("choreId", "==", choreStatistics.choreId)
-                .get()
-                .then((query) => {
-                  query.forEach((doc) => {
-                    userStatistics.completedChores.push(
-                      doc.data() as CompletedChore
-                    );
-                  });
-                })
-                .catch((err) => console.log(err));
+    .get();
 
-              choreStatistics.completedChores.push(userStatistics);
-            });
-          })
-          .catch((err) => console.log(err));
+  for (const chore of chores.docs) {
+    let choreStatisticsDTO: ChoreStatisticsDTO = {
+      choreTitle: chore.data().title,
+      points: chore.data().points,
+      completedChores: [],
+    };
 
-        statisticsDTOs.push(choreStatistics);
-      });
-    })
-    .catch((err) => console.log(err));
+    const householdUsers = await firebase
+      .firestore()
+      .collection("householdUsers")
+      .where("householdId", "==", householdId)
+      .get();
 
+    for (const householdUser of householdUsers.docs) {
+      let completedChoresByUserDTO: CompletedChoresByUserDTO = {
+        completedChores: [],
+        housholdUserId: householdUser.id,
+        avatarId: householdUser.data().avatarId,
+      };
+
+      const completedChores = await firebase
+        .firestore()
+        .collection("completedChores")
+        .where("householdUserId", "==", householdUser.id)
+        .where("choreId", "==", chore.id)
+        .get();
+
+      for (const completedChore of completedChores.docs) {
+        console.log(completedChore.data().date.toDate());
+        completedChoresByUserDTO.completedChores.push({
+          choreId: completedChore.data().choreId,
+          date: completedChore.data().date.toDate(),
+          householdUserId: completedChore.data().householdUserId,
+        });
+      }
+      choreStatisticsDTO.completedChores.push(completedChoresByUserDTO);
+    }
+    statisticsDTOs.push(choreStatisticsDTO);
+  }
+
+  console.log("uuu" + statisticsDTOs);
   return statisticsDTOs;
 }

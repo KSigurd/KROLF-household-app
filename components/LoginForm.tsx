@@ -54,15 +54,13 @@ const LoginForm: FC<Props> = ({ onLoginSucceded }: Props) => {
         <View style={styles.root}>
           <View>
             <ThemedTextInput
-              style={styles.input}
               label="Användarnamn"
               onChangeText={handleChange<keyof User>("email")}
               onBlur={handleBlur<keyof User>("email")}
-              value={values.email}
+              value={values.email.trim()}
               helperText={touched.email && errors.email}
             />
             <ThemedTextInput
-              style={styles.input}
               secureTextEntry={true}
               label="Lösenord"
               onChangeText={handleChange<keyof User>("password")}
@@ -72,8 +70,6 @@ const LoginForm: FC<Props> = ({ onLoginSucceded }: Props) => {
             />
           </View>
           <NPbutton
-            //TODO: CHECK THIS
-            disabled={!values.password === true || !values.email === true}
             icon="account-key-outline"
             mode="contained"
             style={styles.NPbutton}
@@ -100,8 +96,5 @@ const styles = StyleSheet.create({
     padding: 10,
     alignSelf: "center",
     marginVertical: 10,
-  },
-  input: {
-    elevation: 4,
-  },
+  }
 });

@@ -7,4 +7,4 @@ export interface HouseholdUser {
   avatarId: string;
 }
 
-export interface HouseholdUserOmit extends Omit<HouseholdUser, "id"> {}
+export type CreateHouseholdUser = Omit<HouseholdUser, "id">;

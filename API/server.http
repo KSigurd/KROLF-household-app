@@ -1,0 +1,14 @@
+GET http://localhost:5000/api/v1/user/
+
+###
+
+
+POST http://localhost:5000/api/v1/user/
+Content-Type: : application/json
+
+{
+    "email": "olivia.annemaria@hotmail.com",
+    "password": "ettlösenord"
+}
+
+###

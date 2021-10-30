@@ -34,7 +34,7 @@ export const styles = StyleSheet.create(
             width: "100%",
             flexDirection: "row",
             alignItems: "flex-end",
-            justifyContent: "space-between",
+            justifyContent: "space-between",            
         },
         buttonInnerContainer: {
             flex: 1,
