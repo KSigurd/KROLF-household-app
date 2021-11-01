@@ -13,7 +13,7 @@ const CreateChoreModalScreen = ({ navigation, route }: Props) => {
     navigation.navigate("Home");
   };
 
-  const chore = route.params;
+  const chore: any = route.params;
 
   console.log(chore);
   return (

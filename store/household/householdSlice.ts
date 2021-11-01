@@ -58,7 +58,7 @@ export const addHouseholdAction = createAsyncThunk<
       ...createData.householdUser,
       householdId,
     }
-    dispatch(addHouseholdUserAction(householdUser));
+    dispatch(addHouseholdUserAction({newHouseholdUser: householdUser}));
     return household;
   } catch (e) {
     return rejectWithValue(false);
