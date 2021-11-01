@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { addChore, getChores } from "../../data/fireStoreModule";
 import { Chore } from "../../interfaces/chore";
+import { resetErrorAction } from "../globalActions";
 import { ThunkConfig } from "../store";
 
 interface ChoreState {
@@ -54,7 +55,10 @@ const choreSlice = createSlice({
       }),
       builder.addCase(addChoreAction.rejected, (state, action) => {
         state.error = "Något gick fel";
-      });
+      }),
+      builder.addCase(resetErrorAction, (state, action) => {
+        state.error = undefined;
+      })
   },
 });
 

@@ -3,6 +3,7 @@ import {
   addHouseholdUser,
   getHouseholdUsers
 } from "../../data/fireStoreModule";
+import { resetErrorAction } from "../globalActions";
 import { CreateHouseholdUser, HouseholdUser } from "../../interfaces/householdUser";
 import { ThunkConfig } from "../store";
 
@@ -68,7 +69,10 @@ const householdUserSlice = createSlice({
       }),
       builder.addCase(addHouseholdUserAction.rejected, (state, action) => {
         state.error = "Något gick fel";
-      });
+      }),
+      builder.addCase(resetErrorAction, (state, action) => {
+        state.error = undefined;
+      })
   },
 });
 

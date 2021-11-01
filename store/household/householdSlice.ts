@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { addHoushold, getHouseHolds } from "../../data/fireStoreModule";
+import { resetErrorAction } from "../globalActions";
 import { Household, CreateHousehold, CreateHouseholdData } from "../../interfaces/households";
 import { addHouseholdUserAction } from "../householdUser/householdUserSlice";
 import { households } from "../../data/mockHouseholdData";
@@ -101,6 +102,9 @@ const householdSlice = createSlice({
       }),
       builder.addCase(setActiveHousholdAction.rejected, (state, action) => {
         state.error = "Något gick fel";
+      }),
+      builder.addCase(resetErrorAction, (state, action) => {
+        state.error = undefined;
       })
     },
 });
