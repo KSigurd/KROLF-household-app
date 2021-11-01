@@ -2,79 +2,34 @@ import { Formik } from "formik";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Button as NPbutton } from "react-native-paper";
-import * as Yup from "yup";
-import { chores } from "../data/mockChoresData";
 import { Chore } from "../interfaces/chore";
-import Points from "./Points";
-import Repeatability from "./Repeatability";
 import ThemedTextInput from "./ThemedTextInput";
 
 interface Props {
   onClosed: () => void;
+  chore: Chore;
 }
 
-//DEFAULT VALUES
-const initialValues: Chore = {
-  title: "",
-  description: "",
-  points: 2,
-  repeatability: 7,
-  id: "0",
-  householdId: "0",
-};
-
-type PostSchemaType = Record<keyof Chore, Yup.AnySchema>;
-
-const validationSchema = Yup.object().shape<PostSchemaType>({
-  title: Yup.string().required("Fyll i en titel").min(2),
-  description: Yup.string().required("Fyll i en beskrivning av syssla").min(2),
-  points: Yup.number().required(),
-  repeatability: Yup.number().required(),
-  id: Yup.string(),
-  householdId: Yup.string(),
-});
-
-const CreateChoreInfo = ({ onClosed }: Props) => {
-  const handleSubmit = (chore: Chore) => {
-    //ADD CHANGES TO FIREBASE
-    chores.push({ ...chore, id: "50" });
-    console.log(chore);
-
-    //CLOSES MODAL
+const CreateChoreInfo = ({ onClosed, chore }: Props) => {
+  const handleSubmit = () => {
+    //TODO: MARKERA SYSSLA SOM SLUTFÖRD
     onClosed();
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-    >
-      {({
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        values,
-        touched,
-        errors,
-      }) => (
+    <Formik initialValues={chore} onSubmit={handleSubmit}>
+      {({ handleSubmit }) => (
         <View style={styles.root}>
           <ThemedTextInput
             style={styles.input}
             label="Beskrivning"
-            editable={false}
-            // placeholder="Titel"
+            editable={true}
             numberOfLines={5}
             multiline={true}
             placeholderTextColor="#d3d3d3"
-            onChangeText={handleChange<keyof Chore>("title")}
-            onBlur={handleBlur<keyof Chore>("title")}
-            value={values.title}
-            helperText={touched.title && errors.title}
+            value={chore.description}
           />
-
           <View style={styles.expander} />
-
           <View style={styles.buttonContainer}>
             <NPbutton
               labelStyle={{ fontSize: 25, color: "black" }}
@@ -136,6 +91,4 @@ const styles = StyleSheet.create({
   expander: {
     flex: 1,
   },
-  
-
 });

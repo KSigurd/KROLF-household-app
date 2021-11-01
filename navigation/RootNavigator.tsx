@@ -1,5 +1,8 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator, NativeStackScreenProps } from "@react-navigation/native-stack";
+import {
+  createNativeStackNavigator,
+  NativeStackScreenProps,
+} from "@react-navigation/native-stack";
 import React from "react";
 import CreateAccountScreen from "../screens/CreateAccountScreen";
 import CreateHouseholdScreen from "../screens/CreateHouseholdScreen";
@@ -8,7 +11,8 @@ import LoginScreen from "../screens/LoginScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import ChoresStatisticsNavigator from "./ChoresStatisticsNavigator";
 import CreateChoreModalScreen from "../screens/CreateChoreModalScreen";
-import ChoreDescriptionModalScreen from "../screens/ChoreDescriptionModalScreen"
+import ChoreDescriptionModalScreen from "../screens/ChoreDescriptionModalScreen";
+import { Chore } from "../interfaces/chore";
 
 export type RootStackParamList = {
   Login: undefined;
@@ -18,14 +22,13 @@ export type RootStackParamList = {
   Profile: undefined;
   ChoresStatisticsNavigator: undefined;
   CreateChoreModalScreen: undefined;
-  ChoreDescriptionModalScreen: undefined;
+  ChoreDescriptionModalScreen: Chore;
 };
 
-export type StackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<RootStackParamList, Screen>;
+export type StackScreenProps<Screen extends keyof RootStackParamList> =
+  NativeStackScreenProps<RootStackParamList, Screen>;
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
-
-
 
 const RootNavigator = () => {
   return (
