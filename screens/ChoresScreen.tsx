@@ -38,7 +38,7 @@ const ChoresScreen = ({
     <View style={{ flex: 1, marginHorizontal: 10, marginVertical: 25 }}>
       <Text>household ID who is active : {activeHouseholdState}</Text>
       <Text>Name : {household?.name}</Text>
-      {allHousoholdChores.map((prop) => {
+      {allHouseholdChores.map((prop) => {
         return (
           <View key={prop.id}>
             <Surface style={stylesLocal.surface}>
