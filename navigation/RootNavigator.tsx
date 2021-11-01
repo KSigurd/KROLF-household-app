@@ -52,14 +52,14 @@ const RootNavigator = () => {
           options={{ title: "Skapa konto" }}
         />
         <Stack.Screen
+          name="JoinHousehold"
+          component={JoinHouseholdScreen}
+          options={{ title: "Gå med i hushåll" }}
+        />
+        <Stack.Screen
           name="CreateHousehold"
           component={CreateHouseholdScreen}
           options={{ title: "Skapa hushåll" }}
-        />
-        <Stack.Screen
-          name="JoinHousehold"
-          component={JoinHouseholdScreen}
-          options={{ title: "Gå med" }}
         />
         {/* TODO: CHECK THIS */}
         <Stack.Screen

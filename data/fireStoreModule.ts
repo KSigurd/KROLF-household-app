@@ -227,14 +227,30 @@ export async function getHouseHolds(userId: string) {
 }
 
 /**
- * Takes an object of type HouseholdUser and writes it to FireStore
- * @requires HouseholdUser
+ * Takes an object of type HouseholdUser and an optional invite code and writes it to FireStore. Then returns the new householdUserId.
+ * @requires HouseholdUserOmit
+ * @optional InviteCode
  */
-export async function addHouseholdUser(newHouseHoldUser: CreateHouseholdUser) {
+export async function addHouseholdUser(newHouseholdUser: CreateHouseholdUser, inviteCode?: number) {
+
+if(inviteCode) {
+  await firebase
+    .firestore()
+    .collection("households")
+    .where("inviteCode", "==", inviteCode)
+    .get()
+    .then(query => {
+      query.forEach(doc => {
+        newHouseholdUser.householdId = doc.id;
+      })
+    })
+    .catch((err) => console.log(err));
+}
+  
   const result = await firebase
     .firestore()
     .collection("householdUsers")
-    .add(newHouseHoldUser)
+    .add(newHouseholdUser)
     return result.id;
 }
 

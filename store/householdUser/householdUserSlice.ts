@@ -31,11 +31,16 @@ export const getHouseholdUserAction = createAsyncThunk<
 
 export const addHouseholdUserAction = createAsyncThunk<
   HouseholdUser,
-  CreateHouseholdUser,
+  {inviteCode?: number, newHouseholdUser: CreateHouseholdUser},
   ThunkConfig
->("addUserToHousehold", async (newHouseholdUser, { rejectWithValue }) => {
+>("addUserToHousehold", async ({inviteCode, newHouseholdUser}, { rejectWithValue }) => {
   try {
-    const householdUserId = await addHouseholdUser(newHouseholdUser);
+    let householdUserId: string;
+    if(inviteCode) {
+      householdUserId = await addHouseholdUser(newHouseholdUser, inviteCode);
+    } else {
+      householdUserId = await addHouseholdUser(newHouseholdUser);
+    }
         const householdUser = {
           ...newHouseholdUser,
           id: householdUserId,
