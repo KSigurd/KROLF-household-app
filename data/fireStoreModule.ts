@@ -14,7 +14,7 @@ import { householdUser } from "./mockHouseholdData";
  * Takes an object of type User and writes it to FireStore
  * @requires User
  */
-export async function addUser(newUser: UserOmit) {
+export async function addUser(newUser: User) {
   let userAdded: boolean = false;
   await firebase
     .firestore()
@@ -71,11 +71,12 @@ export async function loginUser(user: User) {
  * Takes an object of type Chore and writes it to FireStore
  * @requires Chore
  */
-export async function addChore(newChore: ChoreOmit) {
+export async function addChore(newChore: Chore) {
+  const {id, ...omittedChore} = newChore;
   await firebase
     .firestore()
     .collection("chores")
-    .add(newChore)
+    .add(omittedChore)
     .catch((err) => console.log(err));
 }
 
@@ -84,11 +85,12 @@ export async function addChore(newChore: ChoreOmit) {
  * @requires Chore
  */
 export async function updateChore(modifiedChore: Chore) {
+  const {id, ...omittedChore} = modifiedChore;
   await firebase
     .firestore()
     .collection("chores")
     .doc(modifiedChore.id)
-    .update(modifiedChore as ChoreOmit)
+    .update(omittedChore)
     .catch((err) => console.log(err));
 }
 
@@ -188,11 +190,12 @@ export async function addHoushold(newHousehold: CreateHousehold) {
  * @requires Household
  */
 export async function updateHoushold(modifiedHousehold: Household) {
+  const {id, ...omittedHousehold} = modifiedHousehold;
   await firebase
     .firestore()
     .collection("households")
     .doc(modifiedHousehold.id)
-    .update(modifiedHousehold as CreateHousehold)
+    .update(omittedHousehold)
     .catch((err) => console.log(err));
 }
 
@@ -261,11 +264,12 @@ if(inviteCode) {
 export async function updateHouseholdUser(
   modifiedHouseholdUser: HouseholdUser
 ) {
+  const {id, ...omittedHouseholdUser} = modifiedHouseholdUser;
   await firebase
     .firestore()
     .collection("householdUsers")
     .doc(modifiedHouseholdUser.id)
-    .update(modifiedHouseholdUser as CreateHouseholdUser);
+    .update(omittedHouseholdUser);
 }
 
 /**
