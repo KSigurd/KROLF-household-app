@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addUser, loginUser } from "../../data/fireStoreModule";
+import { addUser, loginUser, logoutUser } from "../../data/fireStoreModule";
 import { User } from "../../interfaces/user";
 import { resetErrorAction } from "../globalActions";
 import { ThunkConfig } from "../store";
@@ -32,6 +32,20 @@ export const loginUserAction = createAsyncThunk<
     return rejectWithValue(false);
   }
 });
+
+export const logoutUserAction = createAsyncThunk<
+  { user: User; response: boolean },
+  User,
+  ThunkConfig
+>("logoutUser", async (user, { rejectWithValue }) => {
+  try {
+    const response = await logoutUser(user);
+    return { user, response };
+  } catch (e) {
+    return rejectWithValue(false);
+  }
+});
+
 
 export const addUserAction = createAsyncThunk<
   { user: User; response: boolean },
@@ -78,7 +92,14 @@ const userSlice = createSlice({
       }),
       builder.addCase(resetErrorAction, (state, action) => {
         state.error = undefined;
+      }),
+      builder.addCase(logoutUserAction.fulfilled, (state, action) => {
+        state.loggedIn = action.payload.response;
+      }),
+      builder.addCase(logoutUserAction.rejected, (state, action) => {
+        state.error = "Något gick fel";
       })
+      
   },
 });
 

@@ -23,7 +23,7 @@ const CreateChoreInfo = ({ onClosed, chore }: Props) => {
           <ThemedTextInput
             style={styles.input}
             label="Beskrivning"
-            editable={true}
+            editable={false}
             numberOfLines={5}
             multiline={true}
             placeholderTextColor="#d3d3d3"

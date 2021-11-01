@@ -45,24 +45,77 @@ export async function addUser(newUser: UserOmit) {
  * @returns {boolean}
  */
 export async function loginUser(user: User) {
+ 
   let loggedIn: boolean = false;
-  await firebase
+  const userPerson = await firebase
     .firestore()
     .collection("users")
     .where("email", "==", user.email.toLowerCase())
     .where("password", "==", user.password)
     .get()
-    .then((query) => {
-      query.forEach((doc) => {
-        if (doc.exists) {
-          user.id = doc.id;
-          loggedIn = true;
-        }
-      });
-    })
     .catch((err) => {
       throw err;
     });
+
+    for (const u of userPerson.docs) {
+      if (u.exists) {
+              user.id = u.id;
+              loggedIn = true;
+            }
+          }
+
+
+
+    // .then((query) => {
+    //   query.forEach((doc) => {
+    //     if (doc.exists) {
+    //       user.id = doc.id;
+    //       loggedIn = true;
+    //     }
+    //   });
+    // })
+    // .catch((err) => {
+    //   throw err;
+    // });
+
+  return loggedIn;
+}
+
+/**
+ * Takes an object of type User and returns a bool depending on if email and password matches database
+ * @requires User
+ * @returns {boolean}
+ */
+export async function logoutUser(user: User) {
+  const userPerson = await firebase
+  .firestore()
+  .collection("users")
+  .where("email", "==", user.email.toLowerCase())
+  .where("password", "==", user.password)
+  .get()
+  .catch((err) => {
+    throw err;
+  });
+  
+  let loggedIn: boolean = false;
+  for (const u of userPerson.docs) {
+      if (u.exists) {
+              user.id = u.id;
+              loggedIn = false
+            }
+          }
+    // for()
+    // .then((query) => {
+    //   query.forEach((doc) => {
+    //     if (doc.exists) {
+    //       user.id = doc.id;
+    //       loggedIn = false;
+    //     }
+    //   });      
+    // })
+    // .catch((err) => {
+    //   throw err;
+    // });
 
   return loggedIn;
 }
