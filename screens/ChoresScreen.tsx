@@ -1,8 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Button, Surface, TouchableRipple } from "react-native-paper";
+import ChoreDeleteButton from "../components/ChoreDeleteButton";
 import { StackScreenProps } from "../navigation/RootNavigator";
-import { getChoresAction } from "../store/chore/choreSlice";
+import { getChoresAction, removeChoreAction } from "../store/chore/choreSlice";
+import { getCompletedChoresAction } from "../store/completedChore/completedChoreSlice";
 import { selectHouseholdById } from "../store/household/hoseholdSelector";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { styles } from "../styles/styles";
@@ -14,65 +16,75 @@ const ChoresScreen = ({
     const activeHouseholdState = useAppSelector(
         (state) => state.household.activeHouseholdId
     );
+    const user = useAppSelector((state) => state.user.user)
+    const allHouseholdChores = useAppSelector((state) => state.chore.chores);
     const household = useAppSelector(selectHouseholdById(activeHouseholdState));
+    const [isEditPressed, setIsEditPressed] = React.useState(false);
 
     dispatch(getChoresAction(activeHouseholdState));
-    const allHousoholdChores = useAppSelector((state) => state.chore.chores);
+
+    const RemoveChore = async(choreId: string) => {
+        await dispatch(removeChoreAction(choreId));
+        await dispatch(getChoresAction(user.id))
+        await dispatch(getCompletedChoresAction(activeHouseholdState))
+    }
 
     // const [isVisible, setIsVisible] = React.useState(false);
 
     return (
-        <View style={{ flex: 1, marginHorizontal: 10, marginVertical: 25 }}>
-            <Text>household ID who is active : {activeHouseholdState}</Text>
-            <Text>Name : {household?.name}</Text>
+      <View style={{ flex: 1, marginHorizontal: 10, marginVertical: 25 }}>
+        <Text>household ID who is active : {activeHouseholdState}</Text>
+        <Text>Name : {household?.name}</Text>
 
-            {allHousoholdChores.map((prop) => {
-                return (
-                    <View key={prop.id}>
-                        <Surface style={stylesLocal.surface}>
-                            {/* TODO: NAVIGATE TO NEW MODAL, FILMIL */}
-                            <TouchableRipple
-                                
-                                style={stylesLocal.chip}
-                                onPress={() => console.log(prop)}
-                            >
-                                <Text
-                                    style={stylesLocal.surfaceText}
-                                >
-                                    {prop.title}
-                                </Text>
-                            </TouchableRipple>
-                        </Surface>
-                    </View>
-                );
-            })}
-
-            {/* TODO: flytta till styles.css */}
-            <View style={styles.bottomButtonRow}>
-                <Button
-                    icon="plus-circle-outline"
-                    labelStyle={styles.buttonIconSize}
-                    color={"#000"}
-                    uppercase={false}
-                    style={styles.smallButton}
-                    onPress={() =>
-                        navigation.navigate("CreateChoreModalScreen")
-                    } //TODO
+        {allHouseholdChores.map((prop) => {
+          return (
+            <View key={prop.id}>
+              <Surface style={stylesLocal.surface}>
+                {/* TODO: NAVIGATE TO NEW MODAL, FILMIL */}
+                <TouchableRipple
+                  style={stylesLocal.chip}
+                  onPress={() => console.log(prop)}
                 >
-                    <Text style={styles.buttonText}>Lägg till</Text>
-                </Button>
-                <Button
-                    icon="pencil-outline"
-                    labelStyle={styles.buttonIconSize}
-                    color={"#000"}
-                    uppercase={false}
-                    style={styles.smallButton}
-                    onPress={() => {}} //TODO
-                >
-                    <Text style={styles.buttonText}>Ändra</Text>
-                </Button>
+                  <Text style={stylesLocal.surfaceText}>{prop.title}</Text>
+                </TouchableRipple>
+                {isEditPressed ? <ChoreDeleteButton onRemove={() => RemoveChore(prop.id)} /> : null}
+              </Surface>
             </View>
+          );
+        })}
+
+        {/* TODO: flytta till styles.css */}
+        <View style={styles.bottomButtonRow}>
+          <Button
+            icon="plus-circle-outline"
+            labelStyle={styles.buttonIconSize}
+            color={"#000"}
+            uppercase={false}
+            style={styles.smallButton}
+            onPress={() => navigation.navigate("CreateChoreModalScreen")} //TODO
+          >
+            <Text style={styles.buttonText}>Lägg till</Text>
+          </Button>
+          <Button
+            icon="pencil-outline"
+            labelStyle={styles.buttonIconSize}
+            color={"#000"}
+            uppercase={false}
+            style={styles.smallButton}
+            onPress={
+              isEditPressed
+                ? () => {
+                    setIsEditPressed(false);
+                  }
+                : () => {
+                    setIsEditPressed(true);
+                  }
+            } //TODO
+          >
+            <Text style={styles.buttonText}>Ändra</Text>
+          </Button>
         </View>
+      </View>
     );
 };
 
@@ -82,28 +94,25 @@ const stylesLocal = StyleSheet.create({
     surface: {
         height: "auto",
         borderRadius: 10,
-        width: "100%",
-        alignItems: "flex-start",
-        justifyContent: "center",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-evenly",
         backgroundColor: "white",
         elevation: 4,
         marginVertical: 5,
     },
     surfaceText: {
         flex: 1,
-        width: "100%",
-        height: "100%",
         fontSize: 18,
         fontWeight: "bold",
-        alignItems: "flex-start",
-        alignSelf: "flex-start",
     },
     chip: {
-        width: "100%",
+        flex: 1,
         padding: 10,
         backgroundColor: "white",
         height: 50,
         borderRadius: 10,
+        justifyContent: "center",
     },
 });
 

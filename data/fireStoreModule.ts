@@ -124,7 +124,17 @@ export async function removeChore(choreId: string) {
     .collection("chores")
     .doc(choreId)
     .delete()
-    .catch((err) => console.log(err));
+
+  await firebase
+    .firestore()
+    .collection("completedChores")
+    .where("choreId", "==", choreId)
+    .get()
+    .then(query => {
+      query.forEach(doc => {
+        doc.ref.delete();
+      })
+    })
 }
 
 /**
