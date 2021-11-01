@@ -12,26 +12,27 @@ import { selectHouseholdById } from "../store/household/hoseholdSelector";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { styles } from "../styles/styles";
 import ChoreDescriptionModalScreen from "./ChoreDescriptionModalScreen";
+import ChoreEditButton from "../components/ChoreEditButton";
 
 const ChoresScreen = ({
   navigation,
 }: StackScreenProps<"ChoresStatisticsNavigator">) => {
-    const dispatch = useAppDispatch();
-    const activeHouseholdState = useAppSelector(
-        (state) => state.household.activeHouseholdId
-    );
-    const user = useAppSelector((state) => state.user.user)
-    const allHouseholdChores = useAppSelector((state) => state.chore.chores);
-    const household = useAppSelector(selectHouseholdById(activeHouseholdState));
-    const [isEditPressed, setIsEditPressed] = React.useState(false);
+  const dispatch = useAppDispatch();
+  const activeHouseholdState = useAppSelector(
+    (state) => state.household.activeHouseholdId
+  );
+  const user = useAppSelector((state) => state.user.user);
+  const allHouseholdChores = useAppSelector((state) => state.chore.chores);
+  const household = useAppSelector(selectHouseholdById(activeHouseholdState));
+  const [isEditPressed, setIsEditPressed] = React.useState(false);
 
-    dispatch(getChoresAction(activeHouseholdState));
+  dispatch(getChoresAction(activeHouseholdState));
 
-    const RemoveChore = async(choreId: string) => {
-        await dispatch(removeChoreAction(choreId));
-        await dispatch(getChoresAction(user.id))
-        await dispatch(getCompletedChoresAction(activeHouseholdState))
-    }
+  const RemoveChore = async (choreId: string) => {
+    await dispatch(removeChoreAction(choreId));
+    await dispatch(getChoresAction(user.id));
+    await dispatch(getCompletedChoresAction(activeHouseholdState));
+  };
 
   // const [isVisible, setIsVisible] = React.useState(false);
   return (
@@ -51,7 +52,12 @@ const ChoresScreen = ({
               >
                 <Text style={stylesLocal.surfaceText}>{prop.title}</Text>
               </TouchableRipple>
-               {isEditPressed ? <ChoreDeleteButton onRemove={() => RemoveChore(prop.id)} /> : null}
+              {isEditPressed ? (
+                <View style={stylesLocal.editContainer}>
+                  <ChoreEditButton onEdit={() => navigation.navigate("EditChoreModalScreen", prop)} />
+                  <ChoreDeleteButton onRemove={() => RemoveChore(prop.id)} />
+                </View>
+              ) : null}
             </Surface>
           </View>
         );
@@ -68,23 +74,23 @@ const ChoresScreen = ({
         >
           <Text style={styles.buttonText}>Lägg till</Text>
         </Button>
-       <Button
-            icon="pencil-outline"
-            labelStyle={styles.buttonIconSize}
-            color={"#000"}
-            uppercase={false}
-            style={styles.smallButton}
-            onPress={
-              isEditPressed
-                ? () => {
-                    setIsEditPressed(false);
-                  }
-                : () => {
-                    setIsEditPressed(true);
-                  }
-            }
-          >
-          <Text style={styles.buttonText}>Ändra</Text>
+        <Button
+          icon={isEditPressed ? "close-circle-outline" : "pencil-outline"}
+          labelStyle={styles.buttonIconSize}
+          color={"#000"}
+          uppercase={false}
+          style={styles.smallButton}
+          onPress={
+            isEditPressed
+              ? () => {
+                  setIsEditPressed(false);
+                }
+              : () => {
+                  setIsEditPressed(true);
+                }
+          }
+        >
+          <Text style={styles.buttonText}>{isEditPressed ? "Avbryt": "Ändra"}</Text>
         </Button>
       </View>
     </View>
@@ -94,29 +100,34 @@ const ChoresScreen = ({
 export default ChoresScreen;
 
 const stylesLocal = StyleSheet.create({
-    surface: {
-        height: "auto",
-        borderRadius: 10,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-evenly",
-        backgroundColor: "white",
-        elevation: 4,
-        marginVertical: 5,
-    },
-    surfaceText: {
-        flex: 1,
-        fontSize: 18,
-        fontWeight: "bold",
-    },
-    chip: {
-        flex: 1,
-        padding: 10,
-        backgroundColor: "white",
-        height: 50,
-        borderRadius: 10,
-        justifyContent: "center",
-    },
+  surface: {
+    height: "auto",
+    borderRadius: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    backgroundColor: "white",
+    elevation: 4,
+    marginVertical: 5,
+  },
+  surfaceText: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  chip: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: "white",
+    height: 50,
+    borderRadius: 10,
+    justifyContent: "center",
+  },
+  editContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginRight: 4
+  }
 });
 
 {
