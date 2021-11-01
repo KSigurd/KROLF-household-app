@@ -3,6 +3,7 @@ import {
   addHouseholdUser,
   getHouseholdUsers
 } from "../../data/fireStoreModule";
+import { resetErrorAction } from "../globalActions";
 import { CreateHouseholdUser, HouseholdUser } from "../../interfaces/householdUser";
 import { ThunkConfig } from "../store";
 
@@ -31,11 +32,16 @@ export const getHouseholdUserAction = createAsyncThunk<
 
 export const addHouseholdUserAction = createAsyncThunk<
   HouseholdUser,
-  CreateHouseholdUser,
+  {inviteCode?: number, newHouseholdUser: CreateHouseholdUser},
   ThunkConfig
->("addUserToHousehold", async (newHouseholdUser, { rejectWithValue }) => {
+>("addUserToHousehold", async ({inviteCode, newHouseholdUser}, { rejectWithValue }) => {
   try {
-    const householdUserId = await addHouseholdUser(newHouseholdUser);
+    let householdUserId: string;
+    if(inviteCode) {
+      householdUserId = await addHouseholdUser(newHouseholdUser, inviteCode);
+    } else {
+      householdUserId = await addHouseholdUser(newHouseholdUser);
+    }
         const householdUser = {
           ...newHouseholdUser,
           id: householdUserId,
@@ -63,7 +69,10 @@ const householdUserSlice = createSlice({
       }),
       builder.addCase(addHouseholdUserAction.rejected, (state, action) => {
         state.error = "Något gick fel";
-      });
+      }),
+      builder.addCase(resetErrorAction, (state, action) => {
+        state.error = undefined;
+      })
   },
 });
 

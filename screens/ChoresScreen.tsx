@@ -2,15 +2,19 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Button, Surface, TouchableRipple } from "react-native-paper";
 import ChoreDeleteButton from "../components/ChoreDeleteButton";
+import { number } from "yup/lib/locale";
+import ChoreDescription from "../components/ChoreDescription";
+import { Chore } from "../interfaces/chore";
 import { StackScreenProps } from "../navigation/RootNavigator";
 import { getChoresAction, removeChoreAction } from "../store/chore/choreSlice";
 import { getCompletedChoresAction } from "../store/completedChore/completedChoreSlice";
 import { selectHouseholdById } from "../store/household/hoseholdSelector";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { styles } from "../styles/styles";
+import ChoreDescriptionModalScreen from "./ChoreDescriptionModalScreen";
 
 const ChoresScreen = ({
-    navigation,
+  navigation,
 }: StackScreenProps<"ChoresStatisticsNavigator">) => {
     const dispatch = useAppDispatch();
     const activeHouseholdState = useAppSelector(
@@ -29,43 +33,42 @@ const ChoresScreen = ({
         await dispatch(getCompletedChoresAction(activeHouseholdState))
     }
 
-    // const [isVisible, setIsVisible] = React.useState(false);
-
-    return (
-      <View style={{ flex: 1, marginHorizontal: 10, marginVertical: 25 }}>
-        <Text>household ID who is active : {activeHouseholdState}</Text>
-        <Text>Name : {household?.name}</Text>
-
-        {allHouseholdChores.map((prop) => {
-          return (
-            <View key={prop.id}>
-              <Surface style={stylesLocal.surface}>
-                {/* TODO: NAVIGATE TO NEW MODAL, FILMIL */}
-                <TouchableRipple
-                  style={stylesLocal.chip}
-                  onPress={() => console.log(prop)}
-                >
-                  <Text style={stylesLocal.surfaceText}>{prop.title}</Text>
-                </TouchableRipple>
-                {isEditPressed ? <ChoreDeleteButton onRemove={() => RemoveChore(prop.id)} /> : null}
-              </Surface>
-            </View>
-          );
-        })}
-
-        {/* TODO: flytta till styles.css */}
-        <View style={styles.bottomButtonRow}>
-          <Button
-            icon="plus-circle-outline"
-            labelStyle={styles.buttonIconSize}
-            color={"#000"}
-            uppercase={false}
-            style={styles.smallButton}
-            onPress={() => navigation.navigate("CreateChoreModalScreen")} //TODO
-          >
-            <Text style={styles.buttonText}>Lägg till</Text>
-          </Button>
-          <Button
+  // const [isVisible, setIsVisible] = React.useState(false);
+  return (
+    <View style={{ flex: 1, marginHorizontal: 10, marginVertical: 25 }}>
+      <Text>household ID who is active : {activeHouseholdState}</Text>
+      <Text>Name : {household?.name}</Text>
+      {allHousoholdChores.map((prop) => {
+        return (
+          <View key={prop.id}>
+            <Surface style={stylesLocal.surface}>
+              {/* TODO: NAVIGATE TO NEW MODAL, FILMIL */}
+              <TouchableRipple
+                style={stylesLocal.chip}
+                onPress={() => {
+                  navigation.navigate("ChoreDescriptionModalScreen", prop);
+                }}
+              >
+                <Text style={stylesLocal.surfaceText}>{prop.title}</Text>
+              </TouchableRipple>
+               {isEditPressed ? <ChoreDeleteButton onRemove={() => RemoveChore(prop.id)} /> : null}
+            </Surface>
+          </View>
+        );
+      })}
+      {/* TODO: flytta till styles.css */}
+      <View style={styles.bottomButtonRow}>
+        <Button
+          icon="plus-circle-outline"
+          labelStyle={styles.buttonIconSize}
+          color={"#000"}
+          uppercase={false}
+          style={styles.smallButton}
+          onPress={() => navigation.navigate("CreateChoreModalScreen")} //TODO
+        >
+          <Text style={styles.buttonText}>Lägg till</Text>
+        </Button>
+       <Button
             icon="pencil-outline"
             labelStyle={styles.buttonIconSize}
             color={"#000"}
@@ -79,13 +82,13 @@ const ChoresScreen = ({
                 : () => {
                     setIsEditPressed(true);
                   }
-            } //TODO
+            }
           >
-            <Text style={styles.buttonText}>Ändra</Text>
-          </Button>
-        </View>
+          <Text style={styles.buttonText}>Ändra</Text>
+        </Button>
       </View>
-    );
+    </View>
+  );
 };
 
 export default ChoresScreen;
@@ -117,7 +120,7 @@ const stylesLocal = StyleSheet.create({
 });
 
 {
-    /* {household.chores.map((prop, key) => {
+  /* {household.chores.map((prop, key) => {
         return (
           <ChoreButton  //TODO: Move this props-logic somewhere else
             key={key}
@@ -135,5 +138,5 @@ const stylesLocal = StyleSheet.create({
 }
 
 {
-    /* <CreateChore setVisibleModal= {(isVisible)} /> */
+  /* <CreateChore setVisibleModal= {(isVisible)} /> */
 }

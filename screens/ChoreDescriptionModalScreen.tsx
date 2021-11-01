@@ -2,38 +2,33 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
-import CreateChoreInfo from "../components/CreateChoreInfo";
+import ChoreDescription from "../components/ChoreDescription";
+import { Chore } from "../interfaces/chore";
 import { TabParamList } from "../navigation/ChoresStatisticsNavigator";
 
 type Props = NativeStackScreenProps<TabParamList>;
 
-const CreateChoreModalScreen = ({ navigation }: Props) => {
+const CreateChoreModalScreen = ({ navigation, route }: Props) => {
   const onClosed = () => {
     navigation.navigate("Home");
   };
 
-  return (
-    // <Provider>
-    //   <Portal>
-    //     <Modal
-    //       style={styles.modalBox}
-    //       visible={true}
-    //       onDismiss={() => {
-    //         navigation.navigate("Chores");
-    //       }}
-    //     >
+  const chore = route.params;
 
+  console.log(chore);
+  return (
     <View style={styles.outerContainer}>
       <SafeAreaView>
         <View style={styles.topCointainer}>
-          <Text style={styles.titleText}>Koppla sysslas namn?</Text>
+          {/* TODO: MUPPAR UR. SÄTT EN GUBBE PÅ DET */}
+          <Text style={styles.titleText}>{chore.title}</Text>
         </View>
         <View style={styles.centerContainer}>
-          <CreateChoreInfo onClosed={onClosed} />
+          {/* TODO: MUPPAR UR. SÄTT EN GUBBE PÅ DET */}
+          <ChoreDescription onClosed={onClosed} chore={chore} />
         </View>
       </SafeAreaView>
     </View>
-    //     </Modal>w
   );
 };
 

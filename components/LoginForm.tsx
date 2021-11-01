@@ -1,16 +1,14 @@
 import React, { FC } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { View, StyleSheet, Alert } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { Button as NPbutton } from "react-native-paper";
 import ThemedTextInput from "./ThemedTextInput";
-import { loginUserAction } from "../store/user/userSlice";
 import { User } from "../interfaces/user";
-import { useAppDispatch, useAppSelector } from "../store/store";
-
+import { useAppSelector } from "../store/store";
 
 interface Props {
-  onLoginSucceded: () => void;
+  onSubmit: (user: User) => void;
 }
 
 type PostSchemaType = Record<keyof User, Yup.AnySchema>;
@@ -23,25 +21,15 @@ const validationSchema = Yup.object().shape<PostSchemaType>({
   password: Yup.string().required("Du måste ange ditt lösenord").min(1),
 });
 
-const LoginForm: FC<Props> = ({ onLoginSucceded }: Props) => {
-  const dispatch = useAppDispatch();
-  const userState = useAppSelector(state => state.user);
+const LoginForm: FC<Props> = ({ onSubmit }: Props) => {
+  const userState = useAppSelector((state) => state.user);
   const initialValues = userState.user;
-  const loggedIn = userState.loggedIn;
-  const handleSubmit = async (user: User) => {
-    await dispatch(loginUserAction(user)).then(() => {
-      if (loggedIn) {
-      onLoginSucceded();
-    } else Alert.alert("Oooops!", userState.error);
-    });
-    
-  };
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={handleSubmit}
+      onSubmit={onSubmit}
     >
       {({
         handleChange,
@@ -96,5 +84,5 @@ const styles = StyleSheet.create({
     padding: 10,
     alignSelf: "center",
     marginVertical: 10,
-  }
+  },
 });

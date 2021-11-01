@@ -6,6 +6,7 @@ import {
 } from "../../data/fireStoreModule";
 import { CompletedChore } from "../../interfaces/completedChore";
 import { ChoreStatisticsDTO } from "../../interfaces/statisticsDTO";
+import { resetErrorAction } from "../globalActions";
 import { ThunkConfig } from "../store";
 
 interface CompletedChoreState {
@@ -81,6 +82,9 @@ const completedChoreSlice = createSlice({
       }),
       builder.addCase(getStatisticsAction.rejected, (state, action) => {
         state.error = "något gick fel";
+      }),
+      builder.addCase(resetErrorAction, (state, action) => {
+        state.error = undefined;
       })
   },
 });
