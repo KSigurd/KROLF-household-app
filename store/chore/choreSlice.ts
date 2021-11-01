@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addChore, getChores } from "../../data/fireStoreModule";
+import { addChore, getChores, removeChore } from "../../data/fireStoreModule";
 import { Chore } from "../../interfaces/chore";
 import { resetErrorAction } from "../globalActions";
 import { ThunkConfig } from "../store";
@@ -39,6 +39,18 @@ export const addChoreAction = createAsyncThunk<Chore, Chore, ThunkConfig>(
   }
 );
 
+export const removeChoreAction = createAsyncThunk<boolean, string, ThunkConfig>(
+  "removeChore",
+  async (choreId, { rejectWithValue }) => {
+    try {
+      await removeChore(choreId);
+      return true;
+    } catch (e) {
+      return rejectWithValue(false);
+    }
+  }
+);
+
 const choreSlice = createSlice({
   name: "chores",
   initialState,
@@ -54,6 +66,9 @@ const choreSlice = createSlice({
         state.chores.push(action.payload);
       }),
       builder.addCase(addChoreAction.rejected, (state, action) => {
+        state.error = "Något gick fel";
+      }),
+      builder.addCase(removeChoreAction.rejected, (state, action) => {
         state.error = "Något gick fel";
       }),
       builder.addCase(resetErrorAction, (state, action) => {
