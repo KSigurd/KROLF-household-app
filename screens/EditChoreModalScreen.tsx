@@ -7,13 +7,10 @@ import { RootStackParamList } from "../navigation/RootNavigator";
 import { selectChoreById } from "../store/chore/choreSelectors";
 import { useAppSelector } from "../store/store";
 
-type Props = NativeStackScreenProps<
-  RootStackParamList,
-  "EditChoreModalScreen"
->;
+type Props = NativeStackScreenProps<RootStackParamList, "EditChoreModalScreen">;
 
 const EditChoreModalScreen = ({ navigation, route }: Props) => {
-  const onClosed = () => {
+  const onClose = () => {
     navigation.goBack();
   };
 
@@ -21,7 +18,7 @@ const EditChoreModalScreen = ({ navigation, route }: Props) => {
 
   const chore = useAppSelector(selectChoreById(String(choreId)));
 
-  if (!chore) return null; 
+  if (!chore) return null;
 
   return (
     <View style={styles.outerContainer}>
@@ -30,7 +27,7 @@ const EditChoreModalScreen = ({ navigation, route }: Props) => {
           <Text style={styles.titleText}>Ändra en syssla</Text>
         </View>
         <View style={styles.centerContainer}>
-          <CreateChoreInfo onClosed={onClosed} activeChore={chore} />
+          <CreateChoreInfo onClose={onClose} activeChore={chore} />
         </View>
       </SafeAreaView>
     </View>

@@ -3,24 +3,17 @@ import React from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 import CreateChoreInfo from "../components/CreateChoreInfo";
-import { TabParamList } from "../navigation/ChoresStatisticsNavigator";
 import { RootStackParamList } from "../navigation/RootNavigator";
-import { selectChoreById } from "../store/chore/choreSelectors";
-import { useAppSelector } from "../store/store";
 
-type Props = NativeStackScreenProps<RootStackParamList, "CreateChoreModalScreen">;
+type Props = NativeStackScreenProps<
+  RootStackParamList,
+  "CreateChoreModalScreen"
+>;
 
 const CreateChoreModalScreen = ({ navigation }: Props) => {
-  const onClosed = () => {
+  const onClose = () => {
     navigation.goBack();
   };
-
-  // const choreId = route.params.choreId;
-
-  // const chore = useAppSelector(selectChoreById(choreId));
-
-  // if (!chore) return null; 
-
 
   return (
     <View style={styles.outerContainer}>
@@ -29,7 +22,7 @@ const CreateChoreModalScreen = ({ navigation }: Props) => {
           <Text style={styles.titleText}>Skapa en ny syssla</Text>
         </View>
         <View style={styles.centerContainer}>
-          <CreateChoreInfo onClosed={onClosed} />
+          <CreateChoreInfo onClose={onClose} />
         </View>
       </SafeAreaView>
     </View>
@@ -49,7 +42,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 25,
     height: 60,
     backgroundColor: "white",
-    // paddingLeft: 20,
     paddingTop: 15,
   },
   centerContainer: {

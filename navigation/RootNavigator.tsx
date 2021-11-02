@@ -4,16 +4,15 @@ import {
   NativeStackScreenProps,
 } from "@react-navigation/native-stack";
 import React from "react";
+import ChoreDescriptionModalScreen from "../screens/ChoreDescriptionModalScreen";
 import CreateAccountScreen from "../screens/CreateAccountScreen";
+import CreateChoreModalScreen from "../screens/CreateChoreModalScreen";
 import CreateHouseholdScreen from "../screens/CreateHouseholdScreen";
+import EditChoreModalScreen from "../screens/EditChoreModalScreen";
 import JoinHouseholdScreen from "../screens/JoinHouseholdScreen";
 import LoginScreen from "../screens/LoginScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import ChoresStatisticsNavigator from "./ChoresStatisticsNavigator";
-import CreateChoreModalScreen from "../screens/CreateChoreModalScreen";
-import ChoreDescriptionModalScreen from "../screens/ChoreDescriptionModalScreen";
-import { Chore } from "../interfaces/chore";
-import EditChoreModalScreen from "../screens/EditChoreModalScreen";
 
 export type RootStackParamList = {
   Login: undefined;
@@ -22,9 +21,7 @@ export type RootStackParamList = {
   JoinHousehold: undefined;
   Profile: undefined;
   ChoresStatisticsNavigator: undefined;
-  CreateChoreModalScreen: {
-    choreId: string;
-  };
+  CreateChoreModalScreen: undefined;
   EditChoreModalScreen: {
     choreId: string;
   };

@@ -23,11 +23,9 @@ const ChoreDescriptionModalScreen = ({ navigation, route }: Props) => {
     <View style={styles.outerContainer}>
       <SafeAreaView>
         <View style={styles.topCointainer}>
-          {/* TODO: MUPPAR UR. SÄTT EN GUBBE PÅ DET */}
           <Text style={styles.titleText}>{chore.title}</Text>
         </View>
         <View style={styles.centerContainer}>
-          {/* TODO: MUPPAR UR. SÄTT EN GUBBE PÅ DET */}
           <ChoreDescription onClosed={onClosed} chore={chore} />
         </View>
       </SafeAreaView>
