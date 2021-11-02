@@ -126,11 +126,12 @@ export async function logoutUser(user: User) {
  */
 export async function addChore(newChore: Chore) {
   const {id, ...omittedChore} = newChore;
-  await firebase
+  const result = await firebase
     .firestore()
     .collection("chores")
-    .add(omittedChore)
-    .catch((err) => console.log(err));
+    .add(omittedChore);
+
+    return result.id;
 }
 
 /**

@@ -6,7 +6,7 @@ import { generateHouseholdInviteCode } from "../functions/generateHouseholdInvit
 import { CreateHousehold } from "../interfaces/households";
 import { addHouseholdAction } from "../store/household/householdSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import ConfirmButton from "./ConfirmButton";
+import BigThemedButton from "./BigThemedButton";
 import ThemedTextInput from "./ThemedTextInput";
 
 interface Props {
@@ -87,7 +87,13 @@ const CreateHouseholdForm: FC<Props> = ({ onCreateSucceded }: Props) => {
               helperText={touched.inviteCode && errors.inviteCode}
             />
           </View>
-          <ConfirmButton onConfirm={handleSubmit} />
+          <View style={styles.confirmButton}>
+          <BigThemedButton
+            typeOfIcon="plus-circle-outline"
+            buttonText="Bekräfta"
+            onPress={handleSubmit}
+          />
+          </View>
         </View>
       )}
     </Formik>
@@ -101,11 +107,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
   },
-  NPbutton: {
-    width: 150,
-    borderRadius: 100,
-    padding: 10,
-    alignSelf: "center",
-    marginVertical: 10,
+  confirmButton: {
+    alignItems: "center",
   },
 });
