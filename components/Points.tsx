@@ -4,11 +4,12 @@ import { Card, Surface, TouchableRipple } from "react-native-paper";
 import { styles } from "../styles/styles";
 
 interface Props {
+  initialValue? : number;
   onChange: (points: number) => void;
 }
-const Points = ({ onChange }: Props) => {
+const Points = ({ onChange, initialValue }: Props) => {
   const [isEnergyValuePressed, setIsEnergyvaluePressed] = useState(true);
-  const [energyPoints, setEnergyPoints] = useState<number>(2);
+  const [energyPoints, setEnergyPoints] = useState<number>(initialValue || 2);
 
   const values = [
     { points: 1, color: "#f2f2f2" },
