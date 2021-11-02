@@ -2,51 +2,46 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
-import ChoreDescription from "../components/ChoreDescription";
+import CreateChoreInfo from "../components/CreateChoreInfo";
 import { RootStackParamList } from "../navigation/RootNavigator";
 import { selectChoreById } from "../store/chore/choreSelectors";
 import { useAppSelector } from "../store/store";
 
-type Props = NativeStackScreenProps<RootStackParamList, "ChoreDescriptionModalScreen">;
+type Props = NativeStackScreenProps<RootStackParamList, "EditChoreModalScreen">;
 
-const ChoreDescriptionModalScreen = ({ navigation, route }: Props) => {
-  const onClosed = () => {
+const EditChoreModalScreen = ({ navigation, route }: Props) => {
+  const onClose = () => {
     navigation.goBack();
   };
 
   const choreId = route.params;
 
   const chore = useAppSelector(selectChoreById(String(choreId)));
-  if(!chore) return null; 
+
+  if (!chore) return null;
 
   return (
     <View style={styles.outerContainer}>
       <SafeAreaView>
         <View style={styles.topCointainer}>
-          <Text style={styles.titleText}>{chore.title}</Text>
+          <Text style={styles.titleText}>Ändra en syssla</Text>
         </View>
         <View style={styles.centerContainer}>
-          <ChoreDescription onClosed={onClosed} chore={chore} />
+          <CreateChoreInfo onClose={onClose} activeChore={chore} />
         </View>
       </SafeAreaView>
     </View>
   );
 };
 
-export default ChoreDescriptionModalScreen;
+export default EditChoreModalScreen;
 
 const styles = StyleSheet.create({
-  modalBox: {
-    flex: 1,
-    marginHorizontal: 25,
-    marginVertical: 25,
-  },
   topCointainer: {
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     height: 60,
     backgroundColor: "white",
-    // paddingLeft: 20,
     paddingTop: 15,
   },
   centerContainer: {
@@ -54,25 +49,14 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 25,
     borderBottomRightRadius: 25,
   },
-  buttonContainer: {
-    flexDirection: "row",
-    backgroundColor: "white",
-    justifyContent: "space-between",
-    width: "100%",
-    alignItems: "center",
-    height: 60,
-    bottom: 0,
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
-  },
-  titleText: {
-    fontSize: 20,
-    textAlign: "center",
-  },
   outerContainer: {
     backgroundColor: "#000000AA",
     padding: 8,
     flex: 1,
     justifyContent: "center",
+  },
+  titleText: {
+    fontSize: 20,
+    textAlign: "center",
   },
 });

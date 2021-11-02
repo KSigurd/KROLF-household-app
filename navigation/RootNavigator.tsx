@@ -9,6 +9,7 @@ import ChoreDescriptionModalScreen from "../screens/ChoreDescriptionModalScreen"
 import CreateAccountScreen from "../screens/CreateAccountScreen";
 import CreateChoreModalScreen from "../screens/CreateChoreModalScreen";
 import CreateHouseholdScreen from "../screens/CreateHouseholdScreen";
+import EditChoreModalScreen from "../screens/EditChoreModalScreen";
 import EditHouseholdUserModalScreen from "../screens/EditHouseholdUserModalScreen";
 import JoinHouseholdScreen from "../screens/JoinHouseholdScreen";
 import LoginScreen from "../screens/LoginScreen";
@@ -23,8 +24,12 @@ export type RootStackParamList = {
   Profile: undefined;
   ChoresStatisticsNavigator: undefined;
   CreateChoreModalScreen: undefined;
-  ChoreDescriptionModalScreen: Chore;
-  EditHouseholdUser: undefined
+  EditChoreModalScreen: {
+    choreId: string;
+  };
+  ChoreDescriptionModalScreen: {
+    choreId: string;
+  };
 };
 
 export type StackScreenProps<Screen extends keyof RootStackParamList> =
@@ -88,6 +93,15 @@ const RootNavigator = () => {
         <Stack.Screen
           name="CreateChoreModalScreen"
           component={CreateChoreModalScreen}
+          options={{
+            presentation: "transparentModal",
+            contentStyle: { backgroundColor: "transparent" },
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="EditChoreModalScreen"
+          component={EditChoreModalScreen}
           options={{
             presentation: "transparentModal",
             contentStyle: { backgroundColor: "transparent" },

@@ -1,5 +1,9 @@
 import React, { useEffect } from "react";
-import { LogBox, StyleSheet, Text, View } from "react-native";
+import { LogBox, ScrollView, StyleSheet, View, Text } from "react-native";
+import BigThemedButton from "../components/BigThemedButton";
+import ChoreSurface from "../components/ChoreSurface";
+import { getChoresAction } from "../store/chore/choreSlice";
+import { useAppDispatch, useAppSelector } from "../store/store";
 import { Button, Surface, TouchableRipple } from "react-native-paper";
 import ChoreDeleteButton from "../components/ChoreDeleteButton";
 import { number } from "yup/lib/locale";
@@ -14,11 +18,8 @@ import { styles } from "../styles/styles";
 import ChoreDescriptionModalScreen from "./ChoreDescriptionModalScreen";
 import RenderUserInfo from "../components/RenderUserInfo";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-
-type Props = NativeStackScreenProps<RootStackParamList>;
-const ChoresScreen = ({ navigation }: Props) => {
-  console.log("såhär")
-
+  
+const ChoresScreen = ({ navigation }: any) => {
   LogBox.ignoreLogs(["timer"]);
     const dispatch = useAppDispatch();
     const activeHouseholdState = useAppSelector(
@@ -33,66 +34,41 @@ const ChoresScreen = ({ navigation }: Props) => {
       dispatch(getChoresAction(activeHouseholdState));
     }, [activeHouseholdState])
 
-    const RemoveChore = async(choreId: string) => {
-        await dispatch(removeChoreAction(choreId));
-        await dispatch(getChoresAction(user.id))
-        await dispatch(getCompletedChoresAction(activeHouseholdState))
-    }
+  const setIsPressed = () => {
+    if (isEditPressed) setIsEditPressed(false);
+    else setIsEditPressed(true);
+  };
 
-  // const [isVisible, setIsVisible] = React.useState(false);
   return (
-    <View style={{ flex: 1, marginHorizontal: 10, marginVertical: 25 }}>
+    <View style={{ flex: 1, marginVertical: 10, marginHorizontal: 10 }}>
       <RenderUserInfo onClick={ () => {navigation.navigate("EditHouseholdUser")}}/>
-      <Text>household ID who is active : {activeHouseholdState}</Text>
-      <Text> CHORE Name : {household?.name}</Text>
-      {allHouseholdChores.map((prop) => {
-        return (
-          <View key={prop.id}>
-            <Surface style={stylesLocal.surface}>
-              {/* TODO: NAVIGATE TO NEW MODAL, FILMIL */}
-              <TouchableRipple
-                style={stylesLocal.chip}
-                onPress={() => {
-                  navigation.navigate("ChoreDescriptionModalScreen", prop);
-                }}
-              >
-                <Text style={stylesLocal.surfaceText}>{prop.title}</Text>
-              </TouchableRipple>
-               {isEditPressed ? <ChoreDeleteButton onRemove={() => RemoveChore(prop.id)} /> : null}
-            </Surface>
-          </View>
-        );
-      })}
-      {/* TODO: flytta till styles.css */}
-      <View style={styles.bottomButtonRow}>
-        <Button
-          icon="plus-circle-outline"
-          labelStyle={styles.buttonIconSize}
-          color={"#000"}
-          uppercase={false}
-          style={styles.smallButton}
-          onPress={() => navigation.navigate("CreateChoreModalScreen")} //TODO
-        >
-          <Text style={styles.buttonText}>Lägg till</Text>
-        </Button>
-       <Button
-            icon="pencil-outline"
-            labelStyle={styles.buttonIconSize}
-            color={"#000"}
-            uppercase={false}
-            style={styles.smallButton}
-            onPress={
-              isEditPressed
-                ? () => {
-                    setIsEditPressed(false);
-                  }
-                : () => {
-                    setIsEditPressed(true);
-                  }
-            }
-          >
-          <Text style={styles.buttonText}>Ändra</Text>
-        </Button>
+      <ScrollView style={{ flex: 1 }}>
+        {allHouseholdChores.map((prop) => {
+          return (
+            <View key={prop.id}>
+              <ChoreSurface
+                navigation={navigation}
+                choreId={prop.id}
+                isEditPressed={isEditPressed}
+              />
+            </View>
+          );
+        })}
+      </ScrollView>
+      <View style={localStyles.bottomButtonRow}>
+        <BigThemedButton
+          typeOfIcon="plus-circle-outline"
+          buttonText="Lägg till"
+          onPress={() => navigation.navigate("CreateChoreModalScreen")}
+        />
+        <BigThemedButton
+          isPressed={isEditPressed}
+          typeOfIcon="pencil-outline"
+          alternateTypeOfIcon="close-circle-outline"
+          buttonText="Ändra"
+          alternateButtonText="Avbryt"
+          onPress={setIsPressed}
+        />
       </View>
     </View>
   );
@@ -100,50 +76,13 @@ const ChoresScreen = ({ navigation }: Props) => {
 
 export default ChoresScreen;
 
-const stylesLocal = StyleSheet.create({
-    surface: {
-        height: "auto",
-        borderRadius: 10,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-evenly",
-        backgroundColor: "white",
-        elevation: 4,
-        marginVertical: 5,
-    },
-    surfaceText: {
-        flex: 1,
-        fontSize: 18,
-        fontWeight: "bold",
-    },
-    chip: {
-        flex: 1,
-        padding: 10,
-        backgroundColor: "white",
-        height: 50,
-        borderRadius: 10,
-        justifyContent: "center",
-    },
+const localStyles = StyleSheet.create({
+  bottomButtonRow: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+    zIndex: 1,
+    backgroundColor: "#f0f0f0",
+    height: 75,
+  },
 });
-
-{
-  /* {household.chores.map((prop, key) => {
-        return (
-          <ChoreButton  //TODO: Move this props-logic somewhere else
-            key={key}
-            buttonText={prop.title}
-            completedBy={users.filter(
-              (user) =>
-                user.choresDone.filter((chore) => chore.choreId === prop.id)
-                  .length
-            )}
-            daysSinceLast={String(7)}
-            isLate={false}
-          />
-        );
-      })} */
-}
-
-{
-  /* <CreateChore setVisibleModal= {(isVisible)} /> */
-}
