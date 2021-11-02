@@ -9,7 +9,7 @@ interface Props extends Omit<TextInputProps, "theme"> {
 }
 
 //GÅR ATT ÅTERANVÄNDA TILL CHORES OCH SKAPA ANVÄNDARE
-const ThemedTextInput = ({ label, helperText, ...textInputProps }: Props) => {
+const ThemedTextInput = ({ value, label, helperText, ...textInputProps }: Props) => {
   return (
     <View style={styles.root}>
       {label ? <Text style={styles.text}>{label}</Text> : null}
@@ -26,6 +26,7 @@ const ThemedTextInput = ({ label, helperText, ...textInputProps }: Props) => {
               primary: "black",
             },
           }}
+          value={value}
           {...textInputProps}
           style={[styles.input, helperText ? { borderColor: "red" } : null]}
           //underlineColor="transparent"
