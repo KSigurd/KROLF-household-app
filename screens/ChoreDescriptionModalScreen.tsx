@@ -3,17 +3,22 @@ import React from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 import ChoreDescription from "../components/ChoreDescription";
-import { Chore } from "../interfaces/chore";
-import { TabParamList } from "../navigation/ChoresStatisticsNavigator";
+import { RootStackParamList } from "../navigation/RootNavigator";
+import { selectChoreById } from "../store/chore/choreSelectors";
+import { useAppSelector } from "../store/store";
 
-type Props = NativeStackScreenProps<TabParamList>;
+type Props = NativeStackScreenProps<RootStackParamList, "ChoreDescriptionModalScreen">;
 
-const CreateChoreModalScreen = ({ navigation, route }: Props) => {
+const ChoreDescriptionModalScreen = ({ navigation, route }: Props) => {
   const onClosed = () => {
-    navigation.navigate("Home");
+    navigation.goBack();
   };
 
-  const chore = route.params;
+  const choreId = route.params.choreId;
+
+  const chore = useAppSelector(selectChoreById(choreId));
+
+  if(!chore) return null; 
 
   console.log(chore);
   return (
@@ -32,7 +37,7 @@ const CreateChoreModalScreen = ({ navigation, route }: Props) => {
   );
 };
 
-export default CreateChoreModalScreen;
+export default ChoreDescriptionModalScreen;
 
 const styles = StyleSheet.create({
   modalBox: {
