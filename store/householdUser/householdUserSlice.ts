@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   addHouseholdUser,
-  getHouseholdUsers
+  getHouseholdUsers,
+  getHouseholdUsersForLoggedInUser
 } from "../../data/fireStoreModule";
 import { resetErrorAction } from "../globalActions";
 import { CreateHouseholdUser, HouseholdUser } from "../../interfaces/householdUser";
@@ -9,13 +10,28 @@ import { ThunkConfig } from "../store";
 
 interface HouseholdUserState {
   householdUsers: HouseholdUser[];
+  householdUsersForLoggedInUser: HouseholdUser[];
   error: string | undefined;
 }
 
 const initialState: HouseholdUserState = {
   householdUsers: [],
+  householdUsersForLoggedInUser: [],
   error: undefined,
 };
+
+export const getHouseholdUserForLoggedInUserAction = createAsyncThunk<
+  { response: HouseholdUser[] },
+  string,
+  ThunkConfig
+>("getHouseholdUsersForLoggedInUser", async (userId, { rejectWithValue }) => {
+  try {
+    const response = await getHouseholdUsersForLoggedInUser(userId);
+    return { response };
+  } catch (e) {
+    return rejectWithValue(false);
+  }
+});
 
 export const getHouseholdUserAction = createAsyncThunk<
   { response: HouseholdUser[] },
@@ -72,7 +88,14 @@ const householdUserSlice = createSlice({
       }),
       builder.addCase(resetErrorAction, (state, action) => {
         state.error = undefined;
-      })
+      }),
+      builder.addCase(getHouseholdUserForLoggedInUserAction.fulfilled, (state, action) => {
+        state.householdUsersForLoggedInUser = action.payload.response;
+      }),
+        builder.addCase(getHouseholdUserForLoggedInUserAction.rejected, (state, action) => {
+          state.householdUsers = [];
+          state.error = "Något gick fel";
+        })
   },
 });
 
