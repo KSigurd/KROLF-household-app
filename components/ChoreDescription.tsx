@@ -23,12 +23,23 @@ const CreateChoreInfo = ({ onClosed, chore }: Props) => {
           <ThemedTextInput
             style={styles.input}
             label="Beskrivning"
-            editable={true}
+            editable={false}
             numberOfLines={5}
             multiline={true}
             placeholderTextColor="#d3d3d3"
             value={chore.description}
           />
+          <View style={{ flexDirection: "row" }}>
+            <View style={styles.valueContainer}>
+              <Text style={styles.textSize}>Värde:</Text>
+              <Text style={styles.textSize}> {chore.points} </Text>
+            </View>
+
+            <View style={styles.valueContainer}>
+              <Text style={styles.textSize}>Återkomst:</Text>
+              <Text style={styles.textSize}> {chore.repeatability} </Text>
+            </View>
+          </View>
           <View style={styles.expander} />
           <View style={styles.buttonContainer}>
             <NPbutton
@@ -90,5 +101,20 @@ const styles = StyleSheet.create({
   // Expanderar och pressar ner knapparna till botten
   expander: {
     flex: 1,
+  },
+  valueContainer: {
+    flex: 1,
+    flexDirection: "row",
+    backgroundColor: "white",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginHorizontal: 10,
+    marginVertical: 8,
+    borderRadius: 10,
+    elevation: 4,
+    padding: 16,
+  },
+  textSize: {
+    fontSize: 16,
   },
 });

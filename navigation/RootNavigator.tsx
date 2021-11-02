@@ -4,11 +4,13 @@ import {
   NativeStackScreenProps,
 } from "@react-navigation/native-stack";
 import React from "react";
+import { Chore } from "../interfaces/chore";
 import ChoreDescriptionModalScreen from "../screens/ChoreDescriptionModalScreen";
 import CreateAccountScreen from "../screens/CreateAccountScreen";
 import CreateChoreModalScreen from "../screens/CreateChoreModalScreen";
 import CreateHouseholdScreen from "../screens/CreateHouseholdScreen";
 import EditChoreModalScreen from "../screens/EditChoreModalScreen";
+import EditHouseholdUserModalScreen from "../screens/EditHouseholdUserModalScreen";
 import JoinHouseholdScreen from "../screens/JoinHouseholdScreen";
 import LoginScreen from "../screens/LoginScreen";
 import ProfileScreen from "../screens/ProfileScreen";
@@ -52,7 +54,11 @@ const RootNavigator = () => {
         <Stack.Screen
           name="Login"
           component={LoginScreen}
-          options={{ title: "Logga in" }}
+          options={{
+            title: "Logga in",
+            headerBackVisible: false,
+            headerBackTitleVisible: false,
+          }}
         />
         <Stack.Screen
           name="CreateAccount"
@@ -69,12 +75,16 @@ const RootNavigator = () => {
           component={CreateHouseholdScreen}
           options={{ title: "Skapa hushåll" }}
         />
-        {/* TODO: CHECK THIS */}
         <Stack.Screen
           name="Profile"
           component={ProfileScreen}
-          options={{ title: "Profil" }}
+          options={{
+            title: "Profil",
+            headerBackVisible: false,
+            headerBackTitleVisible: false,
+          }}
         />
+
         <Stack.Screen
           name="ChoresStatisticsNavigator"
           component={ChoresStatisticsNavigator}
@@ -104,6 +114,15 @@ const RootNavigator = () => {
           options={{
             presentation: "transparentModal",
             contentStyle: { backgroundColor: "transparent" },
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="EditHouseholdUser"
+          component={EditHouseholdUserModalScreen}
+          options={{
+            presentation: "transparentModal",
+            contentStyle: { backgroundColor: "rgba(0,0,0,0.7)" },
             headerShown: false,
           }}
         />

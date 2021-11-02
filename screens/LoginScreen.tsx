@@ -10,6 +10,8 @@ import { getStatisticsAction } from "../store/completedChore/completedChoreSlice
 import { getHouseholdsAction } from "../store/household/householdSlice";
 import { User } from "../interfaces/user";
 import { loginUserAction } from "../store/user/userSlice";
+import { getHouseholdUsersForLoggedInUser } from "../data/fireStoreModule";
+import { getHouseholdUserForLoggedInUserAction } from "../store/householdUser/householdUserSlice";
 
 type Props = NativeStackScreenProps<RootStackParamList, "CreateHousehold">;
 
@@ -30,7 +32,10 @@ const LoginScreen = ({ navigation }: Props) => {
 
   const loginUser = async (user: User) => {
     await dispatch(loginUserAction(user)).then(
-      async () => await dispatch(getHouseholdsAction(user.id))
+      async () => {
+        await dispatch(getHouseholdsAction(user.id));
+        await dispatch(getHouseholdUserForLoggedInUserAction(user.id));
+      }
     );
   };
 

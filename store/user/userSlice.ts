@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addUser, loginUser } from "../../data/fireStoreModule";
+import { addUser, loginUser, logoutUser } from "../../data/fireStoreModule";
 import { User } from "../../interfaces/user";
 import { resetErrorAction } from "../globalActions";
 import { ThunkConfig } from "../store";
@@ -33,6 +33,20 @@ export const loginUserAction = createAsyncThunk<
   }
 });
 
+export const logoutUserAction = createAsyncThunk<
+  { user: User; response: boolean },
+  User,
+  ThunkConfig
+>("logoutUser", async (user, { rejectWithValue }) => {
+  try {
+    const response = await logoutUser(user);
+    return { user, response };
+  } catch (e) {
+    return rejectWithValue(false);
+  }
+});
+
+
 export const addUserAction = createAsyncThunk<
   { user: User; response: boolean },
   User,
@@ -62,7 +76,7 @@ const userSlice = createSlice({
       builder.addCase(loginUserAction.rejected, (state, action) => {
         state.loggedIn = action.meta.rejectedWithValue;
         state.user = {} as User;
-        state.error = "Något gick fel";
+        state.error = "Problem med databasen. Kunde inte logga in";
       }),
       builder.addCase(addUserAction.fulfilled, (state, action) => {
         state.user.email = action.payload.user.email;
@@ -74,11 +88,19 @@ const userSlice = createSlice({
         }
       }),
       builder.addCase(addUserAction.rejected, (state, action) => {
-        state.error = "Något gick fel";
+        state.error = "Problem med databasen. Kunde inte registrera användaren";
       }),
       builder.addCase(resetErrorAction, (state, action) => {
         state.error = undefined;
+      }),
+      //TODO -> Ska denna bort?
+      builder.addCase(logoutUserAction.fulfilled, (state, action) => {
+        state.loggedIn = action.payload.response;
+      }),
+      builder.addCase(logoutUserAction.rejected, (state, action) => {
+        state.error = "Kunde inte ";
       })
+      
   },
 });
 
