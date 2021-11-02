@@ -41,7 +41,7 @@ const ChoresScreen = ({ navigation }: Props) => {
 
   // const [isVisible, setIsVisible] = React.useState(false);
   return (
-    <View style={{ flex: 1, marginHorizontal: 10, marginVertical: 25 }}>
+    <View style={{ flex: 1, marginHorizontal: 10, marginBottom: 25 }}>
       <RenderUserInfo onClick={ () => {navigation.navigate("EditHouseholdUser")}}/>
       <Text>household ID who is active : {activeHouseholdState}</Text>
       <Text> CHORE Name : {household?.name}</Text>
