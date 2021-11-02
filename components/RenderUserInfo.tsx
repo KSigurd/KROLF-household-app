@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { TouchableHighlight, TouchableOpacity } from "react-native-gesture-handler";
 import { getHouseholdUserAction } from "../store/householdUser/householdUserSlice";
@@ -16,7 +16,12 @@ const RenderUserInfo = ({ onClick }: Props) => {
   const activeHouseholdId = useAppSelector(
       (state) => state.household.activeHouseholdId
   );
-  dispatch(getHouseholdUserAction(activeHouseholdId));
+
+  useEffect(() => {
+    dispatch(getHouseholdUserAction(activeHouseholdId));
+},[activeHouseholdId]);
+
+  
 
   const userData = useAppSelector(selectHouseholdUserById(user.id));
 

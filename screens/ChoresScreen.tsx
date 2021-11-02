@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { LogBox, StyleSheet, Text, View } from "react-native";
 import { Button, Surface, TouchableRipple } from "react-native-paper";
 import ChoreDeleteButton from "../components/ChoreDeleteButton";
@@ -16,9 +16,9 @@ import RenderUserInfo from "../components/RenderUserInfo";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 type Props = NativeStackScreenProps<RootStackParamList>;
-const ChoresScreen = ({
-  navigation,
-}: Props) => {
+const ChoresScreen = ({ navigation }: Props) => {
+  console.log("såhär")
+
   LogBox.ignoreLogs(["timer"]);
     const dispatch = useAppDispatch();
     const activeHouseholdState = useAppSelector(
@@ -29,7 +29,9 @@ const ChoresScreen = ({
     const household = useAppSelector(selectHouseholdById(activeHouseholdState));
     const [isEditPressed, setIsEditPressed] = React.useState(false);
 
-    dispatch(getChoresAction(activeHouseholdState));
+    useEffect(() => {
+      dispatch(getChoresAction(activeHouseholdState));
+    }, [activeHouseholdState])
 
     const RemoveChore = async(choreId: string) => {
         await dispatch(removeChoreAction(choreId));

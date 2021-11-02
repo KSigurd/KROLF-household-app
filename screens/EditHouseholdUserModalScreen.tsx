@@ -1,81 +1,92 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Formik } from "formik";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
-import { Button as NPbutton, TextInput } from "react-native-paper";
-import Points from "../components/Points";
-import Repeatability from "../components/Repeatability";
+import {
+  Button as NPbutton,
+  TouchableRipple,
+  Surface,
+} from "react-native-paper";
 import ThemedTextInput from "../components/ThemedTextInput";
-import { Chore } from "../interfaces/chore";
 import { TabParamList } from "../navigation/ChoresStatisticsNavigator";
 import * as Yup from "yup";
 import { getHouseholdUserAction } from "../store/householdUser/householdUserSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { selectHouseholdUserById, selectAvatarById } from "../store/user/userSelector";
-import { updateHouseholdUser } from "../data/fireStoreModule";
-
+import {
+  selectHouseholdUserById,
+  selectAvatarById,
+} from "../store/user/userSelector";
+import { Avatar } from "../interfaces/avatar";
+import { avatars } from "../data/avatarData";
 
 type Props = NativeStackScreenProps<TabParamList>;
 
 interface userInfo {
-    name: string,
-    avatar: string,
-};
-
-const initialValues: userInfo = {
-    name: "userData?.name",
-    avatar: "avatarEmoji",
- };
-
+  name: string;
+  avatar: Avatar;
+}
 
 type PostSchemaType = Record<keyof userInfo, Yup.AnySchema>;
 
 const validationSchema = Yup.object().shape<PostSchemaType>({
-    name: Yup.string().required("Du måste fylla i något här").min(2),
-    avatar: Yup.string()
+  name: Yup.string().required("Du måste fylla i något här").min(2),
+  avatar: Yup.string(),
 });
 
 const EditHouseholdUserModalScreen = ({ navigation }: Props) => {
-    
-    const dispatch = useAppDispatch();
-    const user = useAppSelector((state) => state.user.user);
-    
-    const activeHouseholdId = useAppSelector(
-        (state) => state.household.activeHouseholdId
-        );
-        dispatch(getHouseholdUserAction(activeHouseholdId));
-        
-        const userData = useAppSelector(selectHouseholdUserById(user.id));
-        
-        const avatar = userData?.avatarId
-        
-        let avatarEmoji = ""
-        if(avatar) {
-            avatarEmoji = avatar
-        }
-        const avatarEmojiToRender = useAppSelector(selectAvatarById(avatarEmoji)); 
-        
-    const handleSubmit = async (inputParams: userInfo) => {
-        //ADD update TO FIREMODULE
-        
+  const [avatar, setAvatar] = useState("");
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user.user);
 
-        //CLOSES MODAL
-        onClosed();
-    };
+  const activeHouseholdId = useAppSelector(
+    (state) => state.household.activeHouseholdId
+  );
+
+  useEffect(() => {
+    dispatch(getHouseholdUserAction(activeHouseholdId));
+    //setAvatar(initialValues.avatar.id)
+  }, [activeHouseholdId]);
+
+  const userData = useAppSelector(selectHouseholdUserById(user.id));
+
+  //   const avatarInfo = userData?.avatarId;
+
+  //   let avatarEmoji = "";
+  //   if (avatarInfo) {
+  //     avatarEmoji = avatar;
+  //   }
+  const avatarEmojiToRender = useAppSelector(
+    selectAvatarById(userData?.avatarId)
+  );
+  console.log("emoji", avatarEmojiToRender);
+
+  const initialValues: userInfo = {
+    name: userData?.name || "",
+    avatar: avatarEmojiToRender || { id: "", color: "", avatar: "" },
+  };
+
+  const handleSubmit = async (inputParams: userInfo) => {
+    onClosed();
+    //ADD update TO FIREMODULE
+
+    //CLOSES MODAL
+  };
 
   const onClosed = () => {
     navigation.navigate("Home");
   };
 
-  
+  const chooseAvatar = (avatar: Avatar) => {
+    setAvatar(avatar.id);
+  };
 
   return (
     <Formik
-    initialValues={initialValues}
-    validationSchema={validationSchema}
-    onSubmit={handleSubmit}
->
-    {({
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
+      {({
         handleChange,
         handleBlur,
         handleSubmit,
@@ -83,40 +94,79 @@ const EditHouseholdUserModalScreen = ({ navigation }: Props) => {
         values,
         touched,
         errors,
-    }) => (
+      }) => (
         <View style={styles.root}>
-            <ThemedTextInput
-                style={styles.input}
-                placeholder="Titel"
-                placeholderTextColor="#d3d3d3"
-                onChangeText={handleChange<keyof Chore>("title")}
-                onBlur={handleBlur<keyof Chore>("title")}
-                value={values.name}
-                helperText={touched.name && errors.name}
-            />
-            <View style={styles.buttonContainer}>
-                <NPbutton
-                    labelStyle={{ fontSize: 25, color: "black" }}
-                    icon="plus-circle-outline"
-                    style={styles.NPbutton}
-                    uppercase={false}
-                    onPress={() => handleSubmit()}
-                >
-                    <Text style={{ fontSize: 15 }}>Spara</Text>
-                </NPbutton>
-                <NPbutton
-                    labelStyle={{ fontSize: 25, color: "black" }}
-                    icon="close-circle-outline"
-                    style={styles.NPbutton}
-                    uppercase={false}
-                    onPress={() => onClosed()}
-                >
-                    <Text style={{ fontSize: 15 }}>Stäng</Text>
-                </NPbutton>
+          <View style={{ backgroundColor: "lightblue", borderRadius: 25 }}>
+            <View style={styles.headerTitle}>
+              <Text style={styles.headerTitleText}>Redigera din användare</Text>
             </View>
+            <ThemedTextInput
+              style={styles.input}
+              placeholder="Smeknamn"
+              placeholderTextColor="#d3d3d3"
+              onChangeText={handleChange<keyof userInfo>("name")}
+              onBlur={handleBlur<keyof userInfo>("name")}
+              value={values.name}
+              helperText={touched.name && errors.name}
+            />
+
+            <Text style={{ fontSize: 60, alignSelf: "center", padding: 5 }}>
+              {values.avatar.avatar}
+            </Text>
+
+            <View style={styles.selectAvatar}>
+              <Text style={styles.buttonText}>Välj din avatar</Text>
+              <Surface style={styles.avatarContainer}>
+                {avatars.map((prop, key) => {
+                  return (
+                    <TouchableRipple
+                      key={key}
+                      borderless={true}
+                      style={[
+                        styles.repeatabilityCircle,
+                        styles.avatarButton,
+                        prop.id === avatar
+                          ? styles.selectedAvatarBackground
+                          : styles.unselectedAvatarBackground,
+                      ]}
+                      onPress={() => {
+                        //values.avatar.id = prop.id;
+                        setFieldValue("avatar", prop);
+
+                        //chooseAvatar(prop);
+                      }}
+                    >
+                      <Text style={styles.avatarStyle}>{prop.avatar}</Text>
+                    </TouchableRipple>
+                  );
+                })}
+              </Surface>
+            </View>
+
+            <View style={styles.buttonContainer}>
+              <NPbutton
+                labelStyle={{ fontSize: 25, color: "black" }}
+                icon="plus-circle-outline"
+                style={styles.NPbutton}
+                uppercase={false}
+                onPress={() => handleSubmit()}
+              >
+                <Text style={{ fontSize: 15 }}>Spara</Text>
+              </NPbutton>
+              <NPbutton
+                labelStyle={{ fontSize: 25, color: "black" }}
+                icon="close-circle-outline"
+                style={styles.NPbutton}
+                uppercase={false}
+                onPress={() => onClosed()}
+              >
+                <Text style={{ fontSize: 15 }}>Stäng</Text>
+              </NPbutton>
+            </View>
+          </View>
         </View>
-    )}
-</Formik>
+      )}
+    </Formik>
   );
 };
 
@@ -124,25 +174,24 @@ export default EditHouseholdUserModalScreen;
 
 const styles = StyleSheet.create({
   root: {
-    backgroundColor: "lightblue",
-    margin: 15,
-    padding: 10,
-    borderRadius: 25,
-    marginTop: 300
-},
-NPbutton: {
+    flex: 1,
+    margin: 10,
+    borderRadius: 25, 
+    justifyContent: "center",
+  },
+  NPbutton: {
     flex: 1,
     height: "100%",
     borderRadius: 25,
     justifyContent: "center",
-},
-input: {
+  },
+  input: {
     marginTop: 0,
-},
-marginBottom: {
+  },
+  marginBottom: {
     marginBottom: 10,
-},
-buttonContainer: {
+  },
+  buttonContainer: {
     overflow: "hidden",
     flexDirection: "row",
     backgroundColor: "white",
@@ -153,5 +202,72 @@ buttonContainer: {
     marginTop: 8,
     borderBottomLeftRadius: 25,
     borderBottomRightRadius: 25,
-},
+  },
+  selectAvatar: {
+    alignItems: "flex-start",
+    flexDirection: "column",
+    marginHorizontal: 10,
+  },
+  avatarStyle: {
+    fontSize: 25,
+    fontWeight: "bold",
+  },
+  buttonText: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  avatarContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 30,
+    borderRadius: 10,
+    backgroundColor: "white",
+    elevation: 4,
+    borderColor: "transparent",
+    width: "100%",
+    marginTop: 12,
+    marginBottom: 12,
+  },
+  repeatabilityCircle: {
+    width: 35,
+    height: 35,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 30,
+    elevation: 4,
+  },
+  selectedAvatarBackground: {
+    backgroundColor: "#EDEDED",
+  },
+  unselectedAvatarBackground: {
+    backgroundColor: "white",
+  },
+  bottomButtonRow: {
+    flex: 1,
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+  },
+  buttonIconSize: {
+    fontSize: 25,
+  },
+  avatarButton: {
+    margin: 0,
+    elevation: 0,
+  },
+  headerTitle: {
+    width: "100%",
+    backgroundColor: "#fff",
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+  },
+  headerTitleText: {
+    padding: 15,
+    alignSelf: "center",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
 });

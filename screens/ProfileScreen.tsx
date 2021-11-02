@@ -21,7 +21,7 @@ const ProfileScreen = ({ navigation }: Props) => {
   );
 
   const setHousholdAndNavigate = (householdId: string) => {
-    console.log("inne här");
+    //console.log("inne här");
     dispatch(setActiveHousholdAction(householdId));
     navigation.navigate("ChoresStatisticsNavigator");
   };
