@@ -1,9 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import {
-  TouchableHighlight,
-  TouchableOpacity,
-} from "react-native-gesture-handler";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { getHouseholdUserAction } from "../store/householdUser/householdUserSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import {
@@ -27,14 +23,19 @@ const RenderUserInfo = ({ onClick }: Props) => {
     dispatch(getHouseholdUserAction(activeHouseholdId));
   }, [activeHouseholdId]);
 
+  
   const userData = useAppSelector(selectHouseholdUserById(user.id));
-
+  
   const avatarEmojiToRender = useAppSelector(selectAvatarById(userData?.avatarId));
 
+  const avatarcolor = avatarEmojiToRender?.avatar;
+
+
+
   return (
-    <TouchableOpacity onPress={onClick} style={styles.enklass}>
+    <TouchableOpacity onPress={onClick} style={styles.root}>
       <Text style={styles.text}>
-        {userData?.name} {avatarEmojiToRender?.avatar}
+      {avatarEmojiToRender?.avatar}   {userData?.name}   
       </Text>
     </TouchableOpacity>
   );
@@ -42,13 +43,19 @@ const RenderUserInfo = ({ onClick }: Props) => {
 export default RenderUserInfo;
 
 const styles = StyleSheet.create({
-  enklass: {
-    backgroundColor: "pink",
+  root: {
+
     justifyContent: "center",
     alignSelf: "center",
+    borderColor: "#fff",
+    borderRadius: 25,
+    borderWidth: 3, 
+    margin: 10,
   },
   text: {
-    fontSize: 18,
-    padding: 10,
+    flexWrap: "wrap",
+    fontSize: 20,
+    padding: 12,
+    fontWeight: "300",
   },
 });

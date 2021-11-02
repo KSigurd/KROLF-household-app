@@ -8,6 +8,7 @@ import ThemedTextInput from "../components/ThemedTextInput";
 import { avatars } from "../data/avatarData";
 import { Avatar } from "../interfaces/avatar";
 import { RootStackParamList } from "../navigation/RootNavigator";
+import { househouldUsersFromHousehold, availableAvatars } from "../store/householdUser/householdUserSelectors";
 import { addHouseholdUserAction } from "../store/householdUser/householdUserSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 
@@ -71,6 +72,17 @@ const JoinHouseholdScreen: FC<Props> = ({ navigation }: Props) => {
   const chooseAvatar = (avatar: Avatar) => {
     setAvatar(avatar.id);
   };
+
+
+  // const activeHouseholdId = useAppSelector(
+  //   (state) => state.household.activeHouseholdId
+  // );
+  // const householdUsersFromActiveHousehold = useAppSelector(
+  //   househouldUsersFromHousehold(activeHouseholdId)
+  // );
+  // const availableAvatarList = useAppSelector(
+  //   availableAvatars(householdUsersFromActiveHousehold)
+  // );
 
   return (
     <Formik

@@ -40,7 +40,7 @@ const ChoresScreen = ({ navigation }: any) => {
   };
 
   return (
-    <View style={{ flex: 1, marginVertical: 10, marginHorizontal: 10 }}>
+    <View style={{ flex: 1, marginHorizontal: 10, marginBottom: 10 }}>
       <RenderUserInfo onClick={ () => {navigation.navigate("EditHouseholdUser")}}/>
       <ScrollView style={{ flex: 1 }}>
         {allHouseholdChores.map((prop) => {

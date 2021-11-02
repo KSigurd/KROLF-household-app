@@ -1,24 +1,26 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import {
-  Button as NPbutton,
-  TouchableRipple,
-  Surface,
+  Button as NPbutton, Surface, TouchableRipple
 } from "react-native-paper";
-import ThemedTextInput from "../components/ThemedTextInput";
-import { TabParamList } from "../navigation/ChoresStatisticsNavigator";
 import * as Yup from "yup";
-import {getHouseholdUserAction, updateHouseholdUserAction } from "../store/householdUser/householdUserSlice";
+import ThemedTextInput from "../components/ThemedTextInput";
+import { Avatar } from "../interfaces/avatar";
+import { TabParamList } from "../navigation/ChoresStatisticsNavigator";
+import {
+  availableAvatars,
+  househouldUsersFromHousehold
+} from "../store/householdUser/householdUserSelectors";
+import {
+  getHouseholdUserAction,
+  updateHouseholdUserAction
+} from "../store/householdUser/householdUserSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import {
-  selectHouseholdUserById,
-  selectAvatarById,
+  selectAvatarById, selectHouseholdUserById
 } from "../store/user/userSelector";
-import { Avatar } from "../interfaces/avatar";
-import { avatars } from "../data/avatarData";
-import { updateHouseholdUser } from "../data/fireStoreModule";
 
 type Props = NativeStackScreenProps<TabParamList>;
 
@@ -30,7 +32,7 @@ interface userInfo {
 type PostSchemaType = Record<keyof userInfo, Yup.AnySchema>;
 
 const validationSchema = Yup.object().shape<PostSchemaType>({
-  name: Yup.string().required("Du måste fylla i något här").min(2),
+  name: Yup.string().required("Du måste fylla i något här").min(2).max(20, "Ditt namn kan bara innehålla 20 tecken"),
   avatar: Yup.object(),
 });
 
@@ -42,6 +44,13 @@ const EditHouseholdUserModalScreen = ({ navigation }: Props) => {
   const activeHouseholdId = useAppSelector(
     (state) => state.household.activeHouseholdId
   );
+  const householdUsersFromActiveHousehold = useAppSelector(
+    househouldUsersFromHousehold(activeHouseholdId)
+  );
+
+  const availableAvatarList = useAppSelector(
+    availableAvatars(householdUsersFromActiveHousehold)
+  );
 
   useEffect(() => {
     dispatch(getHouseholdUserAction(activeHouseholdId));
@@ -52,7 +61,6 @@ const EditHouseholdUserModalScreen = ({ navigation }: Props) => {
   const avatarEmojiToRender = useAppSelector(
     selectAvatarById(userData?.avatarId)
   );
-  //console.log("emoji", avatarEmojiToRender);
 
   const initialValues: userInfo = {
     name: userData?.name || "",
@@ -60,28 +68,26 @@ const EditHouseholdUserModalScreen = ({ navigation }: Props) => {
   };
 
   const handleSubmit = async (inputParams: userInfo) => {
-    console.log("inne i fkn submt")
-    if(userData){
-      
+    console.log("inne i fkn submt");
+    if (userData) {
       const updatedHouseholdUser = {
         ...userData,
         avatarId: inputParams.avatar.id,
-      name: inputParams.name}
-        
-        console.log(updatedHouseholdUser)
+        name: inputParams.name,
+      };
+
+      console.log(updatedHouseholdUser);
       await dispatch(
-        
         updateHouseholdUserAction(updatedHouseholdUser)
-          
-      
-      // ).then(() => {
-      //   setAvatar("");
-      //   navigation.navigate("Home");
+
+        // ).then(() => {
+        //   setAvatar("");
+        //   navigation.navigate("Home");
       );
 
       navigation.pop();
     }
-  
+
     //onClosed();
     //ADD update TO FIREMODULE
 
@@ -112,7 +118,7 @@ const EditHouseholdUserModalScreen = ({ navigation }: Props) => {
         errors,
       }) => (
         <View style={styles.root}>
-          <View style={{ backgroundColor: "lightblue", borderRadius: 25 }}>
+          <View style={{ backgroundColor: "#f2f2f2", borderRadius: 25 }}>
             <View style={styles.headerTitle}>
               <Text style={styles.headerTitleText}>Redigera din användare</Text>
             </View>
@@ -133,7 +139,7 @@ const EditHouseholdUserModalScreen = ({ navigation }: Props) => {
             <View style={styles.selectAvatar}>
               <Text style={styles.buttonText}>Välj din avatar</Text>
               <Surface style={styles.avatarContainer}>
-                {avatars.map((prop, key) => {
+                {availableAvatarList.map((prop, key) => {
                   return (
                     <TouchableRipple
                       key={key}
@@ -192,7 +198,7 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     margin: 10,
-    borderRadius: 25, 
+    borderRadius: 25,
     justifyContent: "center",
   },
   NPbutton: {
@@ -236,7 +242,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     padding: 30,
     borderRadius: 10,
     backgroundColor: "white",
