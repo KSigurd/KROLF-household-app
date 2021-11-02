@@ -10,16 +10,16 @@ import { useAppSelector } from "../store/store";
 
 type Props = NativeStackScreenProps<RootStackParamList, "CreateChoreModalScreen">;
 
-const CreateChoreModalScreen = ({ navigation, route }: Props) => {
+const CreateChoreModalScreen = ({ navigation }: Props) => {
   const onClosed = () => {
     navigation.goBack();
   };
 
-  const choreId = route.params.choreId;
+  // const choreId = route.params.choreId;
 
-  const chore = useAppSelector(selectChoreById(choreId));
+  // const chore = useAppSelector(selectChoreById(choreId));
 
-  if (!chore) return null; 
+  // if (!chore) return null; 
 
 
   return (
@@ -29,7 +29,7 @@ const CreateChoreModalScreen = ({ navigation, route }: Props) => {
           <Text style={styles.titleText}>Skapa en ny syssla</Text>
         </View>
         <View style={styles.centerContainer}>
-          <CreateChoreInfo onClosed={onClosed} typeOfInfo="create" activeChore={chore} />
+          <CreateChoreInfo onClosed={onClosed} />
         </View>
       </SafeAreaView>
     </View>

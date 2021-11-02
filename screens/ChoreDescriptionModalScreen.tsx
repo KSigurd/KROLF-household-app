@@ -14,13 +14,11 @@ const ChoreDescriptionModalScreen = ({ navigation, route }: Props) => {
     navigation.goBack();
   };
 
-  const choreId = route.params.choreId;
+  const choreId = route.params;
 
-  const chore = useAppSelector(selectChoreById(choreId));
-
+  const chore = useAppSelector(selectChoreById(String(choreId)));
   if(!chore) return null; 
 
-  console.log(chore);
   return (
     <View style={styles.outerContainer}>
       <SafeAreaView>

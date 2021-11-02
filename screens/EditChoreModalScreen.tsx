@@ -17,9 +17,9 @@ const EditChoreModalScreen = ({ navigation, route }: Props) => {
     navigation.goBack();
   };
 
-  const choreId = route.params.choreId;
+  const choreId = route.params;
 
-  const chore = useAppSelector(selectChoreById(choreId));
+  const chore = useAppSelector(selectChoreById(String(choreId)));
 
   if (!chore) return null; 
 
@@ -30,7 +30,7 @@ const EditChoreModalScreen = ({ navigation, route }: Props) => {
           <Text style={styles.titleText}>Ändra en syssla</Text>
         </View>
         <View style={styles.centerContainer}>
-          <CreateChoreInfo onClosed={onClosed} typeOfInfo="edit" activeChore={chore} />
+          <CreateChoreInfo onClosed={onClosed} activeChore={chore} />
         </View>
       </SafeAreaView>
     </View>
