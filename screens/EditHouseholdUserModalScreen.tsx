@@ -118,7 +118,7 @@ const EditHouseholdUserModalScreen = ({ navigation }: Props) => {
         errors,
       }) => (
         <View style={styles.root}>
-          <View style={{ backgroundColor: "lightblue", borderRadius: 25 }}>
+          <View style={{ backgroundColor: "#f2f2f2", borderRadius: 25 }}>
             <View style={styles.headerTitle}>
               <Text style={styles.headerTitleText}>Redigera din användare</Text>
             </View>
