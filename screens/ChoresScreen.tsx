@@ -1,21 +1,25 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useEffect } from "react";
+import { LogBox, StyleSheet, Text, View } from "react-native";
 import { Button, Surface, TouchableRipple } from "react-native-paper";
 import ChoreDeleteButton from "../components/ChoreDeleteButton";
 import { number } from "yup/lib/locale";
 import ChoreDescription from "../components/ChoreDescription";
 import { Chore } from "../interfaces/chore";
-import { StackScreenProps } from "../navigation/RootNavigator";
+import { RootStackParamList, StackScreenProps } from "../navigation/RootNavigator";
 import { getChoresAction, removeChoreAction } from "../store/chore/choreSlice";
 import { getCompletedChoresAction } from "../store/completedChore/completedChoreSlice";
 import { selectHouseholdById } from "../store/household/hoseholdSelector";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { styles } from "../styles/styles";
 import ChoreDescriptionModalScreen from "./ChoreDescriptionModalScreen";
+import RenderUserInfo from "../components/RenderUserInfo";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-const ChoresScreen = ({
-  navigation,
-}: StackScreenProps<"ChoresStatisticsNavigator">) => {
+type Props = NativeStackScreenProps<RootStackParamList>;
+const ChoresScreen = ({ navigation }: Props) => {
+  console.log("såhär")
+
+  LogBox.ignoreLogs(["timer"]);
     const dispatch = useAppDispatch();
     const activeHouseholdState = useAppSelector(
         (state) => state.household.activeHouseholdId
@@ -25,7 +29,9 @@ const ChoresScreen = ({
     const household = useAppSelector(selectHouseholdById(activeHouseholdState));
     const [isEditPressed, setIsEditPressed] = React.useState(false);
 
-    dispatch(getChoresAction(activeHouseholdState));
+    useEffect(() => {
+      dispatch(getChoresAction(activeHouseholdState));
+    }, [activeHouseholdState])
 
     const RemoveChore = async(choreId: string) => {
         await dispatch(removeChoreAction(choreId));
@@ -36,8 +42,9 @@ const ChoresScreen = ({
   // const [isVisible, setIsVisible] = React.useState(false);
   return (
     <View style={{ flex: 1, marginHorizontal: 10, marginVertical: 25 }}>
+      <RenderUserInfo onClick={ () => {navigation.navigate("EditHouseholdUser")}}/>
       <Text>household ID who is active : {activeHouseholdState}</Text>
-      <Text>Name : {household?.name}</Text>
+      <Text> CHORE Name : {household?.name}</Text>
       {allHouseholdChores.map((prop) => {
         return (
           <View key={prop.id}>
