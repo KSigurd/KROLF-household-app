@@ -4,13 +4,14 @@ import { Surface, Title, TouchableRipple } from "react-native-paper";
 import { styles } from "../styles/styles";
 
 interface Props {
+  initialValue?: number;
   getRepeatability: (nummer: number) => void;
 }
 
-const Repeatability = ({ getRepeatability }: Props) => {
+const Repeatability = ({ initialValue, getRepeatability }: Props) => {
   const [isRepeatabilityValuePressed, setIsRepeatabilityValuePressed] =
     useState(true);
-  const [repeatability, setRepeatability] = useState<number>(7);
+  const [repeatability, setRepeatability] = useState<number>(initialValue || 7);
 
   const displayRepeatabilityValues = () => {
     let repeatabilityNumbers: number[] = [];
