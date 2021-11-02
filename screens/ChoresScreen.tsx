@@ -1,23 +1,11 @@
 import React, { useEffect } from "react";
-import { LogBox, ScrollView, StyleSheet, View, Text } from "react-native";
+import { LogBox, ScrollView, StyleSheet, View } from "react-native";
 import BigThemedButton from "../components/BigThemedButton";
 import ChoreSurface from "../components/ChoreSurface";
+import RenderUserInfo from "../components/RenderUserInfo";
 import { getChoresAction } from "../store/chore/choreSlice";
-import { useAppDispatch, useAppSelector } from "../store/store";
-import { Button, Surface, TouchableRipple } from "react-native-paper";
-import ChoreDeleteButton from "../components/ChoreDeleteButton";
-import { number } from "yup/lib/locale";
-import ChoreDescription from "../components/ChoreDescription";
-import { Chore } from "../interfaces/chore";
-import { RootStackParamList, StackScreenProps } from "../navigation/RootNavigator";
-import { getChoresAction, removeChoreAction } from "../store/chore/choreSlice";
-import { getCompletedChoresAction } from "../store/completedChore/completedChoreSlice";
 import { selectHouseholdById } from "../store/household/hoseholdSelector";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { styles } from "../styles/styles";
-import ChoreDescriptionModalScreen from "./ChoreDescriptionModalScreen";
-import RenderUserInfo from "../components/RenderUserInfo";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
   
 const ChoresScreen = ({ navigation }: any) => {
   LogBox.ignoreLogs(["timer"]);
