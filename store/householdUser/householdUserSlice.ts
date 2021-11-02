@@ -78,13 +78,13 @@ const householdUserSlice = createSlice({
     }),
       builder.addCase(getHouseholdUserAction.rejected, (state, action) => {
         state.householdUsers = [];
-        state.error = "Något gick fel";
+        state.error = "Kunde inte hämta data om hushållets användare";
       }),
       builder.addCase(addHouseholdUserAction.fulfilled, (state, action) => {
         state.householdUsers.push(action.payload);
       }),
       builder.addCase(addHouseholdUserAction.rejected, (state, action) => {
-        state.error = "Något gick fel";
+        state.error = "Kunde inte gå med i hushållet";
       }),
       builder.addCase(resetErrorAction, (state, action) => {
         state.error = undefined;
@@ -94,7 +94,7 @@ const householdUserSlice = createSlice({
       }),
         builder.addCase(getHouseholdUserForLoggedInUserAction.rejected, (state, action) => {
           state.householdUsers = [];
-          state.error = "Något gick fel";
+          state.error = "Kunde inte hämta användardata";
         })
   },
 });

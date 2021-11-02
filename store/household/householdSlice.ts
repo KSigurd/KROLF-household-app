@@ -33,14 +33,9 @@ export const getHouseholdsAction = createAsyncThunk<
 
 export const setActiveHousholdAction = createAsyncThunk<
   string,
-  string,
-  ThunkConfig
->("setActiveHousehold", async (householdId, { rejectWithValue }) => {
-  try {
-    return householdId
-  } catch (e) {
-    return rejectWithValue(false);
-  }
+  string
+>("setActiveHousehold", async (householdId) => {
+  return householdId
 });
 
 export const addHouseholdAction = createAsyncThunk<
@@ -102,19 +97,16 @@ const householdSlice = createSlice({
       state.households = action.payload.response;
     }),
       builder.addCase(getHouseholdsAction.rejected, (state, action) => {
-        state.error = "Något gick fel";
+        state.error = "Kunde inte hämta hushåll";
       }),
       builder.addCase(addHouseholdAction.fulfilled, (state, action) => {
         state.households.push(action.payload);
       }),
       builder.addCase(addHouseholdAction.rejected, (state, action) => {
-        state.error = "Något gick fel";
+        state.error = "Kunde inte lägga till hushållet";
       }),
       builder.addCase(setActiveHousholdAction.fulfilled, (state, action) => {
         state.activeHouseholdId = action.payload;
-      }),
-      builder.addCase(setActiveHousholdAction.rejected, (state, action) => {
-        state.error = "Något gick fel";
       }),
       builder.addCase(resetErrorAction, (state, action) => {
         state.error = undefined;
@@ -126,7 +118,7 @@ const householdSlice = createSlice({
         state.households[index] = action.payload;
       }),
       builder.addCase(updateHouseholdAction.rejected, (state, action) => {
-        state.error = "Något gick fel";
+        state.error = "Kunde inte uppdatera hushållet";
       })
     },
 });
