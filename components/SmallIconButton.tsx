@@ -3,22 +3,23 @@ import { IconButton } from "react-native-paper";
 import { StyleSheet } from "react-native";
 
 interface Props {
-  onEdit: () => void;
+  onPress: () => void;
+  typeOfIcon: string;
 }
 
-const ChoreEditButton: FC<Props> = ({ onEdit }) => {
+const SmallIconButton: FC<Props> = ({ onPress, typeOfIcon }) => {
   return (
     <IconButton
-      icon="pencil-outline"
+      icon={typeOfIcon}
       color="#000"
       size={20}
       style={styles.iconButton}
-      onPress={() => onEdit()}
+      onPress={() => onPress()}
     ></IconButton>
   );
 };
 
-export default ChoreEditButton;
+export default SmallIconButton;
 
 const styles = StyleSheet.create({
   iconButton: {
