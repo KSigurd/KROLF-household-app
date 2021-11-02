@@ -85,6 +85,7 @@ const ChoreSurface = ({ navigation, choreId, isEditPressed }: Props) => {
     <View>
       <Surface style={stylesLocal.surface}>
         <TouchableRipple
+        borderless={true}
           style={stylesLocal.chip}
           onPress={() => {
             navigation.navigate("ChoreDescriptionModalScreen", choreId);
