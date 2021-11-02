@@ -14,7 +14,7 @@ import { householdUser } from "./mockHouseholdData";
  * Takes an object of type User and writes it to FireStore
  * @requires User
  */
-export async function addUser(newUser: UserOmit) {
+export async function addUser(newUser: User) {
   let userAdded: boolean = false;
   await firebase
     .firestore()
@@ -45,24 +45,77 @@ export async function addUser(newUser: UserOmit) {
  * @returns {boolean}
  */
 export async function loginUser(user: User) {
+ 
   let loggedIn: boolean = false;
-  await firebase
+  const userPerson = await firebase
     .firestore()
     .collection("users")
     .where("email", "==", user.email.toLowerCase())
     .where("password", "==", user.password)
     .get()
-    .then((query) => {
-      query.forEach((doc) => {
-        if (doc.exists) {
-          user.id = doc.id;
-          loggedIn = true;
-        }
-      });
-    })
     .catch((err) => {
       throw err;
     });
+
+    for (const u of userPerson.docs) {
+      if (u.exists) {
+              user.id = u.id;
+              loggedIn = true;
+            }
+          }
+
+
+
+    // .then((query) => {
+    //   query.forEach((doc) => {
+    //     if (doc.exists) {
+    //       user.id = doc.id;
+    //       loggedIn = true;
+    //     }
+    //   });
+    // })
+    // .catch((err) => {
+    //   throw err;
+    // });
+
+  return loggedIn;
+}
+
+/**
+ * Takes an object of type User and returns a bool depending on if email and password matches database
+ * @requires User
+ * @returns {boolean}
+ */
+export async function logoutUser(user: User) {
+  const userPerson = await firebase
+  .firestore()
+  .collection("users")
+  .where("email", "==", user.email.toLowerCase())
+  .where("password", "==", user.password)
+  .get()
+  .catch((err) => {
+    throw err;
+  });
+  
+  let loggedIn: boolean = false;
+  for (const u of userPerson.docs) {
+      if (u.exists) {
+              user.id = u.id;
+              loggedIn = false
+            }
+          }
+    // for()
+    // .then((query) => {
+    //   query.forEach((doc) => {
+    //     if (doc.exists) {
+    //       user.id = doc.id;
+    //       loggedIn = false;
+    //     }
+    //   });      
+    // })
+    // .catch((err) => {
+    //   throw err;
+    // });
 
   return loggedIn;
 }
@@ -71,11 +124,12 @@ export async function loginUser(user: User) {
  * Takes an object of type Chore and writes it to FireStore
  * @requires Chore
  */
-export async function addChore(newChore: ChoreOmit) {
+export async function addChore(newChore: Chore) {
+  const {id, ...omittedChore} = newChore;
   await firebase
     .firestore()
     .collection("chores")
-    .add(newChore)
+    .add(omittedChore)
     .catch((err) => console.log(err));
 }
 
@@ -84,11 +138,12 @@ export async function addChore(newChore: ChoreOmit) {
  * @requires Chore
  */
 export async function updateChore(modifiedChore: Chore) {
+  const {id, ...omittedChore} = modifiedChore;
   await firebase
     .firestore()
     .collection("chores")
     .doc(modifiedChore.id)
-    .update(modifiedChore as ChoreOmit)
+    .update(omittedChore)
     .catch((err) => console.log(err));
 }
 
@@ -198,11 +253,12 @@ export async function addHoushold(newHousehold: CreateHousehold) {
  * @requires Household
  */
 export async function updateHoushold(modifiedHousehold: Household) {
+  const {id, ...omittedHousehold} = modifiedHousehold;
   await firebase
     .firestore()
     .collection("households")
     .doc(modifiedHousehold.id)
-    .update(modifiedHousehold as CreateHousehold)
+    .update(omittedHousehold)
     .catch((err) => console.log(err));
 }
 
@@ -271,11 +327,12 @@ if(inviteCode) {
 export async function updateHouseholdUser(
   modifiedHouseholdUser: HouseholdUser
 ) {
+  const {id, ...omittedHouseholdUser} = modifiedHouseholdUser;
   await firebase
     .firestore()
     .collection("householdUsers")
     .doc(modifiedHouseholdUser.id)
-    .update(modifiedHouseholdUser as CreateHouseholdUser);
+    .update(omittedHouseholdUser);
 }
 
 /**

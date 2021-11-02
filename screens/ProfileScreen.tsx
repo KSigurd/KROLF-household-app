@@ -7,8 +7,8 @@ import EditHouseholdModal from "../components/EditHouseholdModal";
 import HouseholdSurface from "../components/HouseholdSurface";
 import JoinHouseholdButton from "../components/JoinHouseHoldButton";
 import { Household } from "../interfaces/households";
+import { setActiveHousholdAction, updateHouseholdAction } from "../store/household/householdSlice";
 import { RootStackParamList } from "../navigation/RootNavigator";
-import { getHouseholdsAction, setActiveHousholdAction, updateHouseholdAction } from "../store/household/householdSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { isUserAdmin } from "../store/householdUser/householdUserSelectors";
 
