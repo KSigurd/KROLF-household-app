@@ -71,12 +71,14 @@ export async function loginUser(user: User) {
  * Takes an object of type Chore and writes it to FireStore
  * @requires Chore
  */
-export async function addChore(newChore: ChoreOmit) {
-  await firebase
+export async function addChore(newChore: Chore) {
+  const {id, ...omittedChore} = newChore;
+  const result = await firebase
     .firestore()
     .collection("chores")
-    .add(newChore)
-    .catch((err) => console.log(err));
+    .add(omittedChore);
+
+    return result.id;
 }
 
 /**
