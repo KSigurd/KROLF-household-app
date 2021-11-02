@@ -10,7 +10,7 @@ import {
 import ThemedTextInput from "../components/ThemedTextInput";
 import { TabParamList } from "../navigation/ChoresStatisticsNavigator";
 import * as Yup from "yup";
-import { getHouseholdUserAction } from "../store/householdUser/householdUserSlice";
+import {getHouseholdUserAction, updateHouseholdUserAction } from "../store/householdUser/householdUserSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import {
   selectHouseholdUserById,
@@ -18,6 +18,7 @@ import {
 } from "../store/user/userSelector";
 import { Avatar } from "../interfaces/avatar";
 import { avatars } from "../data/avatarData";
+import { updateHouseholdUser } from "../data/fireStoreModule";
 
 type Props = NativeStackScreenProps<TabParamList>;
 
@@ -30,7 +31,7 @@ type PostSchemaType = Record<keyof userInfo, Yup.AnySchema>;
 
 const validationSchema = Yup.object().shape<PostSchemaType>({
   name: Yup.string().required("Du måste fylla i något här").min(2),
-  avatar: Yup.string(),
+  avatar: Yup.object(),
 });
 
 const EditHouseholdUserModalScreen = ({ navigation }: Props) => {
@@ -44,21 +45,14 @@ const EditHouseholdUserModalScreen = ({ navigation }: Props) => {
 
   useEffect(() => {
     dispatch(getHouseholdUserAction(activeHouseholdId));
-    //setAvatar(initialValues.avatar.id)
   }, [activeHouseholdId]);
 
   const userData = useAppSelector(selectHouseholdUserById(user.id));
 
-  //   const avatarInfo = userData?.avatarId;
-
-  //   let avatarEmoji = "";
-  //   if (avatarInfo) {
-  //     avatarEmoji = avatar;
-  //   }
   const avatarEmojiToRender = useAppSelector(
     selectAvatarById(userData?.avatarId)
   );
-  console.log("emoji", avatarEmojiToRender);
+  //console.log("emoji", avatarEmojiToRender);
 
   const initialValues: userInfo = {
     name: userData?.name || "",
@@ -66,7 +60,29 @@ const EditHouseholdUserModalScreen = ({ navigation }: Props) => {
   };
 
   const handleSubmit = async (inputParams: userInfo) => {
-    onClosed();
+    console.log("inne i fkn submt")
+    if(userData){
+      
+      const updatedHouseholdUser = {
+        ...userData,
+        avatarId: inputParams.avatar.id,
+      name: inputParams.name}
+        
+        console.log(updatedHouseholdUser)
+      await dispatch(
+        
+        updateHouseholdUserAction(updatedHouseholdUser)
+          
+      
+      // ).then(() => {
+      //   setAvatar("");
+      //   navigation.navigate("Home");
+      );
+
+      navigation.pop();
+    }
+  
+    //onClosed();
     //ADD update TO FIREMODULE
 
     //CLOSES MODAL

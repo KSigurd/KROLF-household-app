@@ -32,6 +32,32 @@ export const getHouseholdUserAction = createAsyncThunk<
   }
 });
 
+// export const updateHouseholdUserAction = createAsyncThunk<
+//   HouseholdUser,
+//   string,
+//   ThunkConfig
+// >("updateHouseholdUsers", async (householdId, { rejectWithValue }) => {
+//   try {
+//     const response = await updateHouseholdUser(householdId);
+//     return { response };
+//   } catch (e) {
+//     return rejectWithValue(false);
+//   }
+// });
+
+export const updateHouseholdUserAction = createAsyncThunk<
+  HouseholdUser,
+  HouseholdUser,
+  ThunkConfig
+>("updateHouseholdUser", async (household, { dispatch, rejectWithValue }) => {
+  try {
+    await updateHouseholdUser(household);
+    return household;
+  } catch (e) {
+    return rejectWithValue(false);
+  }
+});
+
 
 
 export const addHouseholdUserAction = createAsyncThunk<
@@ -56,31 +82,6 @@ export const addHouseholdUserAction = createAsyncThunk<
   }
 });
 
-
-
-// export const updateHouseholdUserAction = createAsyncThunk<
-//   HouseholdUser,
-//   {householdUser: HouseholdUser},
-//   ThunkConfig
-// >("updateHouseholdUserd", async ({ householdUser}, { rejectWithValue }) => {
-//   try {
-//     let householdUserId: string;
- 
-//       householdUserId = await getHouseholdUser(householdUserId);
-    
-//         const householdUser = {
-//           ...newHouseholdUser,
-//           id: householdUserId,
-//         };
-//     return householdUser;
-//   } catch (e) {
-//     return rejectWithValue(false);
-//   }
-// });
-
-
-
-
 const householdUserSlice = createSlice({
   name: "householdUser",
   initialState,
@@ -101,6 +102,15 @@ const householdUserSlice = createSlice({
       }),
       builder.addCase(resetErrorAction, (state, action) => {
         state.error = undefined;
+      }),
+      builder.addCase(updateHouseholdUserAction.fulfilled, (state, action) => {
+        const index = state.householdUsers.findIndex(hu => 
+          hu.id === action.payload.id
+        );
+        state.householdUsers[index] = action.payload;
+      }),
+      builder.addCase(updateHouseholdUserAction.rejected, (state, action) => {
+        state.error = "Något gick fel";
       })
   },
 });
