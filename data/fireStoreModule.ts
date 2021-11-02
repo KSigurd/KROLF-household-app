@@ -357,6 +357,27 @@ export async function getHouseholdUsers(householdId: string) {
   return householdUsers;
 }
 
+/**
+ * Takes an userId of type string and retrieves all HouseholdUser from FireStore connected with user
+ * @requires userId
+ * @returns {HouseholdUser[]}
+ */
+ export async function getHouseholdUsersForLoggedInUser(userId: string) {
+  const householdUsers: HouseholdUser[] = [];
+  await firebase
+    .firestore()
+    .collection("householdUsers")
+    .where("userId", "==", userId)
+    .get()
+    .then((query) => {
+      query.forEach((doc) => {
+        householdUsers.push({ id: doc.id, ...doc.data() } as HouseholdUser);
+      });
+    })
+
+  return householdUsers;
+}
+
 //TODO: Denna kommer inte funka. Men totalt hjärntrött just nu. Fixa senare
 /**
  * Takes an userId of type string and deletes corresponding HousholdUser and CompletedChores from FireStore

@@ -60,16 +60,16 @@ const choreSlice = createSlice({
       state.chores = action.payload.response;
     }),
       builder.addCase(getChoresAction.rejected, (state, action) => {
-        state.error = "Något gick fel";
+        state.error = "Kunde inte hämta hushållets sysslor";
       }),
       builder.addCase(addChoreAction.fulfilled, (state, action) => {
         state.chores.push(action.payload);
       }),
       builder.addCase(addChoreAction.rejected, (state, action) => {
-        state.error = "Något gick fel";
+        state.error = "Kunde inte lägga till sysslan";
       }),
       builder.addCase(removeChoreAction.rejected, (state, action) => {
-        state.error = "Något gick fel";
+        state.error = "Kunde inte ta bort sysslan";
       }),
       builder.addCase(resetErrorAction, (state, action) => {
         state.error = undefined;

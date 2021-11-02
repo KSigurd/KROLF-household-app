@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addHoushold, getHouseHolds } from "../../data/fireStoreModule";
+import { addHoushold, getHouseHolds, updateHoushold } from "../../data/fireStoreModule";
 import { resetErrorAction } from "../globalActions";
 import { Household, CreateHousehold, CreateHouseholdData } from "../../interfaces/households";
 import { addHouseholdUserAction } from "../householdUser/householdUserSlice";
@@ -33,14 +33,9 @@ export const getHouseholdsAction = createAsyncThunk<
 
 export const setActiveHousholdAction = createAsyncThunk<
   string,
-  string,
-  ThunkConfig
->("setActiveHousehold", async (householdId, { rejectWithValue }) => {
-  try {
-    return householdId
-  } catch (e) {
-    return rejectWithValue(false);
-  }
+  string
+>("setActiveHousehold", async (householdId) => {
+  return householdId
 });
 
 export const addHouseholdAction = createAsyncThunk<
@@ -59,6 +54,19 @@ export const addHouseholdAction = createAsyncThunk<
       householdId,
     }
     dispatch(addHouseholdUserAction({newHouseholdUser: householdUser}));
+    return household;
+  } catch (e) {
+    return rejectWithValue(false);
+  }
+});
+
+export const updateHouseholdAction = createAsyncThunk<
+  Household,
+  Household,
+  ThunkConfig
+>("updateHousehold", async (household, { dispatch, rejectWithValue }) => {
+  try {
+    await updateHoushold(household);
     return household;
   } catch (e) {
     return rejectWithValue(false);
@@ -89,22 +97,28 @@ const householdSlice = createSlice({
       state.households = action.payload.response;
     }),
       builder.addCase(getHouseholdsAction.rejected, (state, action) => {
-        state.error = "Något gick fel";
+        state.error = "Kunde inte hämta hushåll";
       }),
       builder.addCase(addHouseholdAction.fulfilled, (state, action) => {
         state.households.push(action.payload);
       }),
       builder.addCase(addHouseholdAction.rejected, (state, action) => {
-        state.error = "Något gick fel";
+        state.error = "Kunde inte lägga till hushållet";
       }),
       builder.addCase(setActiveHousholdAction.fulfilled, (state, action) => {
         state.activeHouseholdId = action.payload;
       }),
-      builder.addCase(setActiveHousholdAction.rejected, (state, action) => {
-        state.error = "Något gick fel";
-      }),
       builder.addCase(resetErrorAction, (state, action) => {
         state.error = undefined;
+      }),
+      builder.addCase(updateHouseholdAction.fulfilled, (state, action) => {
+        const index = state.households.findIndex(hh => 
+          hh.id === action.payload.id
+        );
+        state.households[index] = action.payload;
+      }),
+      builder.addCase(updateHouseholdAction.rejected, (state, action) => {
+        state.error = "Kunde inte uppdatera hushållet";
       })
     },
 });

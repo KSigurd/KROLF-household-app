@@ -2,7 +2,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   addHouseholdUser,
   getHouseholdUsers,
-  updateHouseholdUser
+  updateHouseholdUser,
+  getHouseholdUsersForLoggedInUser
 } from "../../data/fireStoreModule";
 import { resetErrorAction } from "../globalActions";
 import { CreateHouseholdUser, HouseholdUser } from "../../interfaces/householdUser";
@@ -11,13 +12,28 @@ import { householdUser } from "../../data/mockHouseholdData";
 
 interface HouseholdUserState {
   householdUsers: HouseholdUser[];
+  householdUsersForLoggedInUser: HouseholdUser[];
   error: string | undefined;
 }
 
 const initialState: HouseholdUserState = {
   householdUsers: [],
+  householdUsersForLoggedInUser: [],
   error: undefined,
 };
+
+export const getHouseholdUserForLoggedInUserAction = createAsyncThunk<
+  { response: HouseholdUser[] },
+  string,
+  ThunkConfig
+>("getHouseholdUsersForLoggedInUser", async (userId, { rejectWithValue }) => {
+  try {
+    const response = await getHouseholdUsersForLoggedInUser(userId);
+    return { response };
+  } catch (e) {
+    return rejectWithValue(false);
+  }
+});
 
 export const getHouseholdUserAction = createAsyncThunk<
   { response: HouseholdUser[] },
@@ -92,13 +108,13 @@ const householdUserSlice = createSlice({
     }),
       builder.addCase(getHouseholdUserAction.rejected, (state, action) => {
         state.householdUsers = [];
-        state.error = "Något gick fel";
+        state.error = "Kunde inte hämta data om hushållets användare";
       }),
       builder.addCase(addHouseholdUserAction.fulfilled, (state, action) => {
         state.householdUsers.push(action.payload);
       }),
       builder.addCase(addHouseholdUserAction.rejected, (state, action) => {
-        state.error = "Något gick fel";
+        state.error = "Kunde inte gå med i hushållet";
       }),
       builder.addCase(resetErrorAction, (state, action) => {
         state.error = undefined;
@@ -111,7 +127,14 @@ const householdUserSlice = createSlice({
       }),
       builder.addCase(updateHouseholdUserAction.rejected, (state, action) => {
         state.error = "Något gick fel";
-      })
+      }),
+      builder.addCase(getHouseholdUserForLoggedInUserAction.fulfilled, (state, action) => {
+        state.householdUsersForLoggedInUser = action.payload.response;
+      }),
+        builder.addCase(getHouseholdUserForLoggedInUserAction.rejected, (state, action) => {
+          state.householdUsers = [];
+          state.error = "Kunde inte hämta användardata";
+        })
   },
 });
 
