@@ -11,6 +11,7 @@ import { setActiveHousholdAction, updateHouseholdAction } from "../store/househo
 import { RootStackParamList } from "../navigation/RootNavigator";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { isUserAdmin } from "../store/householdUser/householdUserSelectors";
+import LogoutButton from "../components/LogoutButton";
 
 type Props = NativeStackScreenProps<
   RootStackParamList,
@@ -69,7 +70,9 @@ const ProfileScreen = ({ navigation }: Props) => {
                 />
               );
             })}
+            <LogoutButton onClick={() => navigation.replace("Login")} />
           </View>
+
           <View style={styles.NPbuttonRoot}>
             <AddHouseholdButton
               onAddHousehold={() => navigation.navigate("CreateHousehold")}
