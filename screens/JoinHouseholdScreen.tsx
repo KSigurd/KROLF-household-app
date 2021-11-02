@@ -1,21 +1,17 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Formik } from "formik";
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, Surface, Text, TouchableRipple } from "react-native-paper";
+import { Button, Text } from "react-native-paper";
 import * as Yup from "yup";
 import ThemedTextInput from "../components/ThemedTextInput";
-import { avatars } from "../data/avatarData";
-import { Avatar } from "../interfaces/avatar";
 import { RootStackParamList } from "../navigation/RootNavigator";
-import { househouldUsersFromHousehold, availableAvatars } from "../store/householdUser/householdUserSelectors";
-import { addHouseholdUserAction } from "../store/householdUser/householdUserSlice";
+import { selectHouseholdByInviteCode } from "../store/household/hoseholdSelector";
+import { setActiveHousholdAction } from "../store/household/householdSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 
 interface ParamsToValidate {
-  inviteCode: string;
-  name: string;
-  avatarId: string;
+  inviteCode: number;
 }
 
 type PostSchemaType = Record<keyof ParamsToValidate, Yup.AnySchema>;
@@ -35,54 +31,27 @@ const validationSchema = Yup.object().shape<PostSchemaType>({
     .min(6, "En inbjudningskod måste innehålla 6 siffror")
     .max(6, "En inbjudningskod måste innehålla 6 siffror")
     .required(),
-  name: Yup.string().required("Du måste ange ett namn"),
-  avatarId: Yup.string().min(1, "Välj en avatar"),
 });
 
 type Props = NativeStackScreenProps<RootStackParamList, "JoinHousehold">;
 
 const JoinHouseholdScreen: FC<Props> = ({ navigation }: Props) => {
-  const [avatar, setAvatar] = useState("");
   const dispatch = useAppDispatch();
-  const userState = useAppSelector((state) => state.user);
   const inputParams: ParamsToValidate = {
-    inviteCode: "",
-    name: "",
-    avatarId: avatar,
+    inviteCode: 0,
   } as ParamsToValidate;
 
+  const householdIdFromInviteCode = useAppSelector(
+    selectHouseholdByInviteCode(Number(inputParams.inviteCode))
+  );
+  console.log(householdIdFromInviteCode, "invitecode")
+
   const handleSubmit = async (inputParams: ParamsToValidate) => {
-    await dispatch(
-      addHouseholdUserAction({
-        inviteCode: Number(inputParams.inviteCode),
-        newHouseholdUser: {
-          avatarId: inputParams.avatarId,
-          name: inputParams.name,
-          householdId: "",
-          isAdmin: false,
-          userId: userState.user.id,
-        },
-      })
-    ).then(() => {
-      setAvatar("");
-      navigation.navigate("Profile");
-    });
+    if (householdIdFromInviteCode)
+      await dispatch(setActiveHousholdAction(householdIdFromInviteCode?.id)).then(() => {
+        navigation.navigate("AddHouseholdUserInfoModalScreen");
+      });
   };
-
-  const chooseAvatar = (avatar: Avatar) => {
-    setAvatar(avatar.id);
-  };
-
-
-  // const activeHouseholdId = useAppSelector(
-  //   (state) => state.household.activeHouseholdId
-  // );
-  // const householdUsersFromActiveHousehold = useAppSelector(
-  //   househouldUsersFromHousehold(activeHouseholdId)
-  // );
-  // const availableAvatarList = useAppSelector(
-  //   availableAvatars(householdUsersFromActiveHousehold)
-  // );
 
   return (
     <Formik
@@ -103,45 +72,11 @@ const JoinHouseholdScreen: FC<Props> = ({ navigation }: Props) => {
             <ThemedTextInput
               secureTextEntry={false}
               label="Inbjudningskod"
-              value={values.inviteCode}
+              value={String(values.inviteCode)}
               onChangeText={handleChange<keyof ParamsToValidate>("inviteCode")}
               onBlur={handleBlur<keyof ParamsToValidate>("inviteCode")}
               helperText={touched.inviteCode && errors.inviteCode}
             />
-            <ThemedTextInput
-              secureTextEntry={false}
-              label="Ditt namn i hushållet"
-              value={values.name}
-              onChangeText={handleChange<keyof ParamsToValidate>("name")}
-              onBlur={handleBlur<keyof ParamsToValidate>("name")}
-              helperText={touched.name && errors.name}
-            />
-            <View style={styles.selectAvatar}>
-              <Text style={styles.buttonText}>Välj din avatar</Text>
-              <Surface style={styles.avatarContainer}>
-                {avatars.map((prop, key) => {
-                  return (
-                    <TouchableRipple
-                      key={key}
-                      borderless={true}
-                      style={[
-                        styles.repeatabilityCircle,
-                        styles.avatarButton,
-                        prop.id === avatar
-                          ? styles.selectedAvatarBackground
-                          : styles.unselectedAvatarBackground,
-                      ]}
-                      onPress={() => {
-                        values.avatarId = prop.id;
-                        chooseAvatar(prop);
-                      }}
-                    >
-                      <Text style={styles.buttonText}>{prop.avatar}</Text>
-                    </TouchableRipple>
-                  );
-                })}
-              </Surface>
-            </View>
           </View>
           <Button
             icon="plus-circle-outline"

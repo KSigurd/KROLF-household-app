@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { LogBox, ScrollView, StyleSheet, View } from "react-native";
+import { LogBox, ScrollView, StyleSheet, View, Text } from "react-native";
 import BigThemedButton from "../components/BigThemedButton";
 import ChoreSurface from "../components/ChoreSurface";
 import RenderUserInfo from "../components/RenderUserInfo";
@@ -30,6 +30,7 @@ const ChoresScreen = ({ navigation }: any) => {
   return (
     <View style={{ flex: 1, marginHorizontal: 10, marginBottom: 10 }}>
       <RenderUserInfo onClick={ () => {navigation.navigate("EditHouseholdUser")}}/>
+      <Text>{household?.inviteCode}</Text>
       <ScrollView style={{ flex: 1 }}>
         {allHouseholdChores.map((prop) => {
           return (

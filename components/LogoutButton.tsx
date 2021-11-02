@@ -13,9 +13,9 @@ const LogoutButton = ({ onClick }: Props) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user);
 
-  const activeHouseholdState = useAppSelector((state) => state.user);
+  const activeUserState = useAppSelector((state) => state.user);
   const logoutUser = async (user: User) => {
-    activeHouseholdState.loggedIn = false;
+    activeUserState.loggedIn = false;
     await dispatch(logoutUserAction(user)).then(() => {
       onClick();
     });
