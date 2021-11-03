@@ -42,8 +42,6 @@ const LoginScreen = ({ navigation }: Props) => {
   //   useEffect(() => {
 
   //     dispatch(getStatisticsAction(activeHouseholdState.id))
-  //    console.log({statisticsState})
-  //    console.log("hejsvejs")
 
   // })
   return (

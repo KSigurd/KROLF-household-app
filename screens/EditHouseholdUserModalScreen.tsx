@@ -68,15 +68,12 @@ const EditHouseholdUserModalScreen = ({ navigation }: Props) => {
   };
 
   const handleSubmit = async (inputParams: userInfo) => {
-    console.log("inne i fkn submt");
     if (userData) {
       const updatedHouseholdUser = {
         ...userData,
         avatarId: inputParams.avatar.id,
         name: inputParams.name,
       };
-
-      console.log(updatedHouseholdUser);
       await dispatch(
         updateHouseholdUserAction(updatedHouseholdUser)
 

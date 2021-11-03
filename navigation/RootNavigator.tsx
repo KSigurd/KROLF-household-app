@@ -30,8 +30,10 @@ export type RootStackParamList = {
   };
   ChoreDescriptionModalScreen: {
     choreId: string;
+  }; 
+  AddHouseholdUserInfoModalScreen:{
+    inviteCode:string
   };
-  AddHouseholdUserInfoModalScreen: undefined;
   EditHouseholdUser: undefined;
 };
 

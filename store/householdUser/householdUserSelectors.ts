@@ -10,14 +10,14 @@ export const isUserAdmin = (householdId: string, householdUsers: HouseholdUser[]
     )?.isAdmin;
   };
 
-  export const househouldUsersFromHousehold = (householdId: string)  => (state: RootState) => {
+  export const househouldUsersFromHousehold = (householdId?: string)  => (state: RootState) => {
+    console.log(householdId, "from selector");
     let array: HouseholdUser[] = [];
     state.householdUser.householdUsers.forEach(hu => {
       if(hu.householdId === householdId){
         array.push(hu);
       }
     })
-    console.log("innan return", array)
     return array;
   }
 

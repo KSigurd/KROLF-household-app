@@ -289,7 +289,7 @@ export async function getHouseHolds(userId: string) {
       })
       .catch((err) => console.log(err));
   }
-  console.log("från databasen : ", households);
+  //console.log("från databasen : ", households);
   return households;
 }
 

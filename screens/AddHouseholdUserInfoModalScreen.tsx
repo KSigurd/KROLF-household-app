@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Formik } from "formik";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Surface, Text, TouchableRipple } from "react-native-paper";
 import * as Yup from "yup";
@@ -8,13 +8,22 @@ import ThemedTextInput from "../components/ThemedTextInput";
 import { getHouseHolds } from "../data/fireStoreModule";
 import { Avatar } from "../interfaces/avatar";
 import { RootStackParamList } from "../navigation/RootNavigator";
-import { selectHouseholdById } from "../store/household/hoseholdSelector";
-import { getHouseholdsAction } from "../store/household/householdSlice";
+import {
+  selectHouseholdById,
+  selectHouseholdByInviteCode,
+} from "../store/household/hoseholdSelector";
+import {
+  getHouseholdsAction,
+  setActiveHousholdAction,
+} from "../store/household/householdSlice";
 import {
   availableAvatars,
   househouldUsersFromHousehold,
 } from "../store/householdUser/householdUserSelectors";
-import { addHouseholdUserAction } from "../store/householdUser/householdUserSlice";
+import {
+  addHouseholdUserAction,
+  getHouseholdUserAction,
+} from "../store/householdUser/householdUserSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 
 interface ParamsToValidate {
@@ -31,20 +40,43 @@ const validationSchema = Yup.object().shape<PostSchemaType>({
 
 type Props = NativeStackScreenProps<RootStackParamList, "JoinHousehold">;
 
-const AddHouseholdUserInfoModalScreen: FC<Props> = ({ navigation }: Props) => {
+const AddHouseholdUserInfoModalScreen: FC<Props> = ({
+  navigation,
+  route,
+}: Props) => {
   const [avatar, setAvatar] = useState("");
   const dispatch = useAppDispatch();
   const userState = useAppSelector((state) => state.user);
+  const inviteCode = route.params;
+
+  const householdIdFromInviteCode = useAppSelector(
+    selectHouseholdByInviteCode(Number(inviteCode))
+  );
+  console.log(inviteCode, "1");
+  console.log(householdIdFromInviteCode, "2");
+
+  useEffect(() => {
+    if (householdIdFromInviteCode?.id)
+      dispatch(setActiveHousholdAction(householdIdFromInviteCode?.id));
+  }, [householdIdFromInviteCode?.id]);
 
   const activeHouseholdId = useAppSelector(
     (state) => state.household.activeHouseholdId
-  );
+  ); //sätts i början innan useEffecten? eller?
+
+ 
+
+  // console.log(householdUsersFromActiveHousehold);
+
+  useEffect(() => {
+    dispatch(getHouseholdUserAction(activeHouseholdId));
+  }, [activeHouseholdId]);
+
+  //console.log("active", activeHouseholdId);
 
   const householdObject = useAppSelector(
     selectHouseholdById(activeHouseholdId)
   );
-
-  console.log("hallo",activeHouseholdId)
 
   const inputParams: ParamsToValidate = {
     name: "",
@@ -58,7 +90,7 @@ const AddHouseholdUserInfoModalScreen: FC<Props> = ({ navigation }: Props) => {
         newHouseholdUser: {
           avatarId: inputParams.avatarId,
           name: inputParams.name,
-          householdId: activeHouseholdId,
+          householdId: householdIdFromInviteCode?.id || "",
           isAdmin: false,
           userId: userState.user.id,
         },
@@ -66,21 +98,28 @@ const AddHouseholdUserInfoModalScreen: FC<Props> = ({ navigation }: Props) => {
     ).then(() => {
       setAvatar("");
     });
-    await dispatch(getHouseholdsAction(userState.user.id));
-    navigation.replace("Profile");
+    await dispatch(getHouseholdsAction(userState.user.id)).then(() =>
+      navigation.replace("Profile")
+    );
   };
 
   const chooseAvatar = (avatar: Avatar) => {
     setAvatar(avatar.id);
   };
 
+  console.log("activehousehold",activeHouseholdId);
   const householdUsersFromActiveHousehold = useAppSelector(
     househouldUsersFromHousehold(activeHouseholdId)
   );
+  // console.log(householdUsersFromActiveHousehold)
 
   const availableAvatarList = useAppSelector(
     availableAvatars(householdUsersFromActiveHousehold)
   );
+
+  const changeOnName = () => {
+    dispatch(getHouseholdUserAction(activeHouseholdId));
+  };
 
   return (
     <Formik
@@ -98,43 +137,48 @@ const AddHouseholdUserInfoModalScreen: FC<Props> = ({ navigation }: Props) => {
       }) => (
         <View style={styles.root}>
           <View style={styles.titleView}>
-            <Text style={styles.title}>Personliga uppgifter i hushållet {householdObject?.name}</Text>
+            <Text style={styles.title}>
+              Personliga uppgifter i hushållet {householdObject?.name}
+            </Text>
           </View>
           <View>
             <ThemedTextInput
               secureTextEntry={false}
               label="Ditt namn i hushållet"
               value={values.name}
+              onChange={() => changeOnName()}
               onChangeText={handleChange<keyof ParamsToValidate>("name")}
               onBlur={handleBlur<keyof ParamsToValidate>("name")}
               helperText={touched.name && errors.name}
             />
-            <View style={styles.selectAvatar}>
-              <Text style={styles.buttonText}>Välj din avatar</Text>
-              <Surface style={styles.avatarContainer}>
-                {availableAvatarList.map((prop, key) => {
-                  return (
-                    <TouchableRipple
-                      key={key}
-                      borderless={true}
-                      style={[
-                        styles.repeatabilityCircle,
-                        styles.avatarButton,
-                        prop.id === avatar
-                          ? styles.selectedAvatarBackground
-                          : styles.unselectedAvatarBackground,
-                      ]}
-                      onPress={() => {
-                        values.avatarId = prop.id;
-                        chooseAvatar(prop);
-                      }}
-                    >
-                      <Text style={styles.buttonText}>{prop.avatar}</Text>
-                    </TouchableRipple>
-                  );
-                })}
-              </Surface>
-            </View>
+            {values.name.length > 2 ? (
+              <View style={styles.selectAvatar}>
+                <Text style={styles.buttonText}>Välj din avatar</Text>
+                <Surface style={styles.avatarContainer}>
+                  {availableAvatarList.map((prop, key) => {
+                    return (
+                      <TouchableRipple
+                        key={key}
+                        borderless={true}
+                        style={[
+                          styles.repeatabilityCircle,
+                          styles.avatarButton,
+                          prop.id === avatar
+                            ? styles.selectedAvatarBackground
+                            : styles.unselectedAvatarBackground,
+                        ]}
+                        onPress={() => {
+                          values.avatarId = prop.id;
+                          chooseAvatar(prop);
+                        }}
+                      >
+                        <Text style={styles.buttonText}>{prop.avatar}</Text>
+                      </TouchableRipple>
+                    );
+                  })}
+                </Surface>
+              </View>
+            ) : null}
           </View>
           <Button
             icon="plus-circle-outline"

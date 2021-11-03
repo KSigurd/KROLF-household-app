@@ -1,17 +1,25 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Formik } from "formik";
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
 import * as Yup from "yup";
 import ThemedTextInput from "../components/ThemedTextInput";
 import { RootStackParamList } from "../navigation/RootNavigator";
 import { selectHouseholdByInviteCode } from "../store/household/hoseholdSelector";
-import { setActiveHousholdAction } from "../store/household/householdSlice";
+import {
+  getHouseholdsAction,
+  setActiveHousholdAction,
+} from "../store/household/householdSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 
 interface ParamsToValidate {
-  inviteCode: number;
+  inviteCode: string;
+}
+
+interface Props {
+  inviteCode: string;
+  navigation: any;
 }
 
 type PostSchemaType = Record<keyof ParamsToValidate, Yup.AnySchema>;
@@ -33,24 +41,37 @@ const validationSchema = Yup.object().shape<PostSchemaType>({
     .required(),
 });
 
-type Props = NativeStackScreenProps<RootStackParamList, "JoinHousehold">;
+//type Props = NativeStackScreenProps<RootStackParamList, "JoinHousehold">;
 
-const JoinHouseholdScreen: FC<Props> = ({ navigation }: Props) => {
+const JoinHouseholdScreen: FC<Props> = ({ navigation, inviteCode }: Props) => {
   const dispatch = useAppDispatch();
   const inputParams: ParamsToValidate = {
-    inviteCode: 0,
+    inviteCode: "",
   } as ParamsToValidate;
 
-  const householdIdFromInviteCode = useAppSelector(
-    selectHouseholdByInviteCode(Number(inputParams.inviteCode))
-  );
-  console.log(householdIdFromInviteCode, "invitecode")
+  let inputValueOfInviteCode = " ";
+
+  // const change = (value: string) => {
+
+  //   inputValueOfInviteCode = value;
+  // // }
+
+  // useEffect(() => {
+  //   dispatch(setActiveHousholdAction(inviteCode));
+  //   console.log(inputValueOfInviteCode);
+  // }, [inviteCode]);
+
+  // const userState = useAppSelector((state) => state.user);
+
+  // useEffect(() => {
+  //   dispatch(getHouseholdsAction(userState.user.id));
+  // }, [userState.user]);
+
 
   const handleSubmit = async (inputParams: ParamsToValidate) => {
-    if (householdIdFromInviteCode)
-      await dispatch(setActiveHousholdAction(householdIdFromInviteCode?.id)).then(() => {
-        navigation.navigate("AddHouseholdUserInfoModalScreen");
-      });
+    //console.log("inoputpapa", inputParams.inviteCode);
+    inviteCode = inputParams.inviteCode;
+    navigation.navigate("AddHouseholdUserInfoModalScreen", inviteCode);
   };
 
   return (
@@ -58,6 +79,7 @@ const JoinHouseholdScreen: FC<Props> = ({ navigation }: Props) => {
       initialValues={inputParams}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
+      //handleChange={change}
     >
       {({
         handleChange,
@@ -66,14 +88,21 @@ const JoinHouseholdScreen: FC<Props> = ({ navigation }: Props) => {
         values,
         touched,
         errors,
+        setFieldValue,
       }) => (
         <View style={styles.root}>
           <View>
             <ThemedTextInput
               secureTextEntry={false}
               label="Inbjudningskod"
-              value={String(values.inviteCode)}
-              onChangeText={handleChange<keyof ParamsToValidate>("inviteCode")}
+              value={values.inviteCode}
+              // onChange={(value) => setFieldValue("inviteCode", Number(value))}
+              //onChange={() => change(values.inviteCode)}
+              onChangeText={
+                handleChange<keyof ParamsToValidate>("inviteCode")
+                //inviteCode= value
+                //setFieldValue("inviteCode", value);
+              }
               onBlur={handleBlur<keyof ParamsToValidate>("inviteCode")}
               helperText={touched.inviteCode && errors.inviteCode}
             />
@@ -85,7 +114,9 @@ const JoinHouseholdScreen: FC<Props> = ({ navigation }: Props) => {
             labelStyle={styles.buttonIconSize}
             uppercase={false}
             style={styles.NPbutton}
-            onPress={() => handleSubmit()}
+            onPress={() => {
+              handleSubmit();
+            }}
           >
             <Text style={styles.buttonText}>Gå med</Text>
           </Button>

@@ -5,5 +5,5 @@ export const selectHouseholdById = (id: string) => (state: RootState) => {
 }
 
 export const selectHouseholdByInviteCode = (inviteCode: number) => (state: RootState) => {
-    return state.household.households.find(house => house.inviteCode === inviteCode);
+    return state.household.households.find(house => house?.inviteCode === inviteCode);
 }
