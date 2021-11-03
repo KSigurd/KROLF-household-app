@@ -53,19 +53,23 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Surface, Text, TouchableRipple } from "react-native-paper";
+import { avatars } from "../data/avatarData";
+import { HouseholdUser } from "../interfaces/householdUser";
 import { selectChoreById } from "../store/chore/choreSelectors";
 import { getChoresAction, removeChoreAction } from "../store/chore/choreSlice";
 import { getCompletedChoresAction } from "../store/completedChore/completedChoreSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
+import { styles } from "../styles/styles";
 import SmallIconButton from "./SmallIconButton";
 
 interface Props {
   choreId: string;
   isEditPressed: boolean;
   navigation: any;
+  completedBy: HouseholdUser[];
 }
 
-const ChoreSurface = ({ navigation, choreId, isEditPressed }: Props) => {
+const ChoreSurface = ({ navigation, choreId, isEditPressed, completedBy }: Props) => {
   const dispatch = useAppDispatch();
   const activeHouseholdState = useAppSelector(
     (state) => state.household.activeHouseholdId
@@ -85,7 +89,7 @@ const ChoreSurface = ({ navigation, choreId, isEditPressed }: Props) => {
     <View>
       <Surface style={stylesLocal.surface}>
         <TouchableRipple
-        borderless={true}
+          borderless={true}
           style={stylesLocal.chip}
           onPress={() => {
             navigation.navigate("ChoreDescriptionModalScreen", choreId);
@@ -93,11 +97,41 @@ const ChoreSurface = ({ navigation, choreId, isEditPressed }: Props) => {
         >
           <Text style={stylesLocal.surfaceText}>{chore.title}</Text>
         </TouchableRipple>
+        <View>
+        {completedBy.length ? (
+            <Text style={[styles.buttonText, styles.choresButtonAdditions]}>
+              {completedBy.map(user => {
+                return avatars.find(avatar => avatar.id = user.avatarId)?.avatar
+              })}
+                {/* { avatars.map(avatar => {
+                  const result = completedBy.find(user => user.avatarId = avatar.id)
+                  if(result) return (result)
+                
+                })} */}
+            </Text>
+          ) : (
+            <Surface
+              style={[
+                styles.repeatabilityCircle,
+                isLate
+                  ? styles.isLateBackground
+                  : styles.isNotLateBackground,
+              ]}
+            >
+              <Text
+                style={isLate ? styles.isLateText : styles.isNotLateText}
+              >
+                {daysSinceLast}
+              </Text>
+            </Surface>
+        </View>
         {isEditPressed ? (
           <View style={stylesLocal.editContainer}>
             <SmallIconButton
               typeOfIcon="pencil-outline"
-              onPress={() => navigation.navigate("EditChoreModalScreen", choreId)}
+              onPress={() =>
+                navigation.navigate("EditChoreModalScreen", choreId)
+              }
             />
             <SmallIconButton
               typeOfIcon="delete-outline"
