@@ -4,6 +4,7 @@ import React, { FC, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Surface, Text, TouchableRipple } from "react-native-paper";
 import * as Yup from "yup";
+import BigThemedButton from "../components/BigThemedButton";
 import ThemedTextInput from "../components/ThemedTextInput";
 import { avatars } from "../data/avatarData";
 import { Avatar } from "../interfaces/avatar";
@@ -143,17 +144,13 @@ const JoinHouseholdScreen: FC<Props> = ({ navigation }: Props) => {
               </Surface>
             </View>
           </View>
-          <Button
-            icon="plus-circle-outline"
-            mode="contained"
-            color="#fff"
-            labelStyle={styles.buttonIconSize}
-            uppercase={false}
-            style={styles.NPbutton}
+          <View style={styles.themedButtonContainer}>
+          <BigThemedButton
+            typeOfIcon="plus-circle-outline"
+            buttonText="Gå med"
             onPress={() => handleSubmit()}
-          >
-            <Text style={styles.buttonText}>Gå med</Text>
-          </Button>
+          />
+          </View>
         </View>
       )}
     </Formik>
@@ -166,11 +163,14 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     justifyContent: "space-between",
+    marginHorizontal: 10,
+    marginVertical: 10
   },
   selectAvatar: {
     alignItems: "flex-start",
     flexDirection: "column",
     marginHorizontal: 10,
+    marginVertical: 10
   },
   buttonText: {
     fontSize: 18,
@@ -213,13 +213,6 @@ const styles = StyleSheet.create({
   buttonIconSize: {
     fontSize: 25,
   },
-  NPbutton: {
-    width: 150,
-    borderRadius: 100,
-    padding: 10,
-    alignSelf: "center",
-    marginVertical: 10,
-  },
   avatarButton: {
     margin: 0,
     elevation: 0,
@@ -227,4 +220,7 @@ const styles = StyleSheet.create({
   input: {
     elevation: 4,
   },
+  themedButtonContainer: {
+    alignItems: "center"
+  }
 });

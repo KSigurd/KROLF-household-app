@@ -6,6 +6,7 @@ import { Button as NPbutton } from "react-native-paper";
 import ThemedTextInput from "./ThemedTextInput";
 import { User } from "../interfaces/user";
 import { useAppSelector } from "../store/store";
+import BigThemedButton from "./BigThemedButton";
 
 interface Props {
   onSubmit: (user: User) => void;
@@ -57,14 +58,13 @@ const LoginForm: FC<Props> = ({ onSubmit }: Props) => {
               helperText={touched.password && errors.password}
             />
           </View>
-          <NPbutton
-            icon="account-key-outline"
-            mode="contained"
-            style={styles.NPbutton}
+          <View style={styles.NPButtonContainer}>
+          <BigThemedButton
+            typeOfIcon="account-key-outline"
+            buttonText="Logga in"
             onPress={() => handleSubmit()}
-          >
-            Logga in
-          </NPbutton>
+          />
+          </View>
         </View>
       )}
     </Formik>
@@ -78,11 +78,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
   },
-  NPbutton: {
-    width: 150,
-    borderRadius: 100,
-    padding: 10,
-    alignSelf: "center",
-    marginVertical: 10,
+  NPButtonContainer: {
+    alignItems: "center"
   },
 });
