@@ -6,21 +6,26 @@ import RenderUserInfo from "../components/RenderUserInfo";
 import { getChoresAction } from "../store/chore/choreSlice";
 import { selectHouseholdById } from "../store/household/hoseholdSelector";
 import { useAppDispatch, useAppSelector } from "../store/store";
-  
+
 const ChoresScreen = ({ navigation }: any) => {
   LogBox.ignoreLogs(["timer"]);
-    const dispatch = useAppDispatch();
-    const activeHouseholdState = useAppSelector(
-        (state) => state.household.activeHouseholdId
-    );
-    const user = useAppSelector((state) => state.user.user)
-    const allHouseholdChores = useAppSelector((state) => state.chore.chores);
-    const household = useAppSelector(selectHouseholdById(activeHouseholdState));
-    const [isEditPressed, setIsEditPressed] = React.useState(false);
+  const dispatch = useAppDispatch();
+  const activeHouseholdState = useAppSelector(
+    (state) => state.household.activeHouseholdId
+  );
+  const user = useAppSelector((state) => state.user.user);
+  const allHouseholdChores = useAppSelector((state) => state.chore.chores);
+  const household = useAppSelector(selectHouseholdById(activeHouseholdState));
+  const [isEditPressed, setIsEditPressed] = React.useState(false);
 
-    useEffect(() => {
-      dispatch(getChoresAction(activeHouseholdState));
-    }, [activeHouseholdState])
+  const isChores = () => {
+    if(allHouseholdChores.length) return true
+    else return false
+  } 
+
+  useEffect(() => {
+    dispatch(getChoresAction(activeHouseholdState));
+  }, [activeHouseholdState]);
 
   const setIsPressed = () => {
     if (isEditPressed) setIsEditPressed(false);
@@ -29,7 +34,11 @@ const ChoresScreen = ({ navigation }: any) => {
 
   return (
     <View style={{ flex: 1, marginHorizontal: 10, marginBottom: 10 }}>
-      <RenderUserInfo onClick={ () => {navigation.navigate("EditHouseholdUser")}}/>
+      <RenderUserInfo
+        onClick={() => {
+          navigation.navigate("EditHouseholdUser");
+        }}
+      />
       <ScrollView style={{ flex: 1 }}>
         {allHouseholdChores.map((prop) => {
           return (
@@ -43,20 +52,28 @@ const ChoresScreen = ({ navigation }: any) => {
           );
         })}
       </ScrollView>
-      <View style={localStyles.bottomButtonRow}>
+      <View
+        style={
+          isChores()
+            ? localStyles.bottomButtonRow
+            : localStyles.bottomButtonRowOneButton
+        }
+      >
         <BigThemedButton
           typeOfIcon="plus-circle-outline"
           buttonText="Lägg till"
           onPress={() => navigation.navigate("CreateChoreModalScreen")}
         />
-        <BigThemedButton
-          isPressed={isEditPressed}
-          typeOfIcon="pencil-outline"
-          alternateTypeOfIcon="close-circle-outline"
-          buttonText="Ändra"
-          alternateButtonText="Avbryt"
-          onPress={setIsPressed}
-        />
+        {isChores() ? (
+          <BigThemedButton
+            isPressed={isEditPressed}
+            typeOfIcon="pencil-outline"
+            alternateTypeOfIcon="close-circle-outline"
+            buttonText="Ändra"
+            alternateButtonText="Avbryt"
+            onPress={setIsPressed}
+          />
+        ) : null}
       </View>
     </View>
   );
@@ -69,6 +86,14 @@ const localStyles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-end",
     justifyContent: "space-between",
+    zIndex: 1,
+    backgroundColor: "#f0f0f0",
+    height: 75,
+  },
+  bottomButtonRowOneButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     zIndex: 1,
     backgroundColor: "#f0f0f0",
     height: 75,
