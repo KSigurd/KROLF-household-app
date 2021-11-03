@@ -17,8 +17,8 @@ type PostSchemaType = Record<keyof User, Yup.AnySchema>;
 const validationSchema = Yup.object().shape<PostSchemaType>({
   id: Yup.string(),
   email: Yup.string()
-    .email("Mejladressen måste innehålla @ och .com eller .se")
-    .required("Fyll i din mejladress"),
+    .email("E-postadressen måste innehålla @ och .com eller .se")
+    .required("Fyll i din e-postadress"),
   password: Yup.string().required("Du måste ange ditt lösenord").min(1),
 });
 
@@ -43,7 +43,7 @@ const LoginForm: FC<Props> = ({ onSubmit }: Props) => {
         <View style={styles.root}>
           <View>
             <ThemedTextInput
-              label="Användarnamn"
+              label="E-postadress"
               onChangeText={handleChange<keyof User>("email")}
               onBlur={handleBlur<keyof User>("email")}
               value={values.email.trim()}
