@@ -60,17 +60,19 @@ const Repeatability = ({ initialValue, getRepeatability }: Props) => {
             <Title style={[styles.choresButtonTitle, styles.buttonText]}>
               Återkommer:
             </Title>
-            <Text style={{ fontSize: 16 }}>var </Text>
-            <Text
-              style={[
-                styles.buttonText,
-                styles.choresButtonAdditions,
-                stylesLocal.repeatabilityValue,
-              ]}
-            >
-              {repeatability}
-            </Text>
-            <Text style={{ fontSize: 16 }}> dag</Text>
+            <View style={stylesLocal.repeatBox}>
+              <Text style={{ fontSize: 16 }}>var </Text>
+              <Text
+                style={[
+                  styles.buttonText,
+                  styles.choresButtonAdditions,
+                  stylesLocal.repeatabilityValue,
+                ]}
+              >
+                {repeatability}
+              </Text>
+              <Text style={{ fontSize: 16 }}> dag</Text>
+            </View>
           </Surface>
         </TouchableRipple>
       ) : (
@@ -108,4 +110,13 @@ const stylesLocal = StyleSheet.create({
     textAlign: "center",
     textAlignVertical: "center",
   },
+  repeatBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 20,
+    flex: 1,
+  },
+  bla: {
+    flex: 0
+  }
 });
