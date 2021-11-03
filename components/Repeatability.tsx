@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Surface, Title, TouchableRipple } from "react-native-paper";
-import { styles } from "../styles/styles";
 
 interface Props {
   initialValue?: number;
@@ -21,7 +20,7 @@ const Repeatability = ({ initialValue, getRepeatability }: Props) => {
     }
 
     return (
-      <View style={[{ flexDirection: "row", flex: 1 }]}>
+      <View style={stylesLocal.surfaceOne}>
         {repeatabilityNumbers.map((value, index) => {
           return (
             <Text
@@ -45,36 +44,31 @@ const Repeatability = ({ initialValue, getRepeatability }: Props) => {
   };
 
   return (
-    <View style={{padding: 10}}>
-      <Surface style={[styles.fullscreenButton, styles.buttonOutlined]}>
+      <Surface style={stylesLocal.surfaceTwo}>
         {isRepeatabilityValuePressed ? (
           <TouchableRipple
             borderless={true}
-            style={styles.fillParent}
+            style={stylesLocal.touchableRipple}
             onPress={() =>
               isRepeatabilityValuePressed
                 ? setIsRepeatabilityValuePressed(false)
                 : setIsRepeatabilityValuePressed(true)
             }
           >
-            <Surface style={styles.buttonInnerContainer}>
-              <Title style={[styles.choresButtonTitle, styles.buttonText, {fontWeight: "normal"}]}>
+            <View style={stylesLocal.repeateContainer}>
+              <Text style={{fontSize: 18}}>
                 Återkommer:
-              </Title>
+              </Text>
               <View style={stylesLocal.repeatBox}>
                 <Text style={{ fontSize: 16 }}>var </Text>
                 <Text
-                  style={[
-                    styles.buttonText,
-                    styles.choresButtonAdditions,
-                    stylesLocal.repeatabilityValue,
-                  ]}
+                  style={stylesLocal.repeatabilityValue}
                 >
                   {repeatability}
                 </Text>
                 <Text style={{ fontSize: 16 }}> dag</Text>
               </View>
-            </Surface>
+            </View>
           </TouchableRipple>
         ) : (
           <ScrollView
@@ -87,7 +81,6 @@ const Repeatability = ({ initialValue, getRepeatability }: Props) => {
           </ScrollView>
         )}
       </Surface>
-    </View>
   );
 };
 
@@ -118,4 +111,31 @@ const stylesLocal = StyleSheet.create({
     justifyContent: "flex-end",
     flex: 1,
   },
+  surfaceOne: {
+    flexDirection: "row",
+    flex: 1,
+    alignItems: "center",
+  },
+  surfaceTwo: {
+    height: 60,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 18,
+    marginBottom: 18,
+    marginHorizontal: 10,
+    borderRadius: 10,
+    elevation: 4,
+  },
+  touchableRipple: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 10,
+  },
+  repeateContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 20,
+  },  
 });

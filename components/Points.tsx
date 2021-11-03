@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Card, Surface, TouchableRipple } from "react-native-paper";
-import { styles } from "../styles/styles";
+import { Surface, TouchableRipple } from "react-native-paper";
 
 interface Props {
   initialValue?: number;
@@ -21,23 +20,25 @@ const Points = ({ onChange, initialValue }: Props) => {
 
   const displayEnergyValues = () => {
     return (
-        <Card.Actions style={stylesLocal.cardAction}>
-          <View
-            style={{
-              width: "100%",
-              flex: 1,
-              flexDirection: "row",
-              justifyContent: "space-between",
-            }}
-          >
-            {values.map((value, index) => {
-              return (
+      <Surface
+        style={stylesLocal.surfaceOne}
+      >
+        {values.map((value, index) => {
+          return (
+            <View 
+              style={stylesLocal.energyValuesBox}
+              key={index}
+            >
+              <View
+              key={index}
+                style={[
+                  stylesLocal.energyValues,
+                  { backgroundColor: value.color },
+                ]}
+              >
                 <Text
                   key={index}
-                  style={[
-                    stylesLocal.energyValues,
-                    { backgroundColor: value.color },
-                  ]}
+                  style={stylesLocal.pointOptionsText}
                   onPress={() => {
                     onChange(value.points), setEnergyPoints(value.points);
                     setIsEnergyvaluePressed(true);
@@ -45,90 +46,139 @@ const Points = ({ onChange, initialValue }: Props) => {
                 >
                   {value.points}
                 </Text>
-              );
-            })}
-          </View>
-        </Card.Actions>
+              </View>
+            </View>
+          );
+        })}
+      </Surface>
     );
   };
 
   return (
-    <View style={{ paddingHorizontal: 10 }}>
-      <Surface style={[styles.fullscreenButton, styles.buttonOutlined]}>
-        <TouchableRipple
-          borderless={true}
-          style={styles.fillParent}
-          onPress={() =>
-            isEnergyValuePressed
-              ? setIsEnergyvaluePressed(false)
-              : setIsEnergyvaluePressed(true)
-          }
-        >
-          {isEnergyValuePressed ? (
-            <View style={[stylesLocal.cardRow, {backgroundColor: "transparent"}]}>
-              <Card.Title
-                style={[stylesLocal.cardTitle, {backgroundColor: "transparent", alignItems: "flex-start"}]}
-                title="Värde: "
-                subtitle="Hur energikrävande är sysslan?"
-              />
-              <Card.Actions style={stylesLocal.cardAction}>
-                <Text style={stylesLocal.energyValue}>{energyPoints}</Text>
-              </Card.Actions>
-            </View>
-          ) : (
+    <Surface style={stylesLocal.surfaceTwo}>
+      <TouchableRipple
+        borderless={true}
+        style={stylesLocal.fillParent}
+        onPress={() =>
+          isEnergyValuePressed
+            ? setIsEnergyvaluePressed(false)
+            : setIsEnergyvaluePressed(true)
+        }
+      >
+        {isEnergyValuePressed ? (
+          <View
+            style={[stylesLocal.pointContainer, { backgroundColor: "transparent" }]}
+          >
             <View
-              style={{
-                flexDirection: "row",
-              }}
+              style={[
+                stylesLocal.pointBox,
+                {
+                  backgroundColor: "transparent",
+                  alignItems: "flex-start",
+                  justifyContent: "center",
+                  paddingLeft: 20,
+                },
+              ]}
             >
-              {displayEnergyValues()}
+              <Text style={stylesLocal.pointTextTitle}>Värde:</Text>
+              <Text style={stylesLocal.pointTextSubtitle}>
+                hur energikrävande är sysslan?
+              </Text>
             </View>
-          )}
-        </TouchableRipple>
-      </Surface>
-    </View>
+
+            <View style={stylesLocal.chosenEnergyValueContainer}>
+              <View style={stylesLocal.chosenEnergyValue}>
+                <Text style={stylesLocal.chosenEnergyValueText}>
+                  {energyPoints}
+                </Text>
+              </View>
+            </View>
+          </View>
+        ) : (
+          <View
+            style={{
+              flexDirection: "row",
+            }}
+          >
+            {displayEnergyValues()}
+          </View>
+        )}
+      </TouchableRipple>
+    </Surface>
   );
 };
 
 export default Points;
 
 const stylesLocal = StyleSheet.create({
-  cardRow: {
+  pointContainer: {
     flexDirection: "row",
     alignContent: "space-between",
+    justifyContent: "center",
+    height: "100%",
+  },
+  chosenEnergyValueContainer: {
     alignItems: "center",
-    justifyContent: "center"
+    alignContent: "center",
+    justifyContent: "center",
+    paddingHorizontal: 10,
   },
-  card: {
-    flexDirection: "row",
-    backgroundColor: "white",
-    marginHorizontal: 10,
-    marginVertical: 5,
-    borderRadius: 10,
-    elevation: 4,
-  },
-  cardAction: {},
-  cardTitle: {
+  pointBox: {
     flex: 1,
   },
-  energyValue: {
+  chosenEnergyValue: {
     backgroundColor: "#f2f2f2",
-    color: "black",
+    alignItems: "center",
+    justifyContent: "center",
     borderRadius: 100,
-    fontSize: 18,
-    // DESSA TVÅ UNDER HÄR VILL JAG ÄNDRA TILL 30... FILIP
     width: 35,
     height: 35,
-    textAlign: "center",
-    textAlignVertical: "center",
+  },
+  chosenEnergyValueText: {
+    color: "black",
+    fontSize: 18,
   },
   energyValues: {
-    color: "black",
     borderRadius: 100,
-    fontSize: 18,
     width: 50,
     height: 50,
-    textAlign: "center",
-    textAlignVertical: "center",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  pointOptionsText: {
+    color: "black",
+    fontSize: 18,
+  },
+  pointTextTitle: {
+    fontSize: 18,
+  },
+  pointTextSubtitle: {
+    fontSize: 11,
+  },
+  surfaceOne: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 10,
+    alignContent: "center",
+  },
+  surfaceTwo: {
+    height: 60,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 8,
+    marginBottom: 8,
+    borderRadius: 10,
+    elevation: 4,
+    marginHorizontal: 10,
+  },
+  energyValuesBox: {
+    height: 60,
+    justifyContent: "center",
+  },
+  fillParent: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 10,
   },
 });
