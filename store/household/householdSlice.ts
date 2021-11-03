@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addHoushold, getHouseHolds, updateHoushold } from "../../data/fireStoreModule";
+import { addHoushold, getHouseHolds, updateHoushold, getOneHousehold } from "../../data/fireStoreModule";
 import { resetErrorAction } from "../globalActions";
 import { Household, CreateHousehold, CreateHouseholdData } from "../../interfaces/households";
 import { addHouseholdUserAction } from "../householdUser/householdUserSlice";
@@ -9,12 +9,14 @@ import { ThunkConfig, useAppSelector } from "../store";
 interface HouseholdState {
   households: Household[];
   activeHouseholdId: string;
+  temporaryHousehold: Household;
   error: string | undefined;
 }
 
 const initialState: HouseholdState = {
   households: [],
   activeHouseholdId: "",
+  temporaryHousehold: {} as Household,
   error: undefined,
 };
 
@@ -26,6 +28,19 @@ export const getHouseholdsAction = createAsyncThunk<
   try {
     const response = await getHouseHolds(userId);
     return { response };
+  } catch (e) {
+    return rejectWithValue(false);
+  }
+});
+
+export const getOneHouseholdAction = createAsyncThunk<
+Household,
+  number,
+  ThunkConfig
+>("getOneHousehold", async (inviteCode, { rejectWithValue }) => {
+  try {
+    const response = await getOneHousehold(inviteCode);
+    return response;
   } catch (e) {
     return rejectWithValue(false);
   }
@@ -119,7 +134,15 @@ const householdSlice = createSlice({
       }),
       builder.addCase(updateHouseholdAction.rejected, (state, action) => {
         state.error = "Kunde inte uppdatera hushållet";
-      })
+      }),
+      builder.addCase(getOneHouseholdAction.fulfilled, (state, action) => {
+        if(state.households.find(hh => hh.inviteCode === action.payload.inviteCode)) {
+          state.error = "Du är redan medlem i hushållet"
+        } else state.temporaryHousehold = action.payload;
+      }),
+        builder.addCase(getOneHouseholdAction.rejected, (state, action) => {
+          state.error = "Kunde inte hämta hushåll";
+        })
     },
 });
 

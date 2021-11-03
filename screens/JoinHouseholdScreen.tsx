@@ -9,6 +9,7 @@ import { RootStackParamList } from "../navigation/RootNavigator";
 import { selectHouseholdByInviteCode } from "../store/household/hoseholdSelector";
 import {
   getHouseholdsAction,
+  getOneHouseholdAction,
   setActiveHousholdAction,
 } from "../store/household/householdSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
@@ -45,6 +46,7 @@ const validationSchema = Yup.object().shape<PostSchemaType>({
 
 const JoinHouseholdScreen: FC<Props> = ({ navigation, inviteCode }: Props) => {
   const dispatch = useAppDispatch();
+  const errorState = useAppSelector(state => state.household);
   const inputParams: ParamsToValidate = {
     inviteCode: "",
   } as ParamsToValidate;
@@ -68,9 +70,14 @@ const JoinHouseholdScreen: FC<Props> = ({ navigation, inviteCode }: Props) => {
   // }, [userState.user]);
 
 
+
   const handleSubmit = async (inputParams: ParamsToValidate) => {
-    //console.log("inoputpapa", inputParams.inviteCode);
     inviteCode = inputParams.inviteCode;
+    await dispatch(getOneHouseholdAction(Number(inputParams.inviteCode)))
+    // if(errorState){navigation.navion}
+    
+
+    //console.log(response)
     navigation.navigate("AddHouseholdUserInfoModalScreen", inviteCode);
   };
 

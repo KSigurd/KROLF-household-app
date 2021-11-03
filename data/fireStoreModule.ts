@@ -237,6 +237,35 @@ export async function getCompletedChores(householdId: string) {
   return completedChores;
 }
 
+export async function getOneHousehold(inviteCode: number) {
+  let response: Household = {} as Household
+      await firebase
+    .firestore()
+    .collection("households")
+    .where("inviteCode", "==", inviteCode)
+    .get()
+    .then(query => {query.forEach(doc => {
+      response.id = doc.id;
+      response.inviteCode = doc.data().inviteCode;
+      response.name = doc.data().name;
+    })})
+    return response;
+}
+
+// export async function getHouseholdUsersFromOneHousehold(householdId: string) {
+//   let response: HouseholdUser[] = [];
+//       await firebase
+//     .firestore()
+//     .collection("householdUsers")
+//     .where("householdId", "==", householdId)
+//     .get()
+//     .then(query => {query.forEach(doc => {
+//       response.push({ id: doc.id, ...doc.data() } as HouseholdUser);
+//     })})
+//     return response;
+// }
+
+
 /**
  * Takes an object of type Household and writes it to FireStore
  * @requires Household
@@ -357,6 +386,7 @@ export async function getHouseholdUsers(householdId: string) {
 
   return householdUsers;
 }
+
 
 /**
  * Takes an userId of type string and retrieves all HouseholdUser from FireStore connected with user

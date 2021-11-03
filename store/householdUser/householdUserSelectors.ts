@@ -21,6 +21,7 @@ export const isUserAdmin = (householdId: string, householdUsers: HouseholdUser[]
     return array;
   }
 
+
 export const availableAvatars = (householdUsers: HouseholdUser[]) =>  (state: RootState) => {
   let availableAvatars: Avatar[] = [];
   avatars.forEach(avatar => {
