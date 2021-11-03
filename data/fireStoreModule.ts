@@ -1,7 +1,10 @@
 import { Chore, ChoreOmit } from "../interfaces/chore";
 import { CompletedChore } from "../interfaces/completedChore";
 import { Household, CreateHousehold } from "../interfaces/households";
-import { HouseholdUser, CreateHouseholdUser } from "../interfaces/householdUser";
+import {
+  HouseholdUser,
+  CreateHouseholdUser,
+} from "../interfaces/householdUser";
 import {
   ChoreStatisticsDTO,
   CompletedChoresByUserDTO,
@@ -26,7 +29,10 @@ export async function addUser(newUser: User) {
         firebase
           .firestore()
           .collection("users")
-          .add({email: newUser.email.toLowerCase(), password: newUser.password})
+          .add({
+            email: newUser.email.toLowerCase(),
+            password: newUser.password,
+          })
           .catch((err) => console.log(err));
 
         userAdded = true;
@@ -45,7 +51,6 @@ export async function addUser(newUser: User) {
  * @returns {boolean}
  */
 export async function loginUser(user: User) {
- 
   let loggedIn: boolean = false;
   const userPerson = await firebase
     .firestore()
@@ -57,26 +62,24 @@ export async function loginUser(user: User) {
       throw err;
     });
 
-    for (const u of userPerson.docs) {
-      if (u.exists) {
-              user.id = u.id;
-              loggedIn = true;
-            }
-          }
+  for (const u of userPerson.docs) {
+    if (u.exists) {
+      user.id = u.id;
+      loggedIn = true;
+    }
+  }
 
-
-
-    // .then((query) => {
-    //   query.forEach((doc) => {
-    //     if (doc.exists) {
-    //       user.id = doc.id;
-    //       loggedIn = true;
-    //     }
-    //   });
-    // })
-    // .catch((err) => {
-    //   throw err;
-    // });
+  // .then((query) => {
+  //   query.forEach((doc) => {
+  //     if (doc.exists) {
+  //       user.id = doc.id;
+  //       loggedIn = true;
+  //     }
+  //   });
+  // })
+  // .catch((err) => {
+  //   throw err;
+  // });
 
   return loggedIn;
 }
@@ -88,34 +91,34 @@ export async function loginUser(user: User) {
  */
 export async function logoutUser(user: User) {
   const userPerson = await firebase
-  .firestore()
-  .collection("users")
-  .where("email", "==", user.email.toLowerCase())
-  .where("password", "==", user.password)
-  .get()
-  .catch((err) => {
-    throw err;
-  });
-  
+    .firestore()
+    .collection("users")
+    .where("email", "==", user.email.toLowerCase())
+    .where("password", "==", user.password)
+    .get()
+    .catch((err) => {
+      throw err;
+    });
+
   let loggedIn: boolean = false;
   for (const u of userPerson.docs) {
-      if (u.exists) {
-              user.id = u.id;
-              loggedIn = false
-            }
-          }
-    // for()
-    // .then((query) => {
-    //   query.forEach((doc) => {
-    //     if (doc.exists) {
-    //       user.id = doc.id;
-    //       loggedIn = false;
-    //     }
-    //   });      
-    // })
-    // .catch((err) => {
-    //   throw err;
-    // });
+    if (u.exists) {
+      user.id = u.id;
+      loggedIn = false;
+    }
+  }
+  // for()
+  // .then((query) => {
+  //   query.forEach((doc) => {
+  //     if (doc.exists) {
+  //       user.id = doc.id;
+  //       loggedIn = false;
+  //     }
+  //   });
+  // })
+  // .catch((err) => {
+  //   throw err;
+  // });
 
   return loggedIn;
 }
@@ -125,13 +128,13 @@ export async function logoutUser(user: User) {
  * @requires Chore
  */
 export async function addChore(newChore: Chore) {
-  const {id, ...omittedChore} = newChore;
+  const { id, ...omittedChore } = newChore;
   const result = await firebase
     .firestore()
     .collection("chores")
     .add(omittedChore);
 
-    return result.id;
+  return result.id;
 }
 
 /**
@@ -139,7 +142,7 @@ export async function addChore(newChore: Chore) {
  * @requires Chore
  */
 export async function updateChore(modifiedChore: Chore) {
-  const {id, ...omittedChore} = modifiedChore;
+  const { id, ...omittedChore } = modifiedChore;
   await firebase
     .firestore()
     .collection("chores")
@@ -175,22 +178,18 @@ export async function getChores(householdId: string) {
  * @requires choreId
  */
 export async function removeChore(choreId: string) {
-  await firebase
-    .firestore()
-    .collection("chores")
-    .doc(choreId)
-    .delete()
+  await firebase.firestore().collection("chores").doc(choreId).delete();
 
   await firebase
     .firestore()
     .collection("completedChores")
     .where("choreId", "==", choreId)
     .get()
-    .then(query => {
-      query.forEach(doc => {
+    .then((query) => {
+      query.forEach((doc) => {
         doc.ref.delete();
-      })
-    })
+      });
+    });
 }
 
 /**
@@ -212,27 +211,24 @@ export async function addCompletedChore(newCompletedChore: CompletedChore) {
  */
 export async function getCompletedChores(householdId: string) {
   const completedChores: CompletedChore[] = [];
-  await firebase
+  const chores = await firebase
     .firestore()
     .collection("chores")
     .where("householdId", "==", householdId)
-    .get()
-    .then((query) => {
-      query.forEach(async (doc) => {
-        await firebase
-          .firestore()
-          .collection("completedChores")
-          .where("choreId", "==", doc.id)
-          .get()
-          .then((query) => {
-            query.forEach((doc) => {
-              completedChores.push(doc.data() as CompletedChore);
-            });
-          })
-          .catch((err) => console.log(err));
+    .get();
+
+  for (const chore of chores.docs) {
+    await firebase
+      .firestore()
+      .collection("completedChores")
+      .where("choreId", "==", chore.id)
+      .get()
+      .then((query) => {
+        query.forEach((doc) => {
+          completedChores.push({choreId: doc.data().choreId, date: doc.data().date.toDate(), householdUserId: doc.data().householdUserId} as CompletedChore);
+        });
       });
-    })
-    .catch((err) => console.log(err));
+  }
 
   return completedChores;
 }
@@ -242,11 +238,11 @@ export async function getCompletedChores(householdId: string) {
  * @requires Household
  */
 export async function addHoushold(newHousehold: CreateHousehold) {
- const result = await firebase
+  const result = await firebase
     .firestore()
     .collection("households")
-    .add(newHousehold)
-    return result.id
+    .add(newHousehold);
+  return result.id;
 }
 
 /**
@@ -254,7 +250,7 @@ export async function addHoushold(newHousehold: CreateHousehold) {
  * @requires Household
  */
 export async function updateHoushold(modifiedHousehold: Household) {
-  const {id, ...omittedHousehold} = modifiedHousehold;
+  const { id, ...omittedHousehold } = modifiedHousehold;
   await firebase
     .firestore()
     .collection("households")
@@ -298,27 +294,29 @@ export async function getHouseHolds(userId: string) {
  * @requires HouseholdUserOmit
  * @optional InviteCode
  */
-export async function addHouseholdUser(newHouseholdUser: CreateHouseholdUser, inviteCode?: number) {
-
-if(inviteCode) {
-  await firebase
-    .firestore()
-    .collection("households")
-    .where("inviteCode", "==", inviteCode)
-    .get()
-    .then(query => {
-      query.forEach(doc => {
-        newHouseholdUser.householdId = doc.id;
+export async function addHouseholdUser(
+  newHouseholdUser: CreateHouseholdUser,
+  inviteCode?: number
+) {
+  if (inviteCode) {
+    await firebase
+      .firestore()
+      .collection("households")
+      .where("inviteCode", "==", inviteCode)
+      .get()
+      .then((query) => {
+        query.forEach((doc) => {
+          newHouseholdUser.householdId = doc.id;
+        });
       })
-    })
-    .catch((err) => console.log(err));
-}
-  
+      .catch((err) => console.log(err));
+  }
+
   const result = await firebase
     .firestore()
     .collection("householdUsers")
-    .add(newHouseholdUser)
-    return result.id;
+    .add(newHouseholdUser);
+  return result.id;
 }
 
 /**
@@ -328,7 +326,7 @@ if(inviteCode) {
 export async function updateHouseholdUser(
   modifiedHouseholdUser: HouseholdUser
 ) {
-  const {id, ...omittedHouseholdUser} = modifiedHouseholdUser;
+  const { id, ...omittedHouseholdUser } = modifiedHouseholdUser;
   await firebase
     .firestore()
     .collection("householdUsers")
@@ -363,7 +361,7 @@ export async function getHouseholdUsers(householdId: string) {
  * @requires userId
  * @returns {HouseholdUser[]}
  */
- export async function getHouseholdUsersForLoggedInUser(userId: string) {
+export async function getHouseholdUsersForLoggedInUser(userId: string) {
   const householdUsers: HouseholdUser[] = [];
   await firebase
     .firestore()
@@ -374,7 +372,7 @@ export async function getHouseholdUsers(householdId: string) {
       query.forEach((doc) => {
         householdUsers.push({ id: doc.id, ...doc.data() } as HouseholdUser);
       });
-    })
+    });
 
   return householdUsers;
 }
