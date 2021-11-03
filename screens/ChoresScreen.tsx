@@ -6,22 +6,17 @@ import RenderUserInfo from "../components/RenderUserInfo";
 import { getChoresAction } from "../store/chore/choreSlice";
 import { selectHouseholdById } from "../store/household/hoseholdSelector";
 import { useAppDispatch, useAppSelector } from "../store/store";
+import { householdUsersFromChore, househouldUsersFromHousehold } from "../store/householdUser/householdUserSelectors"
+import { getHouseholdUserAction } from "../store/householdUser/householdUserSlice";
+import { getCompletedChoresAction } from "../store/completedChore/completedChoreSlice";
   
 const ChoresScreen = ({ navigation }: any) => {
   LogBox.ignoreLogs(["timer"]);
-    const dispatch = useAppDispatch();
-    const activeHouseholdState = useAppSelector(
-        (state) => state.household.activeHouseholdId
-    );
-    const user = useAppSelector((state) => state.user.user)
     const allHouseholdChores = useAppSelector((state) => state.chore.chores);
-    const household = useAppSelector(selectHouseholdById(activeHouseholdState));
     const [isEditPressed, setIsEditPressed] = React.useState(false);
-
-    useEffect(() => {
-      dispatch(getChoresAction(activeHouseholdState));
-    }, [activeHouseholdState])
-
+    
+    const completedBy = (choreId: string) => useAppSelector(householdUsersFromChore(choreId))
+    //Alla completed för idag
   const setIsPressed = () => {
     if (isEditPressed) setIsEditPressed(false);
     else setIsEditPressed(true);
@@ -35,6 +30,7 @@ const ChoresScreen = ({ navigation }: any) => {
           return (
             <View key={prop.id}>
               <ChoreSurface
+                completedBy={completedBy(prop.id)}
                 navigation={navigation}
                 choreId={prop.id}
                 isEditPressed={isEditPressed}

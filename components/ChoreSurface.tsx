@@ -61,22 +61,38 @@ import { getCompletedChoresAction } from "../store/completedChore/completedChore
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { styles } from "../styles/styles";
 import SmallIconButton from "./SmallIconButton";
+import { daysSinceLastDone } from "../store/completedChore/completedChoreSelectors";
+import { householdUsersFromChore } from "../store/householdUser/householdUserSelectors";
 
 interface Props {
   choreId: string;
   isEditPressed: boolean;
   navigation: any;
-  completedBy: HouseholdUser[];
+  completedBy: undefined[] | HouseholdUser[];
 }
 
-const ChoreSurface = ({ navigation, choreId, isEditPressed, completedBy }: Props) => {
+const ChoreSurface = ({
+  navigation,
+  choreId,
+  isEditPressed,
+  completedBy,
+}: Props) => {
   const dispatch = useAppDispatch();
   const activeHouseholdState = useAppSelector(
     (state) => state.household.activeHouseholdId
   );
   const chore = useAppSelector(selectChoreById(choreId));
-
   if (!chore) return null;
+
+  const daysSinceLast = useAppSelector(daysSinceLastDone(choreId));
+
+  const isLate = () => {
+    if(daysSinceLast) {
+      return daysSinceLast > chore?.repeatability;
+    } else {
+      return false;
+    }
+  } 
 
   //When pressing on delete (trash bin) button
   const removeChore = async (choreId: string) => {
@@ -97,34 +113,32 @@ const ChoreSurface = ({ navigation, choreId, isEditPressed, completedBy }: Props
         >
           <Text style={stylesLocal.surfaceText}>{chore.title}</Text>
         </TouchableRipple>
-        <View>
-        {completedBy.length ? (
-            <Text style={[styles.buttonText, styles.choresButtonAdditions]}>
-              {completedBy.map(user => {
-                return avatars.find(avatar => avatar.id = user.avatarId)?.avatar
-              })}
-                {/* { avatars.map(avatar => {
-                  const result = completedBy.find(user => user.avatarId = avatar.id)
-                  if(result) return (result)
-                
-                })} */}
-            </Text>
-          ) : (
-            <Surface
-              style={[
-                styles.repeatabilityCircle,
-                isLate
-                  ? styles.isLateBackground
-                  : styles.isNotLateBackground,
-              ]}
-            >
-              <Text
-                style={isLate ? styles.isLateText : styles.isNotLateText}
-              >
-                {daysSinceLast}
+        {isEditPressed ? (
+          <View />
+        ) : (
+          <View style={stylesLocal.editContainer}>
+            {completedBy.length ? (
+              <Text style={[styles.buttonText, styles.choresButtonAdditions]}>
+                {completedBy.map((user) => {
+                  if (user)
+                    return avatars.find((avatar) => (avatar.id = user.avatarId))
+                      ?.avatar;
+                })}
               </Text>
-            </Surface>
-        </View>
+            ) : (
+              <Surface
+                style={[
+                  styles.repeatabilityCircle,
+                  isLate() ? styles.isLateBackground : styles.isNotLateBackground,
+                ]}
+              >
+                <Text style={isLate() ? styles.isLateText : styles.isNotLateText}>
+                  {daysSinceLast}
+                </Text>
+              </Surface>
+            )}
+          </View>
+        )}
         {isEditPressed ? (
           <View style={stylesLocal.editContainer}>
             <SmallIconButton
@@ -173,6 +187,6 @@ const stylesLocal = StyleSheet.create({
   editContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    marginRight: 4,
+    marginRight: 8,
   },
 });
