@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     marginHorizontal: 10,
-    marginVertical: 25,
+    marginVertical: 10,
     justifyContent: "space-between",
   },
   noAccountContainer: {

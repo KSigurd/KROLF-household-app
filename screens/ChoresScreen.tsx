@@ -5,6 +5,10 @@ import ChoreSurface from "../components/ChoreSurface";
 import RenderUserInfo from "../components/RenderUserInfo";
 import { getChoresAction } from "../store/chore/choreSlice";
 import { selectHouseholdById } from "../store/household/hoseholdSelector";
+import {
+  househouldUsersFromHousehold,
+  isUserAdmin,
+} from "../store/householdUser/householdUserSelectors";
 import { useAppDispatch, useAppSelector } from "../store/store";
 
 const ChoresScreen = ({ navigation }: any) => {
@@ -15,13 +19,16 @@ const ChoresScreen = ({ navigation }: any) => {
   );
   const user = useAppSelector((state) => state.user.user);
   const allHouseholdChores = useAppSelector((state) => state.chore.chores);
+  const allHouseholdUsers = useAppSelector(househouldUsersFromHousehold(activeHouseholdState));
   const household = useAppSelector(selectHouseholdById(activeHouseholdState));
   const [isEditPressed, setIsEditPressed] = React.useState(false);
 
   const isChores = () => {
     if(allHouseholdChores.length) return true
     else return false
-  } 
+  }
+
+  const isAdmin = isUserAdmin(activeHouseholdState, allHouseholdUsers);
 
   useEffect(() => {
     dispatch(getChoresAction(activeHouseholdState));
@@ -52,19 +59,20 @@ const ChoresScreen = ({ navigation }: any) => {
           );
         })}
       </ScrollView>
-      <View
+      {isAdmin ? (
+        <View
         style={
           isChores()
             ? localStyles.bottomButtonRow
             : localStyles.bottomButtonRowOneButton
         }
       >
-        <BigThemedButton
-          typeOfIcon="plus-circle-outline"
-          buttonText="Lägg till"
-          onPress={() => navigation.navigate("CreateChoreModalScreen")}
-        />
-        {isChores() ? (
+          <BigThemedButton
+            typeOfIcon="plus-circle-outline"
+            buttonText="Lägg till"
+            onPress={() => navigation.navigate("CreateChoreModalScreen")}
+          />
+          {isChores() ? (
           <BigThemedButton
             isPressed={isEditPressed}
             typeOfIcon="pencil-outline"
@@ -74,7 +82,10 @@ const ChoresScreen = ({ navigation }: any) => {
             onPress={setIsPressed}
           />
         ) : null}
-      </View>
+        </View>
+      ) : (
+        <View />
+      )}
     </View>
   );
 };
