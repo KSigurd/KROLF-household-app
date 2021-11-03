@@ -4,14 +4,17 @@ import {
 import * as React from "react";
 import CustomTopTabBar from "../components/CustomTopTabBar";
 import ChoresScreen from "../screens/ChoresScreen";
-import StatisticsScreen from "../screens/StatisticsScreen";
+// import StatisticsScreen from "../screens/StatisticsScreen";
+import CurrentWeekStatisticsScreen from "../screens/CurrentWeekStatisticsScreen"
+// import LastWeekStatisticsScreen from "../screens/LastWeekStatisticsScreen"
+import CurrentMonthStatisticsScreen from "../screens/CurrentMonthStatisticsScreen"
 import LastMonthStatisticsScreen from "../screens/LastMonthStatisticsScreen"
 import LastYearStatisticsScreen from "../screens/LastYearStatisticsScreen"
-import LastWeekStatisticsScreen from "../screens/LastWeekStatisticsScreen"
-import CurrentMonthStatisticsScreen from "../screens/CurrentMonthStatisticsScreen"
 
 export type TabParamList = {
   Home: undefined;
+  ChoresScreen : undefined;
+  CurrentWeekStatisticsScreen: undefined;
   LastWeekStatistics: undefined;
   CurrentMonthStatistics: undefined;
   LastMonthStatistics: undefined;
@@ -50,31 +53,44 @@ const ChoresStatisticsNavigator = () => {
           title: "idag",
         }}
       />
+      {/* <Tab.Screen
+        name="ChoresScreen"
+        component={ChoresScreen}
+        options={{ title: "choreScreen" }}
+      /> */}
       <Tab.Screen
+        name="CurrentWeekStatisticsScreen"
+        component={CurrentWeekStatisticsScreen}
+        options={{ title: "nuvarande vecka" }}
+      />
+      {/* <Tab.Screen
         name="LastWeekStatistics"
         component={LastWeekStatisticsScreen}
         options={{ title: "förra veckan" }}
-      />
+      /> */}
       <Tab.Screen
         name="CurrentMonthStatistics"
         component={CurrentMonthStatisticsScreen}
-        options={{ 
-          title: currentMonth, 
-          tabBarScrollEnabled: true }}
+        options={{
+          title: currentMonth,
+          tabBarScrollEnabled: true,
+        }}
       />
       <Tab.Screen
         name="LastMonthStatistics"
         component={LastMonthStatisticsScreen}
-        options={{ 
-          title: lastMonth, 
-          tabBarScrollEnabled: true }}
+        options={{
+          title: lastMonth,
+          tabBarScrollEnabled: true,
+        }}
       />
       <Tab.Screen
         name="LastYearStatistics"
         component={LastYearStatisticsScreen}
-        options={{ 
-          title: lastYear, 
-          tabBarScrollEnabled: true }}
+        options={{
+          title: lastYear,
+          tabBarScrollEnabled: true,
+        }}
       />
     </Tab.Navigator>
   );
