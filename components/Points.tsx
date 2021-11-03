@@ -4,7 +4,7 @@ import { Card, Surface, TouchableRipple } from "react-native-paper";
 import { styles } from "../styles/styles";
 
 interface Props {
-  initialValue? : number;
+  initialValue?: number;
   onChange: (points: number) => void;
 }
 const Points = ({ onChange, initialValue }: Props) => {
@@ -21,39 +21,39 @@ const Points = ({ onChange, initialValue }: Props) => {
 
   const displayEnergyValues = () => {
     return (
-      <Card.Actions style={stylesLocal.cardAction}>
-        <View
-          style={{
-            width: "100%",
-            flex: 1,
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          {values.map((value, index) => {
-            return (
-              <Text
-                key={index}
-                style={[
-                  stylesLocal.energyValues,
-                  { backgroundColor: value.color },
-                ]}
-                onPress={() => {
-                  onChange(value.points), setEnergyPoints(value.points);
-                  setIsEnergyvaluePressed(true);
-                }}
-              >
-                {value.points}
-              </Text>
-            );
-          })}
-        </View>
-      </Card.Actions>
+        <Card.Actions style={stylesLocal.cardAction}>
+          <View
+            style={{
+              width: "100%",
+              flex: 1,
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            {values.map((value, index) => {
+              return (
+                <Text
+                  key={index}
+                  style={[
+                    stylesLocal.energyValues,
+                    { backgroundColor: value.color },
+                  ]}
+                  onPress={() => {
+                    onChange(value.points), setEnergyPoints(value.points);
+                    setIsEnergyvaluePressed(true);
+                  }}
+                >
+                  {value.points}
+                </Text>
+              );
+            })}
+          </View>
+        </Card.Actions>
     );
   };
 
   return (
-    <View>
+    <View style={{ paddingHorizontal: 10 }}>
       <Surface style={[styles.fullscreenButton, styles.buttonOutlined]}>
         <TouchableRipple
           borderless={true}
@@ -65,9 +65,9 @@ const Points = ({ onChange, initialValue }: Props) => {
           }
         >
           {isEnergyValuePressed ? (
-            <View style={stylesLocal.cardRow}>
+            <View style={[stylesLocal.cardRow, {backgroundColor: "transparent"}]}>
               <Card.Title
-                style={stylesLocal.cardTitle}
+                style={[stylesLocal.cardTitle, {backgroundColor: "transparent", alignItems: "flex-start"}]}
                 title="Värde: "
                 subtitle="Hur energikrävande är sysslan?"
               />
@@ -96,6 +96,8 @@ const stylesLocal = StyleSheet.create({
   cardRow: {
     flexDirection: "row",
     alignContent: "space-between",
+    alignItems: "center",
+    justifyContent: "center"
   },
   card: {
     flexDirection: "row",

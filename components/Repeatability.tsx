@@ -45,47 +45,49 @@ const Repeatability = ({ initialValue, getRepeatability }: Props) => {
   };
 
   return (
-    <Surface style={[styles.fullscreenButton, styles.buttonOutlined]}>
-      {isRepeatabilityValuePressed ? (
-        <TouchableRipple
-          borderless={true}
-          style={styles.fillParent}
-          onPress={() =>
-            isRepeatabilityValuePressed
-              ? setIsRepeatabilityValuePressed(false)
-              : setIsRepeatabilityValuePressed(true)
-          }
-        >
-          <Surface style={styles.buttonInnerContainer}>
-            <Title style={[styles.choresButtonTitle, styles.buttonText]}>
-              Återkommer:
-            </Title>
-            <View style={stylesLocal.repeatBox}>
-              <Text style={{ fontSize: 16 }}>var </Text>
-              <Text
-                style={[
-                  styles.buttonText,
-                  styles.choresButtonAdditions,
-                  stylesLocal.repeatabilityValue,
-                ]}
-              >
-                {repeatability}
-              </Text>
-              <Text style={{ fontSize: 16 }}> dag</Text>
-            </View>
-          </Surface>
-        </TouchableRipple>
-      ) : (
-        <ScrollView
-          horizontal={true}
-          style={{
-            flexDirection: "row",
-          }}
-        >
-          {displayRepeatabilityValues()}
-        </ScrollView>
-      )}
-    </Surface>
+    <View style={{padding: 10}}>
+      <Surface style={[styles.fullscreenButton, styles.buttonOutlined]}>
+        {isRepeatabilityValuePressed ? (
+          <TouchableRipple
+            borderless={true}
+            style={styles.fillParent}
+            onPress={() =>
+              isRepeatabilityValuePressed
+                ? setIsRepeatabilityValuePressed(false)
+                : setIsRepeatabilityValuePressed(true)
+            }
+          >
+            <Surface style={styles.buttonInnerContainer}>
+              <Title style={[styles.choresButtonTitle, styles.buttonText, {fontWeight: "normal"}]}>
+                Återkommer:
+              </Title>
+              <View style={stylesLocal.repeatBox}>
+                <Text style={{ fontSize: 16 }}>var </Text>
+                <Text
+                  style={[
+                    styles.buttonText,
+                    styles.choresButtonAdditions,
+                    stylesLocal.repeatabilityValue,
+                  ]}
+                >
+                  {repeatability}
+                </Text>
+                <Text style={{ fontSize: 16 }}> dag</Text>
+              </View>
+            </Surface>
+          </TouchableRipple>
+        ) : (
+          <ScrollView
+            horizontal={true}
+            style={{
+              flexDirection: "row",
+            }}
+          >
+            {displayRepeatabilityValues()}
+          </ScrollView>
+        )}
+      </Surface>
+    </View>
   );
 };
 
@@ -113,10 +115,7 @@ const stylesLocal = StyleSheet.create({
   repeatBox: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 20,
+    justifyContent: "flex-end",
     flex: 1,
   },
-  bla: {
-    flex: 0
-  }
 });
