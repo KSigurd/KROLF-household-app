@@ -1,4 +1,4 @@
-## Hushållet
+# Hushållet
 
 Länk till repo:
 [Github](https://github.com/KSigurd/KROLF-household-app)
