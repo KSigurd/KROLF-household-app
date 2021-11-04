@@ -18,14 +18,14 @@ interface Props {
   choreId: string;
   isEditPressed: boolean;
   navigation: any;
-  completedBy: undefined[] | HouseholdUser[];
+  // completedBy: undefined[] | HouseholdUser[];
 }
 
 const ChoreSurface = ({
   navigation,
   choreId,
   isEditPressed,
-  completedBy,
+  // completedBy,
 }: Props) => {
 
   //Define dispatch and states
@@ -75,7 +75,7 @@ const ChoreSurface = ({
           <View />
         ) : (
           <View style={stylesLocal.avatarAndBadgeContainer}>
-            {completedBy.length ? (
+            {/* {completedBy.length ? (
               <Text style={[styles.buttonText, styles.choresButtonAdditions]}>
 
                 {completedBy.map((user) => {                  
@@ -83,7 +83,7 @@ const ChoreSurface = ({
                   
                 })}
               </Text>
-            ) : ( 
+            ) : (  */}
 
               <Surface
                 style={[
@@ -104,7 +104,7 @@ const ChoreSurface = ({
 
                 )}
               </Surface>
-            )}
+            {/* )} */}
           </View>
         )}
         {isEditPressed ? (

@@ -27,8 +27,8 @@ const ChoresScreen = ({ navigation }: any) => {
     (state) => state.householdUser.householdUsers
   );
 
-  const completedBy = (choreId: string) =>
-    useAppSelector(householdUsersFromChore(choreId));
+  // const completedBy = (choreId: string) =>
+  //   useAppSelector(householdUsersFromChore(choreId));
 
   const filteredHouseholdUsers: HouseholdUser[] = [];
 
@@ -80,7 +80,7 @@ const ChoresScreen = ({ navigation }: any) => {
           return (
             <View key={prop.id}>
               <ChoreSurface
-                completedBy={completedBy(prop.id)}
+                // completedBy={completedBy(prop.id)}
                 navigation={navigation}
                 choreId={prop.id}
                 isEditPressed={isEditPressed}
