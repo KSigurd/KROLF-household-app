@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { addHoushold, getHouseHolds, updateHoushold, getOneHousehold } from "../../data/fireStoreModule";
 import { resetErrorAction } from "../globalActions";
 import { Household, CreateHousehold, CreateHouseholdData } from "../../interfaces/households";
-import { addHouseholdUserAction } from "../householdUser/householdUserSlice";
+import { addHouseholdUserAction, getHouseholdUserAction } from "../householdUser/householdUserSlice";
 import { households } from "../../data/mockHouseholdData";
 import { ThunkConfig, useAppSelector } from "../store";
 
@@ -37,9 +37,10 @@ export const getOneHouseholdAction = createAsyncThunk<
 Household,
   number,
   ThunkConfig
->("getOneHousehold", async (inviteCode, { rejectWithValue }) => {
+>("getOneHousehold", async (inviteCode, { dispatch, rejectWithValue }) => {
   try {
     const response = await getOneHousehold(inviteCode);
+    await dispatch(getHouseholdUserAction(response.id));
     return response;
   } catch (e) {
     return rejectWithValue(false);
@@ -138,7 +139,8 @@ const householdSlice = createSlice({
       builder.addCase(getOneHouseholdAction.fulfilled, (state, action) => {
         if(state.households.find(hh => hh.inviteCode === action.payload.inviteCode)) {
           state.error = "Du är redan medlem i hushållet"
-        } else state.temporaryHousehold = action.payload;
+        } else {state.temporaryHousehold = action.payload;
+        state.activeHouseholdId = action.payload.id}
       }),
         builder.addCase(getOneHouseholdAction.rejected, (state, action) => {
           state.error = "Kunde inte hämta hushåll";

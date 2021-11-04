@@ -6,7 +6,7 @@ import { Button, Text } from "react-native-paper";
 import * as Yup from "yup";
 import ThemedTextInput from "../components/ThemedTextInput";
 import { RootStackParamList } from "../navigation/RootNavigator";
-import { selectHouseholdByInviteCode } from "../store/household/hoseholdSelector";
+// import { selectHouseholdByInviteCode } from "../store/household/hoseholdSelector";
 import {
   getHouseholdsAction,
   getOneHouseholdAction,
@@ -74,6 +74,8 @@ const JoinHouseholdScreen: FC<Props> = ({ navigation, inviteCode }: Props) => {
   const handleSubmit = async (inputParams: ParamsToValidate) => {
     inviteCode = inputParams.inviteCode;
     await dispatch(getOneHouseholdAction(Number(inputParams.inviteCode)))
+
+    
     // if(errorState){navigation.navion}
     
 

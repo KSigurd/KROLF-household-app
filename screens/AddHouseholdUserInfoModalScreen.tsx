@@ -40,7 +40,7 @@ type PostSchemaType = Record<keyof ParamsToValidate, Yup.AnySchema>;
 
 const validationSchema = Yup.object().shape<PostSchemaType>({
   name: Yup.string().required("Du måste ange ett namn"),
-  avatarId: Yup.string().min(1, "Välj en avatar"),
+  avatarId: Yup.string().required("Välj en avatar"),
 });
 
 type Props = NativeStackScreenProps<RootStackParamList, "JoinHousehold">;
@@ -52,6 +52,9 @@ const AddHouseholdUserInfoModalScreen: FC<Props> = ({
   const [avatar, setAvatar] = useState("");
   const dispatch = useAppDispatch();
   const userState = useAppSelector((state) => state.user);
+  const activehousehold = useAppSelector(
+    (state) => state.household.activeHouseholdId
+  );
   let temporaryHouseholdState: Household = {} as Household;
   let householdUserState: HouseholdUser[] = [];
   const inviteCode = route.params;
@@ -65,13 +68,13 @@ const AddHouseholdUserInfoModalScreen: FC<Props> = ({
   // let availableAvatarList: Avatar[] = [];
 
   temporaryHouseholdState = useAppSelector(
-      (state) => state.household.temporaryHousehold
-      );
+    (state) => state.household.temporaryHousehold
+  );
 
   const householdUsersFromActiveHousehold = useAppSelector(
-    househouldUsersFromHousehold(temporaryHouseholdState.id)
+    househouldUsersFromHousehold(activehousehold)
   );
-console.log("user",householdUsersFromActiveHousehold);
+  console.log("user", householdUsersFromActiveHousehold);
   const availableAvatarList = useAppSelector(
     availableAvatars(householdUsersFromActiveHousehold)
   );
@@ -81,7 +84,7 @@ console.log("user",householdUsersFromActiveHousehold);
       await dispatch(getHouseholdUserAction(temporaryHouseholdState.id));
       temporaryHouseholdState = useAppSelector(
         (state) => state.household.temporaryHousehold
-        );
+      );
       console.log(temporaryHouseholdState, "tempo");
 
       // householdUserState  = useAppSelector(
@@ -171,61 +174,85 @@ console.log("user",householdUsersFromActiveHousehold);
         errors,
       }) => (
         <View style={styles.root}>
-          <View style={styles.titleView}>
-            <Text style={styles.title}>
-              Personliga uppgifter i hushållet {temporaryHouseholdState.name}
-            </Text>
-          </View>
-          <View>
-            <ThemedTextInput
-              secureTextEntry={false}
-              label="Ditt namn i hushållet"
-              value={values.name}
-              //onChange={() => changeOnName()}
-              onChangeText={handleChange<keyof ParamsToValidate>("name")}
-              onBlur={handleBlur<keyof ParamsToValidate>("name")}
-              helperText={touched.name && errors.name}
-            />
-            {values.name.length > 2 ? (
-              <View style={styles.selectAvatar}>
-                <Text style={styles.buttonText}>Välj din avatar</Text>
-                <Surface style={styles.avatarContainer}>
-                  {availableAvatarList.map((prop, key) => {
-                    return (
-                      <TouchableRipple
-                        key={key}
-                        borderless={true}
-                        style={[
-                          styles.repeatabilityCircle,
-                          styles.avatarButton,
-                          prop.id === avatar
-                            ? styles.selectedAvatarBackground
-                            : styles.unselectedAvatarBackground,
-                        ]}
-                        onPress={() => {
-                          values.avatarId = prop.id;
-                          chooseAvatar(prop);
-                        }}
-                      >
-                        <Text style={styles.buttonText}>{prop.avatar}</Text>
-                      </TouchableRipple>
-                    );
-                  })}
-                </Surface>
+          {availableAvatarList.length > 0 ? (
+            <View>
+              <View style={styles.titleView}>
+                <Text style={styles.title}>
+                  Personliga uppgifter i hushållet{" "}
+                  {temporaryHouseholdState.name}
+                </Text>
               </View>
-            ) : null}
-          </View>
-          <Button
-            icon="plus-circle-outline"
-            mode="contained"
-            color="#fff"
-            labelStyle={styles.buttonIconSize}
-            uppercase={false}
-            style={styles.NPbutton}
-            onPress={() => handleSubmit()}
-          >
-            <Text style={styles.buttonText}>Gå med</Text>
-          </Button>
+              <View>
+                <ThemedTextInput
+                  secureTextEntry={false}
+                  label="Ditt namn i hushållet"
+                  value={values.name}
+                  //onChange={() => changeOnName()}
+                  onChangeText={handleChange<keyof ParamsToValidate>("name")}
+                  onBlur={handleBlur<keyof ParamsToValidate>("name")}
+                  helperText={touched.name && errors.name}
+                />
+
+                <View style={styles.selectAvatar}>
+                  <Text style={styles.buttonText}>Välj din avatar</Text>
+                  <Surface style={styles.avatarContainer}>
+                    {availableAvatarList.map((prop, key) => {
+                      return (
+                        <TouchableRipple
+                          key={key}
+                          borderless={true}
+                          style={[
+                            styles.repeatabilityCircle,
+                            styles.avatarButton,
+                            prop.id === avatar
+                              ? styles.selectedAvatarBackground
+                              : styles.unselectedAvatarBackground,
+                          ]}
+                          onPress={() => {
+                            values.avatarId = prop.id;
+                            chooseAvatar(prop);
+                          }}
+                        >
+                          <Text style={styles.buttonText}>{prop.avatar}</Text>
+                        </TouchableRipple>
+                      );
+                    })}
+                  </Surface>
+                </View>
+              </View>
+              <Button
+                icon="plus-circle-outline"
+                mode="contained"
+                color="#fff"
+                labelStyle={styles.buttonIconSize}
+                uppercase={false}
+                style={styles.NPbutton}
+                onPress={() => handleSubmit()}
+              >
+                <Text style={styles.buttonText}>Gå med</Text>
+              </Button>
+            </View>
+          ) : (
+            <View>
+              <View style={styles.titleView}>
+                <Text style={styles.title}>Någonting gick fel...</Text>
+              </View>
+               <Surface style={styles.errorMessage}>
+                 <Text style={{fontSize: 16, textAlign: "center"}}>Hushållet är fullt, vänligen ta kontakt med hushållets ägare!</Text>
+                 </Surface>
+              <Button
+                icon="close-circle-outline"
+                mode="contained"
+                color="#fff"
+                labelStyle={styles.buttonIconSize}
+                uppercase={false}
+                style={styles.NPbutton}
+                onPress={() => navigation.goBack()}
+              >
+                <Text style={styles.buttonText}>Stäng</Text>
+              </Button>
+            </View>
+          )}
         </View>
       )}
     </Formik>
@@ -235,8 +262,7 @@ console.log("user",householdUsersFromActiveHousehold);
     //     <View>
     //       <Text>inviteCode: {inviteCode}</Text>
     //       <Text>
-    //         householdIdFromInviteCode: {householdIdFromInviteCode?.name}
-    //       </Text>
+    //         householdIdFromInviteCode: {house
     //     </View>
     //   ) : (
     //     <View style={styles.root}>
@@ -290,6 +316,21 @@ const styles = StyleSheet.create({
     borderColor: "transparent",
     width: "100%",
     marginTop: 12,
+  },
+  errorMessage: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 40,
+    borderRadius: 10,
+    backgroundColor: "white",
+    elevation: 4,
+    borderColor: "transparent",
+    textAlign: "center",
+    marginTop: 16,
+    marginHorizontal: 20,
+    marginVertical: 20,
   },
   repeatabilityCircle: {
     width: 30,
