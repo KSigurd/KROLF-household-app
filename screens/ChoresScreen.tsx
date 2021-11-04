@@ -1,8 +1,10 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
-import { LogBox, ScrollView, StyleSheet, View } from "react-native";
+import { LogBox, ScrollView, StyleSheet, View, Text } from "react-native";
 import BigThemedButton from "../components/BigThemedButton";
 import ChoreSurface from "../components/ChoreSurface";
 import RenderUserInfo from "../components/RenderUserInfo";
+import { RootStackParamList } from "../navigation/RootNavigator";
 import { getChoresAction } from "../store/chore/choreSlice";
 import { selectHouseholdById } from "../store/household/hoseholdSelector";
 import {
@@ -11,7 +13,7 @@ import {
 } from "../store/householdUser/householdUserSelectors";
 import { useAppDispatch, useAppSelector } from "../store/store";
 
-const ChoresScreen = ({ navigation }: any) => {
+const ChoresScreen = ({ navigation }: NativeStackScreenProps<RootStackParamList>) => {
   LogBox.ignoreLogs(["timer"]);
   const dispatch = useAppDispatch();
   const activeHouseholdState = useAppSelector(
@@ -38,11 +40,15 @@ const ChoresScreen = ({ navigation }: any) => {
 
   return (
     <View style={{ flex: 1, marginHorizontal: 10, marginBottom: 10 }}>
+      
       <RenderUserInfo
         onClick={() => {
-          navigation.navigate("EditHouseholdUser");
+          navigation.navigate("EditHouseholdUserModalScreen");
         }}
       />
+
+      <Text style={{fontSize: 20}}>{household?.inviteCode} är invitecoden</Text>
+
       <ScrollView style={{ flex: 1 }}>
         {allHouseholdChores.map((prop) => {
           return (

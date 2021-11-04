@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Modal, Portal, Provider } from "react-native-paper";
 import EditHouseholdModal from "../components/EditHouseholdModal";
 import HouseholdSurface from "../components/HouseholdSurface";
@@ -58,10 +58,11 @@ const ProfileScreen = ({ navigation }: Props) => {
       </Portal>
       <Portal.Host>
         <View style={styles.root}>
-          <View>
+          <ScrollView>
             <Text style={styles.title}>Välj hushåll:</Text>
             {databaseHouseholds.map((prop, key) => {
               return (
+              
                 <HouseholdSurface
                   key={key}
                   householdObject={prop}
@@ -70,11 +71,12 @@ const ProfileScreen = ({ navigation }: Props) => {
                   onChange={(householdId) => {
                     setHousholdAndNavigate(householdId);
                   }}
-                />
+                  />
+                 
               );
             })}
+          </ScrollView>
             <LogoutButton onClick={() => navigation.replace("Login")} />
-          </View>
 
           <View style={styles.NPbuttonRoot}>
             <BigThemedButton

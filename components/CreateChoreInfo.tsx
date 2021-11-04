@@ -7,7 +7,7 @@ import { Chore } from "../interfaces/chore";
 import { addChoreAction, updateChoreAction } from "../store/chore/choreSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import Points from "./Points";
-import Repeatability from "./repeatability";
+import Repeatability from "./Repeatability";
 import ThemedTextInput from "./ThemedTextInput";
 
 interface Props {

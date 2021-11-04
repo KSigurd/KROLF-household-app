@@ -1,5 +1,5 @@
 export interface CompletedChore {
   choreId: string;
-  householdUserId: string;
+  householdUserId?: string;
   date: Date;
 }
