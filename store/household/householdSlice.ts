@@ -80,8 +80,9 @@ export const updateHouseholdAction = createAsyncThunk<
   Household,
   Household,
   ThunkConfig
->("updateHousehold", async (household, { dispatch, rejectWithValue }) => {
+>("updateHousehold", async (household, { rejectWithValue }) => {
   try {
+    console.log(household, "thuuuunk")
     await updateHoushold(household);
     return household;
   } catch (e) {
