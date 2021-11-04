@@ -52,10 +52,3 @@ Statistik
 *	En användare ska kunna se fördelningen av gjorda sysslor mellan användarna i sitt hushåll. [JA]
 *	Varje statistikvy ska visa den totala fördelningen (inräknat vikterna för sysslorna) samt fördelning av varje enskild syssla. [JA]
 *	Det ska finnas en statistikvy över ”nuvarande vecka”. [JA]
-
-
-
-## Avgränsningar
-
-
-
