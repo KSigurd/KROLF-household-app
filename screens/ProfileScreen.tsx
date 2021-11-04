@@ -1,11 +1,16 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React from "react";
-import { View, Text, Button, StyleSheet, FlatList } from "react-native";
-import AddHouseholdButton from "../components/AddHouseholdButton";
+import React, { useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { Modal, Portal, Provider } from "react-native-paper";
+import EditHouseholdModal from "../components/EditHouseholdModal";
 import HouseholdSurface from "../components/HouseholdSurface";
-import JoinHouseholdButton from "../components/JoinHouseHoldButton";
-import { households } from "../data/mockHouseholdData";
+import { Household } from "../interfaces/households";
+import { setActiveHousholdAction, updateHouseholdAction } from "../store/household/householdSlice";
 import { RootStackParamList } from "../navigation/RootNavigator";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import { isUserAdmin } from "../store/householdUser/householdUserSelectors";
+import LogoutButton from "../components/LogoutButton";
+import BigThemedButton from "../components/BigThemedButton";
 
 type Props = NativeStackScreenProps<
   RootStackParamList,
@@ -13,29 +18,79 @@ type Props = NativeStackScreenProps<
 >;
 
 const ProfileScreen = ({ navigation }: Props) => {
+  const [visible, setVisible] = useState(false);
+  const [householdToEdit, setHouseholdToEdit] = useState({} as Household);
+  const dispatch = useAppDispatch();
+  const databaseHouseholds = useAppSelector(
+    (state) => state.household.households
+  );
+  const setHousholdAndNavigate = (householdId: string) => {
+    dispatch(setActiveHousholdAction(householdId));
+    navigation.navigate("ChoresStatisticsNavigator");
+  };
+
+  const householdUsersForLoggedInUser = useAppSelector(
+    (state) => state.householdUser.householdUsersForLoggedInUser
+  );
+
+  const showModal = (household: Household) => {
+    setHouseholdToEdit(household);
+    setVisible(true);
+  };
+
+  const onSubmit = async (householdToUpdate?: Household) => {
+    setVisible(false);
+    if(householdToUpdate) {
+      await dispatch(updateHouseholdAction(householdToUpdate));
+    }
+  };
+
   return (
-    <View style={styles.root}>
-      <View>
-        <Text style={styles.title}>Välkommen *användarnamn*</Text>
+    <Provider>
+      <Portal>
+        <Modal
+          visible={visible}
+          onDismiss={() => setVisible(false)}
+          contentContainerStyle={styles.modalStyle}
+        >
+          <EditHouseholdModal household={householdToEdit} onSubmit={onSubmit} />
+        </Modal>
+      </Portal>
+      <Portal.Host>
+        <View style={styles.root}>
+          <View>
+            <Text style={styles.title}>Välj hushåll:</Text>
+            {databaseHouseholds.map((prop, key) => {
+              return (
+                <HouseholdSurface
+                  key={key}
+                  householdObject={prop}
+                  isAdmin={isUserAdmin(prop.id, householdUsersForLoggedInUser)}
+                  showModal={showModal}
+                  onChange={(householdId) => {
+                    setHousholdAndNavigate(householdId);
+                  }}
+                />
+              );
+            })}
+            <LogoutButton onClick={() => navigation.replace("Login")} />
+          </View>
 
-        <View>
-          <Text style={styles.title}>Välj hushåll:</Text>
-          {households.map((prop, key) => {
-            return <HouseholdSurface key={key} householdObject={prop} />;
-          })}
+          <View style={styles.NPbuttonRoot}>
+            <BigThemedButton
+              typeOfIcon="plus-circle-outline"
+              buttonText="Lägg till"
+              onPress={() => navigation.navigate("CreateHousehold")}
+            />
+            <BigThemedButton
+              typeOfIcon="account-plus-outline"
+              buttonText="Gå med"
+              onPress={() => navigation.navigate("JoinHousehold")}
+            />
+          </View>
         </View>
-      </View>
-
-      <View style={styles.NPbuttonRoot}>
-        <AddHouseholdButton onAddHousehold={() => navigation.navigate("CreateHousehold")}/>
-        <JoinHouseholdButton onJoinHousehold={() => navigation.navigate("JoinHousehold")}/>
-      </View>
-
-      <Button
-        title="tryck mig vidare"
-        onPress={() => navigation.navigate("ChoresStatisticsNavigator")}
-      />
-    </View>
+      </Portal.Host>
+    </Provider>
   );
 };
 
@@ -45,7 +100,7 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     marginHorizontal: 10,
-    marginVertical: 25,
+    marginVertical: 10,
     justifyContent: "space-between",
   },
   NPbuttonRoot: {
@@ -60,4 +115,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginVertical: 20,
   },
+  modalStyle: {
+      height: "50%",
+  }
 });

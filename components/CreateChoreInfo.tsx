@@ -1,47 +1,71 @@
 import { Formik } from "formik";
-import React from "react";
+import React, { FC } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Button as NPbutton } from "react-native-paper";
 import * as Yup from "yup";
-import { chores } from "../data/mockChoresData";
 import { Chore } from "../interfaces/chore";
+import { addChoreAction, updateChoreAction } from "../store/chore/choreSlice";
+import { useAppDispatch, useAppSelector } from "../store/store";
 import Points from "./Points";
 // import Repeatability from "./Repeatability";
 import ThemedTextInput from "./ThemedTextInput";
 
 interface Props {
-  onClosed: () => void;
+  onClose: () => void;
+  activeChore?: Chore;
 }
-
-//DEFAULT VALUES
-const initialValues: Chore = {
-  title: "",
-  description: "",
-  points: 2,
-  repeatability: 7,
-  id: "0",
-  householdId: "0",
-};
 
 type PostSchemaType = Record<keyof Chore, Yup.AnySchema>;
 
+//Define Yup validation schema
 const validationSchema = Yup.object().shape<PostSchemaType>({
   title: Yup.string().required("Fyll i en titel").min(2),
   description: Yup.string().required("Fyll i en beskrivning av syssla").min(2),
   points: Yup.number().required(),
   repeatability: Yup.number().required(),
-  id: Yup.number(),
-  householdId: Yup.number(),
+  id: Yup.string(),
+  householdId: Yup.string(),
 });
 
-const CreateChoreInfo = ({ onClosed }: Props) => {
-  const handleSubmit = (chore: Chore) => {
-    //ADD CHANGES TO FIREBASE
-    chores.push({ ...chore, id: "50" });
-    console.log(chore);
+const CreateChoreInfo: FC<Props> = ({ onClose, activeChore }) => {
+  //Define states and dispatch
+  const dispatch = useAppDispatch();
+  const activeHouseholdState = useAppSelector(
+    (state) => state.household.activeHouseholdId
+  );
 
-    //CLOSES MODAL
-    onClosed();
+  //Define default values
+  var initialValues: Chore;
+
+  if (!activeChore) {
+    initialValues = {
+      title: "",
+      description: "",
+      points: 2,
+      repeatability: 7,
+      id: "0",
+      householdId: activeHouseholdState,
+    };
+  } else
+    initialValues = {
+      title: activeChore.title,
+      description: activeChore.description,
+      points: activeChore.points,
+      id: activeChore.id,
+      repeatability: activeChore.repeatability,
+      householdId: activeHouseholdState,
+    };
+
+  //Add or update when pressing save button
+  const handleSubmit = (chore: Chore) => {
+    if (activeChore) {
+      dispatch(updateChoreAction(chore));
+    } else {
+      dispatch(addChoreAction(chore));
+    }
+
+    //Closes modal
+    onClose();
   };
 
   return (
@@ -54,6 +78,7 @@ const CreateChoreInfo = ({ onClosed }: Props) => {
         handleChange,
         handleBlur,
         handleSubmit,
+        setFieldValue,
         values,
         touched,
         errors,
@@ -79,14 +104,16 @@ const CreateChoreInfo = ({ onClosed }: Props) => {
             value={values.description}
             helperText={touched.description && errors.description}
           />
-          {/* <Repeatability
+          <Repeatability
+            initialValue={values.repeatability}
             getRepeatability={(repeatability) => {
-              initialValues.repeatability = repeatability;
+              setFieldValue("repeatability", repeatability);
             }}
           /> */}
           <Points
+            initialValue={values.points}
             onChange={(energy) => {
-              initialValues.points = energy;
+              setFieldValue("points", energy);
             }}
           />
           <View style={styles.buttonContainer}>
@@ -104,7 +131,7 @@ const CreateChoreInfo = ({ onClosed }: Props) => {
               icon="close-circle-outline"
               style={styles.NPbutton}
               uppercase={false}
-              onPress={() => onClosed()}
+              onPress={() => onClose()}
             >
               <Text style={{ fontSize: 15 }}>Stäng</Text>
             </NPbutton>

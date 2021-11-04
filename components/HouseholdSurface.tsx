@@ -1,24 +1,54 @@
 import React, { FC } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { Chip, Surface, TouchableRipple } from "react-native-paper";
-import { Household } from "../interfaces/households"
+import {
+  Chip,
+  IconButton,
+  Modal,
+  Surface,
+  TextInput,
+  TouchableRipple,
+} from "react-native-paper";
+import { Provider } from "react-native-paper/lib/typescript/core/settings";
+import { Household } from "../interfaces/households";
+import EditHouseholdModal from "./EditHouseholdModal";
 
 interface Props {
-    householdObject: Household;
+  householdObject: Household;
+  isAdmin: boolean | undefined;
+  onChange: (householdId: string) => void;
+  showModal: (houshold: Household) => void;
 }
 
-const HouseholdSurface: FC<Props> = (props: Props) => {
-
-
+const HouseholdSurface: FC<Props> = ({
+  showModal,
+  isAdmin,
+  householdObject,
+  onChange,
+}: Props) => {
   return (
     <View>
-        <Surface style={styles.surface}>
-            <TouchableRipple style={styles.chip} onPress= {() => console.log("tryckt på hushåll")}>
-          <Text key={props.householdObject.id} style={styles.surfaceText}>
-            {props.householdObject.name}
-          </Text>
-          </TouchableRipple>
-        </Surface>
+      <Surface style={styles.surface}>
+        <TouchableRipple
+        borderless={true}
+          style={styles.chip}
+          onPress={() => {
+            onChange(householdObject.id);
+          }}
+        >
+            <Text key={householdObject.id} style={styles.surfaceText}>
+              {householdObject.name}
+            </Text>
+            </TouchableRipple>
+            {isAdmin ? (
+              <IconButton
+                icon="pencil-outline"
+                size={20}
+                onPress={() => showModal(householdObject)}
+              />
+            ) : (
+              <View />
+            )}
+      </Surface>
     </View>
   );
 };
@@ -29,27 +59,30 @@ const styles = StyleSheet.create({
   surface: {
     height: "auto",
     borderRadius: 10,
-    width: "100%",
-    alignItems: "flex-start",
-    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-evenly",
     backgroundColor: "white",
     elevation: 4,
     marginVertical: 5,
   },
   surfaceText: {
-      flex: 1,
-      width: "100%",
-      height: "100%",
+    flex: 1,
     fontSize: 18,
     fontWeight: "bold",
-    alignItems: "flex-start",
-    alignSelf: "flex-start"
   },
   chip: {
-      width: "100%",
-      padding: 10,
-      backgroundColor: "white", 
-      height: 50,
-      borderRadius: 10
-  }
+    flex: 1,
+    padding: 10,
+    backgroundColor: "white",
+    height: 50,
+    borderRadius: 10,
+    justifyContent: "center",
+
+  },
+  innerContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+  },
 });

@@ -6,6 +6,7 @@ import {
 } from "../../data/fireStoreModule";
 import { CompletedChore } from "../../interfaces/completedChore";
 import { ChoreStatisticsDTO } from "../../interfaces/statisticsDTO";
+import { resetErrorAction } from "../globalActions";
 import { ThunkConfig } from "../store";
 
 interface CompletedChoreState {
@@ -68,19 +69,22 @@ const completedChoreSlice = createSlice({
       state.completedChores = action.payload.response;
     }),
       builder.addCase(getCompletedChoresAction.rejected, (state, action) => {
-        state.error = "Något gick fel";
+        state.error = "Kunde inte hämta data för hushållet";
       }),
       builder.addCase(addCompletedChoreAction.fulfilled, (state, action) => {
         state.completedChores.push(action.payload);
       }),
       builder.addCase(addCompletedChoreAction.rejected, (state, action) => {
-        state.error = "Något gick fel";
+        state.error = "Kunde inte markera sysslan som utförd";
       }),
       builder.addCase(getStatisticsAction.fulfilled, (state, action) => {
         state.statistics = action.payload.response;
       }),
       builder.addCase(getStatisticsAction.rejected, (state, action) => {
-        state.error = "något gick fel";
+        state.error = "Kunde inte hämta statistik för hushållet";
+      }),
+      builder.addCase(resetErrorAction, (state, action) => {
+        state.error = undefined;
       })
   },
 });

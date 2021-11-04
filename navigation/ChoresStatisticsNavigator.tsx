@@ -12,6 +12,7 @@ import LastMonthStatisticsScreen from "../screens/LastMonthStatisticsScreen"
 import LastYearStatisticsScreen from "../screens/LastYearStatisticsScreen"
 
 export type TabParamList = {
+  activeHousehold: undefined;
   Home: undefined;
   ChoresScreen : undefined;
   CurrentWeekStatisticsScreen: undefined;
@@ -42,6 +43,10 @@ let currentMonth = monthNames[date.getMonth()];
 let lastYear = (date.getFullYear() - 1).toString();
 
 const Tab = createMaterialTopTabNavigator<TabParamList>();
+
+// export type NavigationTabProps <Screen extends keyof TabParamList> = NavigationTabProps<TabParamList, Screen>
+//TabScreenProps<TabParamList, Screen>;
+
 
 const ChoresStatisticsNavigator = () => {
   return (
