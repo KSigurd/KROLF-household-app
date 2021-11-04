@@ -50,17 +50,6 @@ const LoginScreen = ({ navigation }: Props) => {
         >
           här
         </Text>
-
-        <Text
-          style={styles.createAccountText}
-          onPress={() => {
-            dispatch(getHouseholdsAction("AMHQtDvOpBThnBV2cfaM")).then(() => {
-              navigation.navigate("Profile");
-            });
-          }}
-        >
-          GÅ VIDARE UTAN INLOGG
-        </Text>
       </View>
     </View>
   );

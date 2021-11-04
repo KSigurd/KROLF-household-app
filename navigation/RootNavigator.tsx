@@ -15,6 +15,7 @@ import JoinHouseholdScreen from "../screens/JoinHouseholdScreen";
 import LoginScreen from "../screens/LoginScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import ChoresStatisticsNavigator from "./ChoresStatisticsNavigator";
+import AddHouseholdUserInfoModalScreen from "../screens/AddHouseholdUserInfoModalScreen"
 
 export type RootStackParamList = {
   Login: undefined;
@@ -29,8 +30,12 @@ export type RootStackParamList = {
   };
   ChoreDescriptionModalScreen: {
     choreId: string;
+  }; 
+  AddHouseholdUserInfoModalScreen:{
+    inviteCode:string
   };
   EditHouseholdUserModalScreen: undefined;
+
 };
 
 export type StackScreenProps<Screen extends keyof RootStackParamList> =
@@ -118,6 +123,15 @@ const RootNavigator = () => {
             headerShown: false,
           }}
         />
+          <Stack.Screen
+            name="AddHouseholdUserInfoModalScreen"
+            component={AddHouseholdUserInfoModalScreen}
+            options={{
+              presentation: "transparentModal",
+              contentStyle: { backgroundColor: "rgba(0,0,0,0.7)" },
+              headerShown: false,
+            }}
+          />
         <Stack.Screen
           name="EditHouseholdUserModalScreen"
           component={EditHouseholdUserModalScreen}
