@@ -1,83 +1,104 @@
-import { createMaterialTopTabNavigator  } from "@react-navigation/material-top-tabs";
+import {
+  createMaterialTopTabNavigator
+} from "@react-navigation/material-top-tabs";
 import * as React from "react";
+import CustomTopTabBar from "../components/CustomTopTabBar";
 import ChoresScreen from "../screens/ChoresScreen";
-import StatisticsScreen from "../screens/StatisticsScreen";
+// import StatisticsScreen from "../screens/StatisticsScreen";
+import CurrentWeekStatisticsScreen from "../screens/CurrentWeekStatisticsScreen"
+// import LastWeekStatisticsScreen from "../screens/LastWeekStatisticsScreen"
+import CurrentMonthStatisticsScreen from "../screens/CurrentMonthStatisticsScreen"
+import LastMonthStatisticsScreen from "../screens/LastMonthStatisticsScreen"
+import LastYearStatisticsScreen from "../screens/LastYearStatisticsScreen"
 
 export type TabParamList = {
-  Chores: undefined;
-  Statistics: undefined;
+  activeHousehold: undefined;
+  Home: undefined;
+  ChoresScreen : undefined;
+  CurrentWeekStatisticsScreen: undefined;
+  LastWeekStatistics: undefined;
+  CurrentMonthStatistics: undefined;
+  LastMonthStatistics: undefined;
+  LastYearStatistics: undefined;
 };
+
+const monthNames = [
+  "Januari",
+  "Februari",
+  "Mars",
+  "April",
+  "Maj",
+  "Juni",
+  "Juli",
+  "Augusti",
+  "September",
+  "Oktober",
+  "November",
+  "December",
+];
+
+const date = new Date();
+let lastMonth = monthNames[date.getMonth() - 1];
+let currentMonth = monthNames[date.getMonth()];
+let lastYear = (date.getFullYear() - 1).toString();
 
 const Tab = createMaterialTopTabNavigator<TabParamList>();
 
+// export type NavigationTabProps <Screen extends keyof TabParamList> = NavigationTabProps<TabParamList, Screen>
+//TabScreenProps<TabParamList, Screen>;
+
+
 const ChoresStatisticsNavigator = () => {
   return (
-    <Tab.Navigator
-      screenOptions={({ route, navigation }) => {
-        return { tabBarStyle: {justifyContent: "center"}, tabBarLabel: navigation.isFocused() ? route.name : "",  }
-      }}
-    >
+    <Tab.Navigator tabBar={(props: any) => <CustomTopTabBar {...props} />}>
       <Tab.Screen
-        name="Chores"
+        name="Home"
         component={ChoresScreen}
-        options={{ title: "idag"}}
+        options={{
+          title: "idag",
+        }}
+      />
+      {/* <Tab.Screen
+        name="ChoresScreen"
+        component={ChoresScreen}
+        options={{ title: "choreScreen" }}
+      /> */}
+      <Tab.Screen
+        name="CurrentWeekStatisticsScreen"
+        component={CurrentWeekStatisticsScreen}
+        options={{ title: "nuvarande vecka" }}
+      />
+      {/* <Tab.Screen
+        name="LastWeekStatistics"
+        component={LastWeekStatisticsScreen}
+        options={{ title: "förra veckan" }}
+      /> */}
+      <Tab.Screen
+        name="CurrentMonthStatistics"
+        component={CurrentMonthStatisticsScreen}
+        options={{
+          title: currentMonth,
+          tabBarScrollEnabled: true,
+        }}
       />
       <Tab.Screen
-        name="Statistics"
-        component={StatisticsScreen}
-        options={{ title: "förra veckan" }}
+        name="LastMonthStatistics"
+        component={LastMonthStatisticsScreen}
+        options={{
+          title: lastMonth,
+          tabBarScrollEnabled: true,
+        }}
+      />
+      <Tab.Screen
+        name="LastYearStatistics"
+        component={LastYearStatisticsScreen}
+        options={{
+          title: lastYear,
+          tabBarScrollEnabled: true,
+        }}
       />
     </Tab.Navigator>
   );
 };
 
 export default ChoresStatisticsNavigator;
-
-// import * as React from "react";
-// import {
-//   createMaterialTopTabNavigator,
-//   MaterialTopTabScreenProps,
-// } from "@react-navigation/material-top-tabs";
-// import BistroScreen from "../screens/BistroScreen";
-// import MapScreen from "../screens/MapScreen";
-// import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-// export type TabParamList = {
-//   Bistro: undefined;
-//   Map: undefined;
-// };
-
-// export type TabScreenProps<Screen extends keyof TabParamList> =
-//   MaterialTopTabScreenProps<TabParamList, Screen>;
-
-// const Tab = createMaterialTopTabNavigator<TabParamList>();
-
-// export default function TabBistroMapNavigator() {
-//   const insets = useSafeAreaInsets();
-
-//   return (
-//     <Tab.Navigator
-//       style={{ paddingTop: insets.top, backgroundColor: "#723A45" }}
-//       initialRouteName="Bistro"
-//       screenOptions={{
-//         tabBarActiveTintColor: "#fff",
-//         tabBarStyle: { backgroundColor: "#723A45" },
-//       }}
-//     >
-//       <Tab.Screen
-//         name="Bistro"
-//         component={BistroScreen}
-//         options={{
-//           title: "Restauranger",
-//         }}
-//       />
-//       <Tab.Screen
-//         name="Map"
-//         component={MapScreen}
-//         options={{
-//           title: "Karta",
-//         }}
-//       />
-//     </Tab.Navigator>
-//   );
-// }
