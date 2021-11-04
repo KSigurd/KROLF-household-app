@@ -64,6 +64,7 @@ import SmallIconButton from "./SmallIconButton";
 import { daysSinceLastDone } from "../store/completedChore/completedChoreSelectors";
 // import { householdUsersFromChore } from "../store/householdUser/householdUserSelectors";
 import { removeChore } from "../data/fireStoreModule";
+import { Chore } from "../interfaces/chore";
 
 interface Props {
   choreId: string;
@@ -78,23 +79,26 @@ const ChoreSurface = ({
   isEditPressed,
   completedBy,
 }: Props) => {
-
   //Define dispatch and states
   const dispatch = useAppDispatch();
   const activeHouseholdState = useAppSelector(
     (state) => state.household.activeHouseholdId
   );
-  const chore = useAppSelector(selectChoreById(choreId));
-  if (!chore) return null;
+  const chore = () => {
+    const chore = useAppSelector(selectChoreById(choreId));
+    if (chore) return chore;
+    else return {} as Chore;
+  };
+  // if (!chore) return null;
 
-  const repeatability = chore.repeatability;
+  const repeatability = chore().repeatability;
 
   const daysSinceLast = useAppSelector(daysSinceLastDone(choreId));
 
   //Check if chore is overdue
   const isLate = () => {
     if (daysSinceLast) {
-      return daysSinceLast > chore?.repeatability;
+      return daysSinceLast > chore().repeatability;
     } else {
       return false;
     }
@@ -117,7 +121,7 @@ const ChoreSurface = ({
             navigation.navigate("ChoreDescriptionModalScreen", choreId);
           }}
         >
-          <Text style={stylesLocal.surfaceText}>{chore.title}</Text>
+          <Text style={stylesLocal.surfaceText}>{chore().title}</Text>
         </TouchableRipple>
         {isEditPressed ? (
           <View />
@@ -140,18 +144,14 @@ const ChoreSurface = ({
                     : styles.isNotLateBackground,
                 ]}
               >
-                {daysSinceLast? (
-                   <Text
-                  style={isLate() ? styles.isLateText : styles.isNotLateText}
-                >
-                  {daysSinceLast}
-                </Text>
+                {daysSinceLast ? (
+                  <Text
+                    style={isLate() ? styles.isLateText : styles.isNotLateText}
+                  >
+                    {daysSinceLast}
+                  </Text>
                 ) : (
-                <Text
-                  style={styles.isNotLateText}
-                >
-                  {repeatability}
-                </Text>
+                  <Text style={styles.isNotLateText}>{repeatability}</Text>
                 )}
               </Surface>
             )}
@@ -167,7 +167,7 @@ const ChoreSurface = ({
             />
             <SmallIconButton
               typeOfIcon="delete-outline"
-              onPress={() => removeChore(chore.id)}
+              onPress={() => removeChore(chore().id)}
             />
           </View>
         ) : null}
