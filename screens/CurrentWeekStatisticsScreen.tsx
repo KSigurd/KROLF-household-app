@@ -87,16 +87,19 @@ const CurrentWeekStatisticsScreen = () => {
           Totalt
         </TestText>
       </View>
-
-      <View style={styles.root}>
-        <View style={styles.circles}>
-          {statistics
-            .filter((chore) => chore.points * chore.completedChores.length > 0)
-            .map((s) => (
-              <StatisticCircle key={s.choreTitle} height={100} data={s} />
-            ))}
+      <ScrollView>
+        <View style={styles.root}>
+          <View style={styles.circles}>
+            {statistics
+              .filter(
+                (chore) => chore.points * chore.completedChores.length > 0
+              )
+              .map((s) => (
+                <StatisticCircle key={s.choreTitle} height={100} data={s} />
+              ))}
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };
