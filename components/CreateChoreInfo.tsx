@@ -7,7 +7,7 @@ import { Chore } from "../interfaces/chore";
 import { addChoreAction, updateChoreAction } from "../store/chore/choreSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import Points from "./Points";
-// import Repeatability from "./Repeatability";
+import Repeatability from "./repeatability";
 import ThemedTextInput from "./ThemedTextInput";
 
 interface Props {
@@ -109,7 +109,7 @@ const CreateChoreInfo: FC<Props> = ({ onClose, activeChore }) => {
             getRepeatability={(repeatability) => {
               setFieldValue("repeatability", repeatability);
             }}
-          /> */}
+          />
           <Points
             initialValue={values.points}
             onChange={(energy) => {

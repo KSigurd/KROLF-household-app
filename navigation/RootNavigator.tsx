@@ -30,6 +30,7 @@ export type RootStackParamList = {
   ChoreDescriptionModalScreen: {
     choreId: string;
   };
+  EditHouseholdUserModalScreen: undefined;
 };
 
 export type StackScreenProps<Screen extends keyof RootStackParamList> =
@@ -51,7 +52,7 @@ const RootNavigator = () => {
           headerTintColor: "#000",
         }}
       >
-        {/* <Stack.Screen
+        <Stack.Screen
           name="Login"
           component={LoginScreen}
           options={{
@@ -118,7 +119,7 @@ const RootNavigator = () => {
           }}
         />
         <Stack.Screen
-          name="EditHouseholdUser"
+          name="EditHouseholdUserModalScreen"
           component={EditHouseholdUserModalScreen}
           options={{
             presentation: "transparentModal",
