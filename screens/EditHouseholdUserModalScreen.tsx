@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import ThemedTextInput from "../components/ThemedTextInput";
 import { Avatar } from "../interfaces/avatar";
 import { TabParamList } from "../navigation/ChoresStatisticsNavigator";
+import { getStatisticsAction } from "../store/completedChore/completedChoreSlice";
 import {
   availableAvatars,
   househouldUsersFromHousehold
@@ -77,10 +78,12 @@ const EditHouseholdUserModalScreen = ({ navigation }: Props) => {
       await dispatch(
         updateHouseholdUserAction(updatedHouseholdUser)
 
+        
         // ).then(() => {
-        //   setAvatar("");
-        //   navigation.navigate("Home");
-      );
+          //   setAvatar("");
+          //   navigation.navigate("Home");
+          );
+          await dispatch(getStatisticsAction(activeHouseholdId));
 
       navigation.pop();
     }

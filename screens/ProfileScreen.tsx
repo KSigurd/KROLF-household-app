@@ -32,7 +32,6 @@ const ProfileScreen = ({ navigation }: Props) => {
     await dispatch(setActiveHousholdAction(householdId));
     await dispatch(getHouseholdUserAction(householdId));
     await dispatch(getChoresAction(householdId));
-    await dispatch(getCompletedChoresAction(householdId))
     navigation.navigate("ChoresStatisticsNavigator");
   };
 
