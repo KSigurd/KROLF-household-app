@@ -25,11 +25,11 @@ const LogoutButton = ({ onClick }: Props) => {
     <NPbutton
       icon="logout"
       color="black"
-      style={{ backgroundColor: "#DDDDDD", padding: 5 }}
+      style={styles.logOutButton}
       //ADD NAVIGATION AND SET state to false
       onPress={() => logoutUser(user.user)}
     >
-      <Text>Logout</Text>
+      <Text style={{fontWeight: "bold"}}>Logout</Text>
     </NPbutton>
   );
 };
@@ -42,5 +42,13 @@ const styles = StyleSheet.create({
     height: "100%",
     borderRadius: 25,
     justifyContent: "center",
+  },
+  logOutButton: {
+    backgroundColor: "white",
+    padding: 5,
+    // MELLANRUM TILL LOGOUTBUTTON
+    marginTop: 30,
+    borderRadius: 10,
+    elevation: 4,
   },
 });

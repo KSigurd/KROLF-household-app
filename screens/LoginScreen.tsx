@@ -39,13 +39,6 @@ const LoginScreen = ({ navigation }: Props) => {
     );
   };
 
-  //   useEffect(() => {
-
-  //     dispatch(getStatisticsAction(activeHouseholdState.id))
-  //    console.log({statisticsState})
-  //    console.log("hejsvejs")
-
-  // })
   return (
     <View style={styles.root}>
       <LoginForm onSubmit={loginUser} />
@@ -79,7 +72,7 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     marginHorizontal: 10,
-    marginVertical: 25,
+    marginVertical: 10,
     justifyContent: "space-between",
   },
   noAccountContainer: {
