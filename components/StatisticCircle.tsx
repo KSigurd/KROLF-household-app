@@ -75,7 +75,7 @@ interface Props {
 const StatisticCircle: FC<Props> = ({ height, data }: Props) => {
 
   const pieData = data.completedChores.map((dataObject, index ) => ({
-    key: `pie-${avatars.find(avatar => avatar.id === String(dataObject.avatarId))?.avatar}`,
+    key: index,
       value: (data.points * dataObject.completedChores.length),
       svg: {
         fill: avatars.find(avatar => avatar.id === String(dataObject.avatarId))?.color,
@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
   },
   circle: {
     width: "100%",
+    height: "40%",
     marginVertical: 10,
     marginHorizontal: 10
   }

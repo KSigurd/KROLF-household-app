@@ -70,7 +70,7 @@ const CurrentWeekStatisticsScreen = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ flexDirection: "column", alignItems: "center"}}>
+      <View style={{ flexDirection: "column" }}>
         <PieChart
           style={{ height: 200 }}
           innerRadius={0}
@@ -81,16 +81,19 @@ const CurrentWeekStatisticsScreen = () => {
         >
           <Labels slices={undefined} height={undefined} width={undefined} />
         </PieChart>
-        <TestText style={{ fontSize: 18, fontWeight: "bold" }}>
+        <TestText
+          style={{ fontSize: 18, alignSelf: "center", fontWeight: "bold" }}
+        >
           Totalt
         </TestText>
       </View>
+
       <View style={styles.root}>
         <View style={styles.circles}>
           {statistics
             .filter((chore) => chore.points * chore.completedChores.length > 0)
-            .map((s, key) => (
-              <StatisticCircle key={key} height={100} data={s} />
+            .map((s) => (
+              <StatisticCircle key={s.choreTitle} height={100} data={s} />
             ))}
         </View>
       </View>
