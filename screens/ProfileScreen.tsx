@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Modal, Portal, Provider } from "react-native-paper";
 import EditHouseholdModal from "../components/EditHouseholdModal";
@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from "../store/store";
 import { isUserAdmin } from "../store/householdUser/householdUserSelectors";
 import LogoutButton from "../components/LogoutButton";
 import BigThemedButton from "../components/BigThemedButton";
+import { getHouseholdUserForLoggedInUserAction } from "../store/householdUser/householdUserSlice";
 
 type Props = NativeStackScreenProps<
   RootStackParamList,
@@ -24,10 +25,19 @@ const ProfileScreen = ({ navigation }: Props) => {
   const databaseHouseholds = useAppSelector(
     (state) => state.household.households
   );
-  const setHousholdAndNavigate = (householdId: string) => {
-    dispatch(setActiveHousholdAction(householdId));
+
+  const user = useAppSelector((state) => state.user.user);
+
+  const setHousholdAndNavigate = async (householdId: string) => {
+    await dispatch(setActiveHousholdAction(householdId));
     navigation.navigate("ChoresStatisticsNavigator");
   };
+
+  useEffect(() => {
+    async () => {
+      await dispatch(getHouseholdUserForLoggedInUserAction(user.id));
+    }
+  }, [databaseHouseholds])
 
   const householdUsersForLoggedInUser = useAppSelector(
     (state) => state.householdUser.householdUsersForLoggedInUser
@@ -40,9 +50,10 @@ const ProfileScreen = ({ navigation }: Props) => {
 
   const onSubmit = async (householdToUpdate?: Household) => {
     setVisible(false);
-    if(householdToUpdate) {
-      await dispatch(updateHouseholdAction(householdToUpdate));
-    }
+    // if(householdToUpdate) {
+    //   console.log(householdToUpdate, "household")
+    //   await dispatch(updateHouseholdAction(householdToUpdate));
+    // }
   };
 
   return (
@@ -58,8 +69,8 @@ const ProfileScreen = ({ navigation }: Props) => {
       </Portal>
       <Portal.Host>
         <View style={styles.root}>
-          <ScrollView>
             <Text style={styles.title}>Välj hushåll:</Text>
+          <ScrollView>
             {databaseHouseholds.map((prop, key) => {
               return (
               
