@@ -56,7 +56,7 @@ const Repeatability = ({ initialValue, getRepeatability }: Props) => {
             }
           >
             <View style={stylesLocal.repeateContainer}>
-              <Text style={{fontSize: 18}}>
+              <Text style={{fontSize: 18, fontWeight: "bold"}}>
                 Återkommer:
               </Text>
               <View style={stylesLocal.repeatBox}>
