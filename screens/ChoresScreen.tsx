@@ -19,11 +19,14 @@ const ChoresScreen = ({ navigation }: any) => {
   );
   const user = useAppSelector((state) => state.user.user);
   const allHouseholdChores = useAppSelector((state) => state.chore.chores);
-  const allHouseholdUsers = useAppSelector(
-    househouldUsersFromHousehold(activeHouseholdState)
-  );
+  const allHouseholdUsers = useAppSelector(househouldUsersFromHousehold(activeHouseholdState));
   const household = useAppSelector(selectHouseholdById(activeHouseholdState));
   const [isEditPressed, setIsEditPressed] = React.useState(false);
+
+  const isChores = () => {
+    if(allHouseholdChores.length) return true
+    else return false
+  }
 
   const isAdmin = isUserAdmin(activeHouseholdState, allHouseholdUsers);
 
@@ -57,12 +60,19 @@ const ChoresScreen = ({ navigation }: any) => {
         })}
       </ScrollView>
       {isAdmin ? (
-        <View style={localStyles.bottomButtonRow}>
+        <View
+        style={
+          isChores()
+            ? localStyles.bottomButtonRow
+            : localStyles.bottomButtonRowOneButton
+        }
+      >
           <BigThemedButton
             typeOfIcon="plus-circle-outline"
             buttonText="Lägg till"
             onPress={() => navigation.navigate("CreateChoreModalScreen")}
           />
+          {isChores() ? (
           <BigThemedButton
             isPressed={isEditPressed}
             typeOfIcon="pencil-outline"
@@ -71,6 +81,7 @@ const ChoresScreen = ({ navigation }: any) => {
             alternateButtonText="Avbryt"
             onPress={setIsPressed}
           />
+        ) : null}
         </View>
       ) : (
         <View />
@@ -86,6 +97,14 @@ const localStyles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-end",
     justifyContent: "space-between",
+    zIndex: 1,
+    backgroundColor: "#f0f0f0",
+    height: 75,
+  },
+  bottomButtonRowOneButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     zIndex: 1,
     backgroundColor: "#f0f0f0",
     height: 75,
