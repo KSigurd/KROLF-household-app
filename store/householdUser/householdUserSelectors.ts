@@ -9,9 +9,8 @@ export const isUserAdmin = (
 ) => {
   return householdUsers.find((hu) => hu.householdId === householdId)?.isAdmin;
 };
+  export const househouldUsersFromHousehold = (householdId?: string)  => (state: RootState) => {
 
-export const househouldUsersFromHousehold =
-  (householdId: string) => (state: RootState) => {
     let array: HouseholdUser[] = [];
     state.householdUser.householdUsers.forEach((hu) => {
       if (hu.householdId === householdId) {

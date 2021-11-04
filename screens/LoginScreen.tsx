@@ -50,17 +50,6 @@ const LoginScreen = ({ navigation }: Props) => {
         >
           här
         </Text>
-
-        <Text
-          style={styles.createAccountText}
-          onPress={() => {
-            dispatch(getHouseholdsAction("AMHQtDvOpBThnBV2cfaM")).then(() => {
-              navigation.navigate("Profile");
-            });
-          }}
-        >
-          GÅ VIDARE UTAN INLOGG
-        </Text>
       </View>
     </View>
   );
@@ -78,11 +67,14 @@ const styles = StyleSheet.create({
   noAccountContainer: {
     flexDirection: "row",
     justifyContent: "center",
+    marginBottom: 20,
   },
   noAccountText: {
+    marginTop:10,
     fontWeight: "bold",
   },
   createAccountText: {
+    marginTop:10,
     fontWeight: "bold",
     alignSelf: "center",
     color: "#B8B8B8",

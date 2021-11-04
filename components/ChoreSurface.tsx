@@ -13,6 +13,7 @@ import { daysSinceLastDone, getCompletedChoreByChoreId } from "../store/complete
 import { removeChore } from "../data/fireStoreModule";
 import { Chore } from "../interfaces/chore";
 
+
 interface Props {
   choreId: string;
   isEditPressed: boolean;
@@ -30,8 +31,8 @@ const ChoreSurface = ({
   //Define dispatch and states
   const dispatch = useAppDispatch();
   const activeHouseholdState = useAppSelector(
-    (state) => state.household.activeHouseholdId
-    );
+    (state) => state.household.activeHouseholdId);
+  
     const chore = () => {
       const chore = useAppSelector(selectChoreById(choreId));
       if (chore) return chore;
@@ -46,6 +47,20 @@ const ChoreSurface = ({
   const isLate = () => {
     if (daysSinceLast) {
       return daysSinceLast > chore().repeatability;
+    } else {
+      return false;
+    }
+  };
+
+
+  const repeatability = chore.repeatability;
+
+  const daysSinceLast = useAppSelector(daysSinceLastDone(choreId));
+
+  //Check if chore is overdue
+  const isLate = () => {
+    if (daysSinceLast) {
+      return daysSinceLast > chore?.repeatability;
     } else {
       return false;
     }
@@ -76,12 +91,14 @@ const ChoreSurface = ({
           <View style={stylesLocal.avatarAndBadgeContainer}>
             {completedBy.length ? (
               <Text style={[styles.buttonText, styles.choresButtonAdditions]}>
+
                 {completedBy.map((user) => {                  
                   if (user) return avatars.find((avatar) => (avatar.id === user.avatarId))?.avatar;
                   
                 })}
               </Text>
             ) : ( 
+
               <Surface
                 style={[
                   styles.repeatabilityCircle,
@@ -98,6 +115,7 @@ const ChoreSurface = ({
                   </Text>
                 ) : (
                   <Text style={styles.isNotLateText}>{repeatability}</Text>
+
                 )}
               </Surface>
             )}

@@ -13,9 +13,9 @@ const LogoutButton = ({ onClick }: Props) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user);
 
-  const activeHouseholdState = useAppSelector((state) => state.user);
+  const activeUserState = useAppSelector((state) => state.user);
   const logoutUser = async (user: User) => {
-    activeHouseholdState.loggedIn = false;
+    activeUserState.loggedIn = false;
     await dispatch(logoutUserAction(user)).then(() => {
       onClick();
     });
@@ -38,16 +38,18 @@ export default LogoutButton;
 
 const styles = StyleSheet.create({
   NPbutton: {
-    flex: 1,
+    // flex: 1,
     height: "100%",
     borderRadius: 25,
     justifyContent: "center",
+    marginBottom: 10
   },
   logOutButton: {
     backgroundColor: "white",
     padding: 5,
     // MELLANRUM TILL LOGOUTBUTTON
-    marginTop: 30,
+    marginBottom: 15,
+    marginTop: 8,
     borderRadius: 10,
     elevation: 4,
   },

@@ -67,77 +67,77 @@
 //  })
 
 
-//   // const statistics = useAppSelector((state) => {
+  // const statistics = useAppSelector((state) => {
 
-//   //   const activeHouseholdId = "1";
+  //   const activeHouseholdId = "1";
 
-//   //   const chores = state.chore.chores.filter(
-//   //     (c) => String(c.householdId) == activeHouseholdId
-//   //   );
+  //   const chores = state.chore.chores.filter(
+  //     (c) => String(c.householdId) == activeHouseholdId
+  //   );
     
-//   //   const activeHouseholdUsers = state.householdUser.householdUsers.filter(
-//   //     (hu) => String(hu.householdId) == activeHouseholdId 
-//   //   );
+  //   const activeHouseholdUsers = state.householdUser.householdUsers.filter(
+  //     (hu) => String(hu.householdId) == activeHouseholdId 
+  //   );
 
 
-//   //   let newarray: UserStatisticsDTO[]
-//   //   const users = activeHouseholdUsers.map((ahu) => {
-//   //     avatars.map((ava) => {
-//   //       if(ava.id == ahu.avatarId) {
-//   //         newarray.push({avatarEmoji: ava.avatar, color: ava.color})
-//   //       }
+  //   let newarray: UserStatisticsDTO[]
+  //   const users = activeHouseholdUsers.map((ahu) => {
+  //     avatars.map((ava) => {
+  //       if(ava.id == ahu.avatarId) {
+  //         newarray.push({avatarEmoji: ava.avatar, color: ava.color})
+  //       }
 
-//   //     })
+  //     })
        
-//   //   });
+  //   });
 
-//   //   const avatarEmoji = avatars.filter(
-//   //     (a) => String(a.id) == activeHouseholdUsers.
-//   //   )
-
-  
-//   //   const completedChoresForHousehold =
-//   //     state.completedChore.completedChores.filter((cc) =>
-//   //       chores.some((c) => c.id === cc.choreId)
-//   //     );
+  //   const avatarEmoji = avatars.filter(
+  //     (a) => String(a.id) == activeHouseholdUsers.
+  //   )
 
   
+  //   const completedChoresForHousehold =
+  //     state.completedChore.completedChores.filter((cc) =>
+  //       chores.some((c) => c.id === cc.choreId)
+  //     );
 
-//   //   return chores.map((chore) => {
-//   //     const completedChoresForChore = completedChoresForHousehold.filter(
-//   //       (cc) => chore.id === cc.choreId
-//   //     );
+  
 
-//   //     const user = completedChoresForHousehold.filter(
-//   //       (cc) => chore.id === cc.choreId
-//   //     );
+  //   return chores.map((chore) => {
+  //     const completedChoresForChore = completedChoresForHousehold.filter(
+  //       (cc) => chore.id === cc.choreId
+  //     );
+
+  //     const user = completedChoresForHousehold.filter(
+  //       (cc) => chore.id === cc.choreId
+  //     );
 
     
-//       // todo....
-// //       return {
-// //         chore,
-// // // newarray,
-// //         users: {
-// //           avatarEmoji,
-// //           color,
-// //           points,
-// //         },
-// //       };
-//   //   });
-//   // });
+      // todo....
+//       return {
+//         chore,
+// // newarray,
+//         users: {
+//           avatarEmoji,
+//           color,
+//           points,
+//         },
+//       };
+  //   });
+  // });
 
-//   // 1. Hämta alla Completed Chores
-//   // 2. Filtera på datum
-//   // 3. Mappa över
+  // 1. Hämta alla Completed Chores
+  // 2. Filtera på datum
+  // 3. Mappa över
 
 
 
-//   // function calcTotal() {
-//   //   let total: 
-//   //   statisticsState.forEach((chore) => {
-//   //     // return chore.points * chore.completedChores.length
-//   //   }
-//   //   )}
+  // function calcTotal() {
+  //   let total: 
+  //   statisticsState.forEach((chore) => {
+  //     // return chore.points * chore.completedChores.length
+  //   }
+  //   )}
 
 //   return (
 //     <View style={styles.root}>
