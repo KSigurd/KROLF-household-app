@@ -19,9 +19,9 @@ Starta appen genom att köra `npm start`
 OBS! För att notiser ska fungera i EXPO, måste du logga in på ditt EXPO-konto. Görs genom kommandot `expo login`.
 ## Krav
 Kravlista
-•	En logga, splashscreen och en appikon ska designas och användas. [JA]
-•	Applikationen ska byggas med RN, Expo & TS. [JA]
-•	Designen av appen ska utgå ifrån befintliga skisser, undantag kan ges men ska diskuteras med produktägaren, godkännas och dokumenteras. [JA]
+*	En logga, splashscreen och en appikon ska designas och användas. [JA]
+*	Applikationen ska byggas med RN, Expo & TS. [JA]
+*	Designen av appen ska utgå ifrån befintliga skisser, undantag kan ges men ska diskuteras med produktägaren, godkännas och dokumenteras. [JA]
 Hushåll
 •	Ett hushåll ska ha ett namn och en genererad enkel) kod så andra kan gå med i hushållet, namnet ska gå att ändra. [JA]
 Konto
