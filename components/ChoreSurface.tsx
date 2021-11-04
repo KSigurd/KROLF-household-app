@@ -52,20 +52,6 @@ const ChoreSurface = ({
     }
   };
 
-
-  const repeatability = chore.repeatability;
-
-  const daysSinceLast = useAppSelector(daysSinceLastDone(choreId));
-
-  //Check if chore is overdue
-  const isLate = () => {
-    if (daysSinceLast) {
-      return daysSinceLast > chore?.repeatability;
-    } else {
-      return false;
-    }
-  };
-
   //When pressing on delete (trash bin) button
   const removeChore = async (choreId: string) => {
     await dispatch(removeChoreAction(choreId));

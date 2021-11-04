@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { LogBox, ScrollView, StyleSheet, View, Text } from "react-native";
 import { useDispatch } from "react-redux";
@@ -10,28 +9,28 @@ import { HouseholdUser } from "../interfaces/householdUser";
 import { getChoresAction } from "../store/chore/choreSlice";
 import { getCompletedChoresAction } from "../store/completedChore/completedChoreSlice";
 import { selectHouseholdById } from "../store/household/hoseholdSelector";
-import { householdUsersFromChore, househouldUsersFromHousehold, isUserAdmin } from "../store/householdUser/householdUserSelectors";
+import {
+  householdUsersFromChore,
+  househouldUsersFromHousehold,
+  isUserAdmin,
+} from "../store/householdUser/householdUserSelectors";
 import { RootState, useAppSelector, useAppDispatch } from "../store/store";
-    
-const ChoresScreen = ({ navigation }: any) => {
-  
-    LogBox.ignoreLogs(["timer"]);
-  const dispatch = useAppDispatch();
-  
-  const completedChores = useAppSelector(state => state.completedChore.completedChores)
-  const householdUsers = useAppSelector(state => state.householdUser.householdUsers)
 
-   const completedBy = (choreId: string) => useAppSelector(householdUsersFromChore(choreId));
-    const filteredHouseholdUsers: HouseholdUser[] = [];
-    for (const chore of filteredCompletedChores) {
-      const householdUser = householdUsers.find(
-        (user) => user.id === chore.householdUserId
-      );
-      if (householdUser && !householdUsers.find((hu) => hu === householdUser))
-        filteredHouseholdUsers.push(householdUser);
-    }
-    return householdUsers;
-  };
+const ChoresScreen = ({ navigation }: any) => {
+  LogBox.ignoreLogs(["timer"]);
+  const dispatch = useAppDispatch();
+
+  const completedChores = useAppSelector(
+    (state) => state.completedChore.completedChores
+  );
+  const householdUsers = useAppSelector(
+    (state) => state.householdUser.householdUsers
+  );
+
+  const completedBy = (choreId: string) =>
+    useAppSelector(householdUsersFromChore(choreId));
+
+  const filteredHouseholdUsers: HouseholdUser[] = [];
 
   const activeHouseholdState = useAppSelector(
     (state) => state.household.activeHouseholdId
@@ -40,23 +39,25 @@ const ChoresScreen = ({ navigation }: any) => {
   const allHouseholdChores = useAppSelector((state) => state.chore.chores);
   const [isEditPressed, setIsEditPressed] = useState(false);
   // const completedBy = (choreId: string) => useAppSelector(householdUsersFromChore(choreId));
-  
-    useEffect(() => {
-      dispatch(getChoresAction(activeHouseholdState))
-      dispatch(getCompletedChoresAction(activeHouseholdState))
-    }, [activeHouseholdState])
 
-const user = useAppSelector((state) => state.user.user);
+  useEffect(() => {
+    dispatch(getChoresAction(activeHouseholdState));
+    dispatch(getCompletedChoresAction(activeHouseholdState));
+  }, [activeHouseholdState]);
 
- const allHouseholdUsers = useAppSelector(househouldUsersFromHousehold(activeHouseholdState));
-const household = useAppSelector(selectHouseholdById(activeHouseholdState));
+  const user = useAppSelector((state) => state.user.user);
+
+  const allHouseholdUsers = useAppSelector(
+    househouldUsersFromHousehold(activeHouseholdState)
+  );
+  const household = useAppSelector(selectHouseholdById(activeHouseholdState));
 
   const isChores = () => {
-    if(allHouseholdChores.length) return true
-    else return false
-  }
+    if (allHouseholdChores.length) return true;
+    else return false;
+  };
 
-const isAdmin = isUserAdmin(activeHouseholdState, allHouseholdUsers);
+  const isAdmin = isUserAdmin(activeHouseholdState, allHouseholdUsers);
 
   //Toggle press on edit button
   const setIsPressed = () => {
@@ -71,7 +72,9 @@ const isAdmin = isUserAdmin(activeHouseholdState, allHouseholdUsers);
           navigation.navigate("EditHouseholdUserModalScreen");
         }}
       />
-      <Text style={{fontSize: 20}}>{household?.inviteCode} är invitecoden</Text>
+      {/* <Text style={{ fontSize: 20 }}>
+        {household?.inviteCode} är invitecode
+      </Text> */}
       <ScrollView style={{ flex: 1 }}>
         {allHouseholdChores.map((prop) => {
           return (
@@ -88,27 +91,27 @@ const isAdmin = isUserAdmin(activeHouseholdState, allHouseholdUsers);
       </ScrollView>
       {isAdmin ? (
         <View
-        style={
-          isChores()
-            ? localStyles.bottomButtonRow
-            : localStyles.bottomButtonRowOneButton
-        }
-      >
+          style={
+            isChores()
+              ? localStyles.bottomButtonRow
+              : localStyles.bottomButtonRowOneButton
+          }
+        >
           <BigThemedButton
             typeOfIcon="plus-circle-outline"
             buttonText="Lägg till"
             onPress={() => navigation.navigate("CreateChoreModalScreen")}
           />
           {isChores() ? (
-          <BigThemedButton
-            isPressed={isEditPressed}
-            typeOfIcon="pencil-outline"
-            alternateTypeOfIcon="close-circle-outline"
-            buttonText="Ändra"
-            alternateButtonText="Avbryt"
-            onPress={() => setIsPressed()}
-          />
-        ) : null}
+            <BigThemedButton
+              isPressed={isEditPressed}
+              typeOfIcon="pencil-outline"
+              alternateTypeOfIcon="close-circle-outline"
+              buttonText="Ändra"
+              alternateButtonText="Avbryt"
+              onPress={() => setIsPressed()}
+            />
+          ) : null}
         </View>
       ) : (
         <View />
@@ -145,4 +148,3 @@ const localStyles = StyleSheet.create({
     height: 75,
   },
 });
-
