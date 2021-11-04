@@ -1,17 +1,16 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Modal, Portal, Provider } from "react-native-paper";
-import AddHouseholdButton from "../components/AddHouseholdButton";
 import EditHouseholdModal from "../components/EditHouseholdModal";
 import HouseholdSurface from "../components/HouseholdSurface";
-import JoinHouseholdButton from "../components/JoinHouseHoldButton";
 import { Household } from "../interfaces/households";
 import { setActiveHousholdAction, updateHouseholdAction } from "../store/household/householdSlice";
 import { RootStackParamList } from "../navigation/RootNavigator";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { isUserAdmin } from "../store/householdUser/householdUserSelectors";
 import LogoutButton from "../components/LogoutButton";
+import BigThemedButton from "../components/BigThemedButton";
 
 type Props = NativeStackScreenProps<
   RootStackParamList,
@@ -49,16 +48,21 @@ const ProfileScreen = ({ navigation }: Props) => {
   return (
     <Provider>
       <Portal>
-        <Modal visible={visible} onDismiss={() => setVisible(false)} contentContainerStyle={styles.modalStyle}>
+        <Modal
+          visible={visible}
+          onDismiss={() => setVisible(false)}
+          contentContainerStyle={styles.modalStyle}
+        >
           <EditHouseholdModal household={householdToEdit} onSubmit={onSubmit} />
         </Modal>
       </Portal>
       <Portal.Host>
         <View style={styles.root}>
-          <View>
+          <ScrollView>
             <Text style={styles.title}>Välj hushåll:</Text>
             {databaseHouseholds.map((prop, key) => {
               return (
+              
                 <HouseholdSurface
                   key={key}
                   householdObject={prop}
@@ -67,18 +71,23 @@ const ProfileScreen = ({ navigation }: Props) => {
                   onChange={(householdId) => {
                     setHousholdAndNavigate(householdId);
                   }}
-                />
+                  />
+                 
               );
             })}
+          </ScrollView>
             <LogoutButton onClick={() => navigation.replace("Login")} />
-          </View>
 
           <View style={styles.NPbuttonRoot}>
-            <AddHouseholdButton
-              onAddHousehold={() => navigation.navigate("CreateHousehold")}
+            <BigThemedButton
+              typeOfIcon="plus-circle-outline"
+              buttonText="Lägg till"
+              onPress={() => navigation.navigate("CreateHousehold")}
             />
-            <JoinHouseholdButton
-              onJoinHousehold={() => navigation.navigate("JoinHousehold")}
+            <BigThemedButton
+              typeOfIcon="account-plus-outline"
+              buttonText="Gå med"
+              onPress={() => navigation.navigate("JoinHousehold")}
             />
           </View>
         </View>
@@ -93,7 +102,7 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     marginHorizontal: 10,
-    marginVertical: 25,
+    marginVertical: 10,
     justifyContent: "space-between",
   },
   NPbuttonRoot: {

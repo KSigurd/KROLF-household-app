@@ -34,7 +34,8 @@ export type RootStackParamList = {
   AddHouseholdUserInfoModalScreen:{
     inviteCode:string
   };
-  EditHouseholdUser: undefined;
+  EditHouseholdUserModalScreen: undefined;
+
 };
 
 export type StackScreenProps<Screen extends keyof RootStackParamList> =
@@ -132,7 +133,7 @@ const RootNavigator = () => {
             }}
           />
         <Stack.Screen
-          name="EditHouseholdUser"
+          name="EditHouseholdUserModalScreen"
           component={EditHouseholdUserModalScreen}
           options={{
             presentation: "transparentModal",
