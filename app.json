@@ -4,9 +4,9 @@
     "slug": "KROLF-household-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/krolf-icon.png",
     "splash": {
-      "image": "./assets/splashscreen.png",
+      "image": "./assets/krolf-splashscreen.png",
       "resizeMode": "contain",
       "backgroundColor": "#0c501c"
     },
