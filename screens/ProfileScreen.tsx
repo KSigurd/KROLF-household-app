@@ -10,6 +10,9 @@ import { RootStackParamList } from "../navigation/RootNavigator";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { isUserAdmin } from "../store/householdUser/householdUserSelectors";
 import LogoutButton from "../components/LogoutButton";
+import { getHouseholdUserAction } from "../store/householdUser/householdUserSlice";
+import { getChoresAction } from "../store/chore/choreSlice";
+import { getCompletedChoresAction } from "../store/completedChore/completedChoreSlice";
 import BigThemedButton from "../components/BigThemedButton";
 import { getHouseholdUserForLoggedInUserAction } from "../store/householdUser/householdUserSlice";
 
@@ -25,11 +28,13 @@ const ProfileScreen = ({ navigation }: Props) => {
   const databaseHouseholds = useAppSelector(
     (state) => state.household.households
   );
-
-  const user = useAppSelector((state) => state.user.user);
-
+    const user = useAppSelector((state) => state.user.user);
+  
   const setHousholdAndNavigate = async (householdId: string) => {
     await dispatch(setActiveHousholdAction(householdId));
+    await dispatch(getHouseholdUserAction(householdId));
+    await dispatch(getChoresAction(householdId));
+    await dispatch(getCompletedChoresAction(householdId))
     navigation.navigate("ChoresStatisticsNavigator");
   };
 
