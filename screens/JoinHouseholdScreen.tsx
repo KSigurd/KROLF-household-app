@@ -1,21 +1,27 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Formik } from "formik";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, Surface, Text, TouchableRipple } from "react-native-paper";
+import { Button, Text } from "react-native-paper";
 import * as Yup from "yup";
+import BigThemedButton from "../components/BigThemedButton";
 import ThemedTextInput from "../components/ThemedTextInput";
-import { avatars } from "../data/avatarData";
-import { Avatar } from "../interfaces/avatar";
 import { RootStackParamList } from "../navigation/RootNavigator";
-import { househouldUsersFromHousehold, availableAvatars } from "../store/householdUser/householdUserSelectors";
-import { addHouseholdUserAction } from "../store/householdUser/householdUserSlice";
+// import { selectHouseholdByInviteCode } from "../store/household/hoseholdSelector";
+import {
+  getHouseholdsAction,
+  getOneHouseholdAction,
+  setActiveHousholdAction,
+} from "../store/household/householdSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 
 interface ParamsToValidate {
   inviteCode: string;
-  name: string;
-  avatarId: string;
+}
+
+interface Props {
+  inviteCode: string;
+  navigation: any;
 }
 
 type PostSchemaType = Record<keyof ParamsToValidate, Yup.AnySchema>;
@@ -35,60 +41,55 @@ const validationSchema = Yup.object().shape<PostSchemaType>({
     .min(6, "En inbjudningskod måste innehålla 6 siffror")
     .max(6, "En inbjudningskod måste innehålla 6 siffror")
     .required(),
-  name: Yup.string().required("Du måste ange ett namn"),
-  avatarId: Yup.string().min(1, "Välj en avatar"),
 });
 
-type Props = NativeStackScreenProps<RootStackParamList, "JoinHousehold">;
+//type Props = NativeStackScreenProps<RootStackParamList, "JoinHousehold">;
 
-const JoinHouseholdScreen: FC<Props> = ({ navigation }: Props) => {
-  const [avatar, setAvatar] = useState("");
+const JoinHouseholdScreen: FC<Props> = ({ navigation, inviteCode }: Props) => {
   const dispatch = useAppDispatch();
-  const userState = useAppSelector((state) => state.user);
+  const errorState = useAppSelector(state => state.household);
   const inputParams: ParamsToValidate = {
     inviteCode: "",
-    name: "",
-    avatarId: avatar,
   } as ParamsToValidate;
 
+  let inputValueOfInviteCode = " ";
+
+  // const change = (value: string) => {
+
+  //   inputValueOfInviteCode = value;
+  // // }
+
+  // useEffect(() => {
+  //   dispatch(setActiveHousholdAction(inviteCode));
+  //   console.log(inputValueOfInviteCode);
+  // }, [inviteCode]);
+
+  // const userState = useAppSelector((state) => state.user);
+
+  // useEffect(() => {
+  //   dispatch(getHouseholdsAction(userState.user.id));
+  // }, [userState.user]);
+
+
+
   const handleSubmit = async (inputParams: ParamsToValidate) => {
-    await dispatch(
-      addHouseholdUserAction({
-        inviteCode: Number(inputParams.inviteCode),
-        newHouseholdUser: {
-          avatarId: inputParams.avatarId,
-          name: inputParams.name,
-          householdId: "",
-          isAdmin: false,
-          userId: userState.user.id,
-        },
-      })
-    ).then(() => {
-      setAvatar("");
-      navigation.navigate("Profile");
-    });
+    inviteCode = inputParams.inviteCode;
+    await dispatch(getOneHouseholdAction(Number(inputParams.inviteCode)))
+
+    
+    // if(errorState){navigation.navion}
+    
+
+    //console.log(response)
+    navigation.navigate("AddHouseholdUserInfoModalScreen", inviteCode);
   };
-
-  const chooseAvatar = (avatar: Avatar) => {
-    setAvatar(avatar.id);
-  };
-
-
-  // const activeHouseholdId = useAppSelector(
-  //   (state) => state.household.activeHouseholdId
-  // );
-  // const householdUsersFromActiveHousehold = useAppSelector(
-  //   househouldUsersFromHousehold(activeHouseholdId)
-  // );
-  // const availableAvatarList = useAppSelector(
-  //   availableAvatars(householdUsersFromActiveHousehold)
-  // );
 
   return (
     <Formik
       initialValues={inputParams}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
+      //handleChange={change}
     >
       {({
         handleChange,
@@ -97,6 +98,7 @@ const JoinHouseholdScreen: FC<Props> = ({ navigation }: Props) => {
         values,
         touched,
         errors,
+        setFieldValue,
       }) => (
         <View style={styles.root}>
           <View>
@@ -104,56 +106,25 @@ const JoinHouseholdScreen: FC<Props> = ({ navigation }: Props) => {
               secureTextEntry={false}
               label="Inbjudningskod"
               value={values.inviteCode}
-              onChangeText={handleChange<keyof ParamsToValidate>("inviteCode")}
+              // onChange={(value) => setFieldValue("inviteCode", Number(value))}
+              //onChange={() => change(values.inviteCode)}
+              onChangeText={
+                handleChange<keyof ParamsToValidate>("inviteCode")
+                //inviteCode= value
+                //setFieldValue("inviteCode", value);
+              }
               onBlur={handleBlur<keyof ParamsToValidate>("inviteCode")}
               helperText={touched.inviteCode && errors.inviteCode}
             />
-            <ThemedTextInput
-              secureTextEntry={false}
-              label="Ditt namn i hushållet"
-              value={values.name}
-              onChangeText={handleChange<keyof ParamsToValidate>("name")}
-              onBlur={handleBlur<keyof ParamsToValidate>("name")}
-              helperText={touched.name && errors.name}
-            />
-            <View style={styles.selectAvatar}>
-              <Text style={styles.buttonText}>Välj din avatar</Text>
-              <Surface style={styles.avatarContainer}>
-                {avatars.map((prop, key) => {
-                  return (
-                    <TouchableRipple
-                      key={key}
-                      borderless={true}
-                      style={[
-                        styles.repeatabilityCircle,
-                        styles.avatarButton,
-                        prop.id === avatar
-                          ? styles.selectedAvatarBackground
-                          : styles.unselectedAvatarBackground,
-                      ]}
-                      onPress={() => {
-                        values.avatarId = prop.id;
-                        chooseAvatar(prop);
-                      }}
-                    >
-                      <Text style={styles.buttonText}>{prop.avatar}</Text>
-                    </TouchableRipple>
-                  );
-                })}
-              </Surface>
-            </View>
           </View>
-          <Button
-            icon="plus-circle-outline"
-            mode="contained"
-            color="#fff"
-            labelStyle={styles.buttonIconSize}
-            uppercase={false}
-            style={styles.NPbutton}
+          <View style={styles.themedButtonContainer}>
+          <BigThemedButton
+            typeOfIcon="plus-circle-outline"
+            buttonText="Gå med"
             onPress={() => handleSubmit()}
-          >
-            <Text style={styles.buttonText}>Gå med</Text>
-          </Button>
+          />
+          </View>
+
         </View>
       )}
     </Formik>
@@ -166,11 +137,14 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     justifyContent: "space-between",
+    marginHorizontal: 10,
+    marginVertical: 10
   },
   selectAvatar: {
     alignItems: "flex-start",
     flexDirection: "column",
     marginHorizontal: 10,
+    marginVertical: 10
   },
   buttonText: {
     fontSize: 18,
@@ -213,13 +187,6 @@ const styles = StyleSheet.create({
   buttonIconSize: {
     fontSize: 25,
   },
-  NPbutton: {
-    width: 150,
-    borderRadius: 100,
-    padding: 10,
-    alignSelf: "center",
-    marginVertical: 10,
-  },
   avatarButton: {
     margin: 0,
     elevation: 0,
@@ -227,4 +194,7 @@ const styles = StyleSheet.create({
   input: {
     elevation: 4,
   },
+  themedButtonContainer: {
+    alignItems: "center"
+  }
 });

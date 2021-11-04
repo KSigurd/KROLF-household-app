@@ -3,10 +3,13 @@ import {
   addHouseholdUser,
   getHouseholdUsers,
   updateHouseholdUser,
-  getHouseholdUsersForLoggedInUser
+  getHouseholdUsersForLoggedInUser,
 } from "../../data/fireStoreModule";
 import { resetErrorAction } from "../globalActions";
-import { CreateHouseholdUser, HouseholdUser } from "../../interfaces/householdUser";
+import {
+  CreateHouseholdUser,
+  HouseholdUser,
+} from "../../interfaces/householdUser";
 import { ThunkConfig } from "../store";
 import { householdUser } from "../../data/mockHouseholdData";
 
@@ -74,29 +77,30 @@ export const updateHouseholdUserAction = createAsyncThunk<
   }
 });
 
-
-
 export const addHouseholdUserAction = createAsyncThunk<
   HouseholdUser,
-  {inviteCode?: number, newHouseholdUser: CreateHouseholdUser},
+  { inviteCode?: number; newHouseholdUser: CreateHouseholdUser },
   ThunkConfig
->("addUserToHousehold", async ({inviteCode, newHouseholdUser}, { rejectWithValue }) => {
-  try {
-    let householdUserId: string;
-    if(inviteCode) {
-      householdUserId = await addHouseholdUser(newHouseholdUser, inviteCode);
-    } else {
-      householdUserId = await addHouseholdUser(newHouseholdUser);
+>(
+  "addUserToHousehold",
+  async ({ inviteCode, newHouseholdUser }, { rejectWithValue }) => {
+    try {
+      let householdUserId: string;
+      if (inviteCode) {
+        householdUserId = await addHouseholdUser(newHouseholdUser, inviteCode);
+      } else {
+        householdUserId = await addHouseholdUser(newHouseholdUser);
+      }
+      const householdUser = {
+        ...newHouseholdUser,
+        id: householdUserId,
+      };
+      return householdUser;
+    } catch (e) {
+      return rejectWithValue(false);
     }
-        const householdUser = {
-          ...newHouseholdUser,
-          id: householdUserId,
-        };
-    return householdUser;
-  } catch (e) {
-    return rejectWithValue(false);
   }
-});
+);
 
 const householdUserSlice = createSlice({
   name: "householdUser",
@@ -120,21 +124,27 @@ const householdUserSlice = createSlice({
         state.error = undefined;
       }),
       builder.addCase(updateHouseholdUserAction.fulfilled, (state, action) => {
-        const index = state.householdUsers.findIndex(hu => 
-          hu.id === action.payload.id
+        const index = state.householdUsers.findIndex(
+          (hu) => hu.id === action.payload.id
         );
         state.householdUsers[index] = action.payload;
       }),
       builder.addCase(updateHouseholdUserAction.rejected, (state, action) => {
         state.error = "Något gick fel";
       }),
-      builder.addCase(getHouseholdUserForLoggedInUserAction.fulfilled, (state, action) => {
-        state.householdUsersForLoggedInUser = action.payload.response;
-      }),
-        builder.addCase(getHouseholdUserForLoggedInUserAction.rejected, (state, action) => {
+      builder.addCase(
+        getHouseholdUserForLoggedInUserAction.fulfilled,
+        (state, action) => {
+          state.householdUsersForLoggedInUser = action.payload.response;
+        }
+      ),
+      builder.addCase(
+        getHouseholdUserForLoggedInUserAction.rejected,
+        (state, action) => {
           state.householdUsers = [];
           state.error = "Kunde inte hämta användardata";
-        })
+        }
+      );
   },
 });
 

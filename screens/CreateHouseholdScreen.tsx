@@ -10,7 +10,8 @@ const CreateHouseholdScreen = ({ navigation }: Props) => {
   return (
     <View style={styles.root}>
       <CreateHouseholdForm
-        onCreateSucceded={() => navigation.navigate("Profile")}
+        onCreateSucceded={() => {
+          navigation.navigate("Profile")}}
       />
     </View>
   );

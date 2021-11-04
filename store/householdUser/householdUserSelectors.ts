@@ -10,8 +10,7 @@ export const isUserAdmin = (
   return householdUsers.find((hu) => hu.householdId === householdId)?.isAdmin;
 };
 
-export const househouldUsersFromHousehold =
-  (householdId: string) => (state: RootState) => {
+  export const househouldUsersFromHousehold = (householdId?: string)  => (state: RootState) => {
     let array: HouseholdUser[] = [];
     state.householdUser.householdUsers.forEach((hu) => {
       if (hu.householdId === householdId) {
@@ -60,3 +59,14 @@ export const availableAvatars =
 //     }
 //     return householdUsers;
 //   };
+
+
+export const availableAvatars = (householdUsers: HouseholdUser[]) =>  (state: RootState) => {
+  let availableAvatars: Avatar[] = [];
+  avatars.forEach(avatar => {
+    if(!householdUsers.find(householdUser => String(householdUser.avatarId) === avatar.id)) {
+      availableAvatars.push(avatar);
+    }
+  })
+  return availableAvatars;
+}

@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
 import userReducer from "./user/userSlice";
 import choreReducer from "./chore/choreSlice";
@@ -13,7 +13,12 @@ const store = configureStore({
        chore: choreReducer,
        completedChore: completedChoreReducer,
        household: householdReducer,
-    }
+    },
+    middleware: [
+        ...getDefaultMiddleware({
+            serializableCheck: false
+        })
+    ],
 });
 
 /* Derive types from our store */

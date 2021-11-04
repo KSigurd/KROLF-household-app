@@ -3,6 +3,10 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Button as NPbutton } from "react-native-paper";
 import { Chore } from "../interfaces/chore";
+import { CompletedChore } from "../interfaces/completedChore";
+import { HouseholdUser } from "../interfaces/householdUser";
+import { addCompletedChoreAction, getStatisticsAction } from "../store/completedChore/completedChoreSlice";
+import { useAppDispatch, useAppSelector } from "../store/store";
 import ThemedTextInput from "./ThemedTextInput";
 
 interface Props {
@@ -11,8 +15,18 @@ interface Props {
 }
 
 const CreateChoreInfo = ({ onClosed, chore }: Props) => {
-  const handleSubmit = () => {
-    //TODO: MARKERA SYSSLA SOM SLUTFÖRD
+  const dispatch = useAppDispatch();
+
+  const householdUser = useAppSelector(state => state.householdUser.householdUsersForLoggedInUser);
+  const householdId = useAppSelector(state => state.household.activeHouseholdId);
+
+  const handleSubmit = async () => {
+    await dispatch(addCompletedChoreAction({
+      choreId: chore.id,
+      date: new Date(),
+      householdUserId: householdUser.find(hu => hu.householdId === householdId)?.id
+    }));
+    await dispatch(getStatisticsAction(householdId));
     onClosed();
   };
 

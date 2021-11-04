@@ -39,13 +39,6 @@ const LoginScreen = ({ navigation }: Props) => {
     );
   };
 
-  //   useEffect(() => {
-
-  //     dispatch(getStatisticsAction(activeHouseholdState.id))
-  //    console.log({statisticsState})
-  //    console.log("hejsvejs")
-
-  // })
   return (
     <View style={styles.root}>
       <LoginForm onSubmit={loginUser} />
@@ -56,17 +49,6 @@ const LoginScreen = ({ navigation }: Props) => {
           onPress={() => navigation.navigate("CreateAccount")}
         >
           här
-        </Text>
-
-        <Text
-          style={styles.createAccountText}
-          onPress={() => {
-            dispatch(getHouseholdsAction("AMHQtDvOpBThnBV2cfaM")).then(() => {
-              navigation.navigate("Profile");
-            });
-          }}
-        >
-          GÅ VIDARE UTAN INLOGG
         </Text>
       </View>
     </View>
@@ -79,7 +61,7 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     marginHorizontal: 10,
-    marginVertical: 25,
+    marginVertical: 10,
     justifyContent: "space-between",
   },
   noAccountContainer: {
