@@ -2,9 +2,11 @@ import { Formik } from "formik";
 import React, { FC } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 import * as Yup from "yup";
+import { getHouseholdUsersForLoggedInUser } from "../data/fireStoreModule";
 import { generateHouseholdInviteCode } from "../functions/generateHouseholdInviteCode";
 import { CreateHousehold } from "../interfaces/households";
-import { addHouseholdAction } from "../store/household/householdSlice";
+import { addHouseholdAction, getHouseholdsAction } from "../store/household/householdSlice";
+import { getHouseholdUserForLoggedInUserAction } from "../store/householdUser/householdUserSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import BigThemedButton from "./BigThemedButton";
 import ThemedTextInput from "./ThemedTextInput";
@@ -48,10 +50,9 @@ const CreateHouseholdForm: FC<Props> = ({ onCreateSucceded }: Props) => {
     };
     await dispatch(
       addHouseholdAction({ household, householdUser: defaultHouseholdUser })
-    ).then(() => {
-      if (household) {
-        onCreateSucceded();
-      } else Alert.alert("Oooops!", householdState.error);
+    )
+    await dispatch(getHouseholdUserForLoggedInUserAction(user.id)).then(() => {
+      if (household) onCreateSucceded();
     });
   };
 
