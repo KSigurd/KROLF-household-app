@@ -38,7 +38,7 @@ Profil
 *	Avataren ska användas i appen för att visa vad användaren har gjort. [JA]
 
 Sysslor
-*	En ägare ska kunna lägga till sysslor att göra i hemmet.
+*	En ägare ska kunna lägga till sysslor att göra i hemmet. [JA]
 *	En syssla ska ha ett namn, en beskrivning (text), hur ofta den ska göras (dagar) och en vikt som beskriver hur energikrävande den är. [JA]
 *	En ägare ska kunna redigera en syssla. [JA]
 *	En ägare ska kunna ta bort en syssla. [JA]
