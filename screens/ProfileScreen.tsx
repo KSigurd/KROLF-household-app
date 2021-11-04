@@ -16,6 +16,7 @@ import { getCompletedChoresAction } from "../store/completedChore/completedChore
 import BigThemedButton from "../components/BigThemedButton";
 import { getHouseholdUserForLoggedInUserAction } from "../store/householdUser/householdUserSlice";
 
+
 type Props = NativeStackScreenProps<
   RootStackParamList,
   "ChoresStatisticsNavigator"

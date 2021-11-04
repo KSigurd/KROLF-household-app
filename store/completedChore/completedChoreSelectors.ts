@@ -27,3 +27,7 @@ export const daysSinceLastDone = (choreId: string) => (state: RootState) => {
     );
   } else return undefined;
 };
+
+export const getCompletedChoreByChoreId = (choreId: string) => (state : RootState) => {
+  return state.completedChore.completedChores.find((c) => c.choreId === choreId);
+} 

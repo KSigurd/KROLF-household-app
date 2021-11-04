@@ -1,32 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { LogBox, ScrollView, StyleSheet, Text, View } from "react-native";
+
+import React, { useState, useEffect } from "react";
+import { LogBox, ScrollView, StyleSheet, View, Text } from "react-native";
+import { useDispatch } from "react-redux";
+
 import BigThemedButton from "../components/BigThemedButton";
 import ChoreSurface from "../components/ChoreSurface";
 import RenderUserInfo from "../components/RenderUserInfo";
 import { HouseholdUser } from "../interfaces/householdUser";
 import { getChoresAction } from "../store/chore/choreSlice";
+import { getCompletedChoresAction } from "../store/completedChore/completedChoreSlice";
 import { selectHouseholdById } from "../store/household/hoseholdSelector";
-import { househouldUsersFromHousehold, isUserAdmin } from "../store/householdUser/householdUserSelectors";
-import { useAppDispatch, useAppSelector } from "../store/store";
-
+import { householdUsersFromChore, househouldUsersFromHousehold, isUserAdmin } from "../store/householdUser/householdUserSelectors";
+import { RootState, useAppSelector, useAppDispatch } from "../store/store";
+    
 const ChoresScreen = ({ navigation }: any) => {
+  
+    LogBox.ignoreLogs(["timer"]);
+  const dispatch = useAppDispatch();
+  
   const completedChores = useAppSelector(state => state.completedChore.completedChores)
   const householdUsers = useAppSelector(state => state.householdUser.householdUsers)
 
-  const householdUsersFromChore =
-  (choreId: string) => {
-    const newDate = new Date();
-    const filteredCompletedChores = completedChores
-      .filter((cc) => cc.choreId === choreId)
-      .filter(
-        (cc) =>
-          Date.UTC(
-            cc.date.getFullYear(),
-            cc.date.getMonth(),
-            cc.date.getDate()
-          ) ===
-          Date.UTC(newDate.getFullYear(), newDate.getMonth(), newDate.getDate())
-      );
+   const completedBy = (choreId: string) => useAppSelector(householdUsersFromChore(choreId));
     const filteredHouseholdUsers: HouseholdUser[] = [];
     for (const chore of filteredCompletedChores) {
       const householdUser = householdUsers.find(
@@ -38,8 +33,6 @@ const ChoresScreen = ({ navigation }: any) => {
     return householdUsers;
   };
 
-
-  LogBox.ignoreLogs(["timer"]);
   const activeHouseholdState = useAppSelector(
     (state) => state.household.activeHouseholdId
   );
@@ -48,9 +41,10 @@ const ChoresScreen = ({ navigation }: any) => {
   const [isEditPressed, setIsEditPressed] = useState(false);
   // const completedBy = (choreId: string) => useAppSelector(householdUsersFromChore(choreId));
   
-
-
-const dispatch = useAppDispatch();
+    useEffect(() => {
+      dispatch(getChoresAction(activeHouseholdState))
+      dispatch(getCompletedChoresAction(activeHouseholdState))
+    }, [activeHouseholdState])
 
 const user = useAppSelector((state) => state.user.user);
 
@@ -64,11 +58,6 @@ const household = useAppSelector(selectHouseholdById(activeHouseholdState));
 
 const isAdmin = isUserAdmin(activeHouseholdState, allHouseholdUsers);
 
-  useEffect(() => {
-    dispatch(getChoresAction(activeHouseholdState));
-  }, [activeHouseholdState]);
-
-
   //Toggle press on edit button
   const setIsPressed = () => {
     if (isEditPressed) setIsEditPressed(false);
@@ -77,21 +66,18 @@ const isAdmin = isUserAdmin(activeHouseholdState, allHouseholdUsers);
 
   return (
     <View style={{ flex: 1, marginHorizontal: 10, marginBottom: 10 }}>
-      
       <RenderUserInfo
         onClick={() => {
           navigation.navigate("EditHouseholdUserModalScreen");
         }}
       />
-
       <Text style={{fontSize: 20}}>{household?.inviteCode} är invitecoden</Text>
-
       <ScrollView style={{ flex: 1 }}>
         {allHouseholdChores.map((prop) => {
           return (
             <View key={prop.id}>
               <ChoreSurface
-                completedBy={householdUsersFromChore(prop.id)}
+                completedBy={completedBy(prop.id)}
                 navigation={navigation}
                 choreId={prop.id}
                 isEditPressed={isEditPressed}
@@ -120,7 +106,7 @@ const isAdmin = isUserAdmin(activeHouseholdState, allHouseholdUsers);
             alternateTypeOfIcon="close-circle-outline"
             buttonText="Ändra"
             alternateButtonText="Avbryt"
-            onPress={setIsPressed}
+            onPress={() => setIsPressed()}
           />
         ) : null}
         </View>

@@ -1,55 +1,3 @@
-// import React, { FC } from "react";
-// import { Surface, Text, Title, TouchableRipple } from "react-native-paper";
-// import { HouseholdUser } from "../interfaces/households";
-// import { styles } from "../styles/styles";
-
-// interface Props {
-//   buttonText: string;
-//   completedBy: HouseholdUser[];
-//   daysSinceLast: string;
-//   isLate: boolean;
-// }
-
-// const ChoreButton: FC<Props> = (props: Props) => {
-//   return (
-//     <Surface style={[styles.fullscreenButton, styles.buttonOutlined]}>
-//       <TouchableRipple
-//         borderless={true}
-//         style={styles.fillParent}
-//         onPress={() => {}} //TODO
-//       >
-//         <Surface style={styles.buttonInnerContainer}>
-//           <Title style={[styles.choresButtonTitle, styles.buttonText]}>
-//             {props.buttonText}
-//           </Title>
-//           {props.completedBy.length ? (
-//             <Text style={[styles.buttonText, styles.choresButtonAdditions]}>
-//               {props.completedBy.map((user) => user.avatar.avatar)}
-//             </Text>
-//           ) : (
-//             <Surface
-//               style={[
-//                 styles.repeatabilityCircle,
-//                 props.isLate
-//                   ? styles.isLateBackground
-//                   : styles.isNotLateBackground,
-//               ]}
-//             >
-//               <Text
-//                 style={props.isLate ? styles.isLateText : styles.isNotLateText}
-//               >
-//                 {props.daysSinceLast}
-//               </Text>
-//             </Surface>
-//           )}
-//         </Surface>
-//       </TouchableRipple>
-//     </Surface>
-//   );
-// };
-
-// export default ChoreButton;
-
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Surface, Text, TouchableRipple } from "react-native-paper";
@@ -61,9 +9,10 @@ import { getCompletedChoresAction } from "../store/completedChore/completedChore
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { styles } from "../styles/styles";
 import SmallIconButton from "./SmallIconButton";
-import { daysSinceLastDone } from "../store/completedChore/completedChoreSelectors";
-// import { householdUsersFromChore } from "../store/householdUser/householdUserSelectors";
+import { daysSinceLastDone, getCompletedChoreByChoreId } from "../store/completedChore/completedChoreSelectors";
 import { removeChore } from "../data/fireStoreModule";
+import { Chore } from "../interfaces/chore";
+
 
 interface Props {
   choreId: string;
@@ -82,10 +31,27 @@ const ChoreSurface = ({
   //Define dispatch and states
   const dispatch = useAppDispatch();
   const activeHouseholdState = useAppSelector(
-    (state) => state.household.activeHouseholdId
-  );
-  const chore = useAppSelector(selectChoreById(choreId));
-  if (!chore) return null;
+    (state) => state.household.activeHouseholdId);
+  
+    const chore = () => {
+      const chore = useAppSelector(selectChoreById(choreId));
+      if (chore) return chore;
+      else return {} as Chore;
+    };
+  
+  const repeatability = chore().repeatability;
+
+  const daysSinceLast = useAppSelector(daysSinceLastDone(choreId));
+
+  //Check if chore is overdue
+  const isLate = () => {
+    if (daysSinceLast) {
+      return daysSinceLast > chore().repeatability;
+    } else {
+      return false;
+    }
+  };
+
 
   const repeatability = chore.repeatability;
 
@@ -117,7 +83,7 @@ const ChoreSurface = ({
             navigation.navigate("ChoreDescriptionModalScreen", choreId);
           }}
         >
-          <Text style={stylesLocal.surfaceText}>{chore.title}</Text>
+          <Text style={stylesLocal.surfaceText}>{chore().title}</Text>
         </TouchableRipple>
         {isEditPressed ? (
           <View />
@@ -125,13 +91,14 @@ const ChoreSurface = ({
           <View style={stylesLocal.avatarAndBadgeContainer}>
             {completedBy.length ? (
               <Text style={[styles.buttonText, styles.choresButtonAdditions]}>
-                {completedBy.map((user) => {
-                  if (user)
-                    return avatars.find((avatar) => (avatar.id = user.avatarId))
-                      ?.avatar;
+
+                {completedBy.map((user) => {                  
+                  if (user) return avatars.find((avatar) => (avatar.id === user.avatarId))?.avatar;
+                  
                 })}
               </Text>
-            ) : (
+            ) : ( 
+
               <Surface
                 style={[
                   styles.repeatabilityCircle,
@@ -140,18 +107,15 @@ const ChoreSurface = ({
                     : styles.isNotLateBackground,
                 ]}
               >
-                {daysSinceLast? (
-                   <Text
-                  style={isLate() ? styles.isLateText : styles.isNotLateText}
-                >
-                  {daysSinceLast}
-                </Text>
+                {daysSinceLast ? (
+                  <Text
+                    style={isLate() ? styles.isLateText : styles.isNotLateText}
+                  >
+                    {daysSinceLast}
+                  </Text>
                 ) : (
-                <Text
-                  style={styles.isNotLateText}
-                >
-                  {repeatability}
-                </Text>
+                  <Text style={styles.isNotLateText}>{repeatability}</Text>
+
                 )}
               </Surface>
             )}
@@ -167,7 +131,7 @@ const ChoreSurface = ({
             />
             <SmallIconButton
               typeOfIcon="delete-outline"
-              onPress={() => removeChore(chore.id)}
+              onPress={() => removeChore(chore().id)}
             />
           </View>
         ) : null}

@@ -22,7 +22,7 @@ const CreateChoreModalScreen = ({ navigation }: Props) => {
           <Text style={styles.titleText}>Skapa en ny syssla</Text>
         </View>
         <View style={styles.centerContainer}>
-          <CreateChoreInfo onClose={onClose} />
+          <CreateChoreInfo onClose={() => onClose()} />
         </View>
       </SafeAreaView>
     </View>
