@@ -22,30 +22,36 @@ Kravlista
 *	En logga, splashscreen och en appikon ska designas och användas. [JA]
 *	Applikationen ska byggas med RN, Expo & TS. [JA]
 *	Designen av appen ska utgå ifrån befintliga skisser, undantag kan ges men ska diskuteras med produktägaren, godkännas och dokumenteras. [JA]
+
 Hushåll
-•	Ett hushåll ska ha ett namn och en genererad enkel) kod så andra kan gå med i hushållet, namnet ska gå att ändra. [JA]
+*	Ett hushåll ska ha ett namn och en genererad enkel) kod så andra kan gå med i hushållet, namnet ska gå att ändra. [JA]
+
 Konto
-•	En användare ska kunna logga in sig. [JA]
-•	En användare ska kunna skapa ett nytt hushåll. [JA]
-•	En användare ska kunna gå med i ett hushåll genom att ange hushållets kod. [JA]
+*	En användare ska kunna logga in sig. [JA]
+*	En användare ska kunna skapa ett nytt hushåll. [JA]
+*	En användare ska kunna gå med i ett hushåll genom att ange hushållets kod. [JA]
+
 Profil
-•	En användare ska kunna ange sitt namn. [JA]
-•	En användare ska kunna välja en avatar (emoji-djur + färg) från en fördefinierad lista. [JA]
-•	Valda avatarer ska inte kunna väljas av andra användare i hushållet. [JA]
-•	Avataren ska användas i appen för att visa vad användaren har gjort. [JA]
+*	En användare ska kunna ange sitt namn. [JA]
+*	En användare ska kunna välja en avatar (emoji-djur + färg) från en fördefinierad lista. [JA]
+*	Valda avatarer ska inte kunna väljas av andra användare i hushållet. [JA]
+*	Avataren ska användas i appen för att visa vad användaren har gjort. [JA]
+
 Sysslor
-•	En ägare ska kunna lägga till sysslor att göra i hemmet.
-•	En syssla ska ha ett namn, en beskrivning (text), hur ofta den ska göras (dagar) och en vikt som beskriver hur energikrävande den är. [JA]
-•	En ägare ska kunna redigera en syssla. [JA]
-•	En ägare ska kunna ta bort en syssla. [JA]
+*	En ägare ska kunna lägga till sysslor att göra i hemmet.
+*	En syssla ska ha ett namn, en beskrivning (text), hur ofta den ska göras (dagar) och en vikt som beskriver hur energikrävande den är. [JA]
+*	En ägare ska kunna redigera en syssla. [JA]
+*	En ägare ska kunna ta bort en syssla. [JA]
+
 Dagsvyn
-•	Alla sysslor ska listas i en dagsvy och ge en översikt kring vad som behöver göras. [JA]
-•	Utöver sysslans namn ska även vem/vilka som har gjort sysslan visas, hur många dagar sedan sysslan gjordes senast samt om den är försenad. [JA]
-•	När en användare väljer en syssla ska beskrivningen av sysslan visas och det ska även med ett enkelt tryck gå att markera sysslan som gjord. [JA]
+*	Alla sysslor ska listas i en dagsvy och ge en översikt kring vad som behöver göras. [JA]
+*	Utöver sysslans namn ska även vem/vilka som har gjort sysslan visas, hur många dagar sedan sysslan gjordes senast samt om den är försenad. [JA]
+*	När en användare väljer en syssla ska beskrivningen av sysslan visas och det ska även med ett enkelt tryck gå att markera sysslan som gjord. [JA]
+
 Statistik
-•	En användare ska kunna se fördelningen av gjorda sysslor mellan användarna i sitt hushåll. [JA]
-•	Varje statistikvy ska visa den totala fördelningen (inräknat vikterna för sysslorna) samt fördelning av varje enskild syssla. [JA]
-•	Det ska finnas en statistikvy över ”nuvarande vecka”. [JA]
+*	En användare ska kunna se fördelningen av gjorda sysslor mellan användarna i sitt hushåll. [JA]
+*	Varje statistikvy ska visa den totala fördelningen (inräknat vikterna för sysslorna) samt fördelning av varje enskild syssla. [JA]
+*	Det ska finnas en statistikvy över ”nuvarande vecka”. [JA]
 
 
 
