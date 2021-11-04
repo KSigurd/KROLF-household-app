@@ -1,7 +1,5 @@
 import { avatars } from "../../data/avatarData";
-import { householdUser } from "../../data/mockHouseholdData";
 import { Avatar } from "../../interfaces/avatar";
-import { CompletedChore } from "../../interfaces/completedChore";
 import { HouseholdUser } from "../../interfaces/householdUser";
 import { RootState } from "../store";
 
@@ -38,27 +36,27 @@ export const availableAvatars =
     return availableAvatars;
   };
 
-export const householdUsersFromChore =
-  (choreId: string) => (state: RootState) => {
-    const newDate = new Date();
-    const completedChores = state.completedChore.compltedChores
-      .filter((cc) => cc.choreId === choreId)
-      .filter(
-        (cc) =>
-          Date.UTC(
-            cc.date.getFullYear(),
-            cc.date.getMonth(),
-            cc.date.getDate()
-          ) ===
-          Date.UTC(newDate.getFullYear(), newDate.getMonth(), newDate.getDate())
-      );
-    const householdUsers: HouseholdUser[] = [];
-    for (const chore of completedChores) {
-      const householdUser = state.householdUser.householdUsers.find(
-        (user) => user.id === chore.householdUserId
-      );
-      if (householdUser && !householdUsers.find((hu) => hu === householdUser))
-        householdUsers.push(householdUser);
-    }
-    return householdUsers;
-  };
+// export const householdUsersFromChore =
+//   (choreId: string) => (state: RootState) => {
+//     const newDate = new Date();
+//     const completedChores = state.completedChore.compltedChores
+//       .filter((cc) => cc.choreId === choreId)
+//       .filter(
+//         (cc) =>
+//           Date.UTC(
+//             cc.date.getFullYear(),
+//             cc.date.getMonth(),
+//             cc.date.getDate()
+//           ) ===
+//           Date.UTC(newDate.getFullYear(), newDate.getMonth(), newDate.getDate())
+//       );
+//     const householdUsers: HouseholdUser[] = [];
+//     for (const chore of completedChores) {
+//       const householdUser = state.householdUser.householdUsers.find(
+//         (user) => user.id === chore.householdUserId
+//       );
+//       if (householdUser && !householdUsers.find((hu) => hu === householdUser))
+//         householdUsers.push(householdUser);
+//     }
+//     return householdUsers;
+//   };

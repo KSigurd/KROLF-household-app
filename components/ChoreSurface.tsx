@@ -62,7 +62,8 @@ import { useAppDispatch, useAppSelector } from "../store/store";
 import { styles } from "../styles/styles";
 import SmallIconButton from "./SmallIconButton";
 import { daysSinceLastDone } from "../store/completedChore/completedChoreSelectors";
-import { householdUsersFromChore } from "../store/householdUser/householdUserSelectors";
+// import { householdUsersFromChore } from "../store/householdUser/householdUserSelectors";
+import { removeChore } from "../data/fireStoreModule";
 
 interface Props {
   choreId: string;
@@ -77,6 +78,8 @@ const ChoreSurface = ({
   isEditPressed,
   completedBy,
 }: Props) => {
+
+  //Define dispatch and states
   const dispatch = useAppDispatch();
   const activeHouseholdState = useAppSelector(
     (state) => state.household.activeHouseholdId
@@ -84,15 +87,18 @@ const ChoreSurface = ({
   const chore = useAppSelector(selectChoreById(choreId));
   if (!chore) return null;
 
+  const repeatability = chore.repeatability;
+
   const daysSinceLast = useAppSelector(daysSinceLastDone(choreId));
 
+  //Check if chore is overdue
   const isLate = () => {
-    if(daysSinceLast) {
+    if (daysSinceLast) {
       return daysSinceLast > chore?.repeatability;
     } else {
       return false;
     }
-  } 
+  };
 
   //When pressing on delete (trash bin) button
   const removeChore = async (choreId: string) => {
@@ -116,7 +122,7 @@ const ChoreSurface = ({
         {isEditPressed ? (
           <View />
         ) : (
-          <View style={stylesLocal.editContainer}>
+          <View style={stylesLocal.avatarAndBadgeContainer}>
             {completedBy.length ? (
               <Text style={[styles.buttonText, styles.choresButtonAdditions]}>
                 {completedBy.map((user) => {
@@ -129,12 +135,24 @@ const ChoreSurface = ({
               <Surface
                 style={[
                   styles.repeatabilityCircle,
-                  isLate() ? styles.isLateBackground : styles.isNotLateBackground,
+                  isLate()
+                    ? styles.isLateBackground
+                    : styles.isNotLateBackground,
                 ]}
               >
-                <Text style={isLate() ? styles.isLateText : styles.isNotLateText}>
+                {daysSinceLast? (
+                   <Text
+                  style={isLate() ? styles.isLateText : styles.isNotLateText}
+                >
                   {daysSinceLast}
                 </Text>
+                ) : (
+                <Text
+                  style={styles.isNotLateText}
+                >
+                  {repeatability}
+                </Text>
+                )}
               </Surface>
             )}
           </View>
@@ -162,7 +180,6 @@ export default ChoreSurface;
 
 const stylesLocal = StyleSheet.create({
   surface: {
-    height: "auto",
     borderRadius: 10,
     flexDirection: "row",
     alignItems: "center",
@@ -170,16 +187,15 @@ const stylesLocal = StyleSheet.create({
     backgroundColor: "white",
     elevation: 4,
     marginVertical: 5,
+    marginHorizontal: 4,
   },
   surfaceText: {
-    flex: 1,
     fontSize: 18,
     fontWeight: "bold",
   },
   chip: {
     flex: 1,
     padding: 10,
-    backgroundColor: "white",
     height: 50,
     borderRadius: 10,
     justifyContent: "center",
@@ -188,5 +204,10 @@ const stylesLocal = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginRight: 8,
+  },
+  avatarAndBadgeContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginRight: 12,
   },
 });

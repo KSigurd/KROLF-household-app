@@ -55,8 +55,8 @@ export const styles = StyleSheet.create(
             textAlign: "center",
         },
         repeatabilityCircle: {
-            width: 30,
-            height: 30,
+            width: 25,
+            height: 25,
             alignItems: "center",
             justifyContent: "center",
             borderRadius: 30,
