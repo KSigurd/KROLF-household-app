@@ -5,7 +5,7 @@ import ChoreSurface from "../components/ChoreSurface";
 import RenderUserInfo from "../components/RenderUserInfo";
 import { HouseholdUser } from "../interfaces/householdUser";
 import { selectHouseholdById } from "../store/household/hoseholdSelector";
-import { househouldUsersFromHousehold, isUserAdmin } from "../store/householdUser/householdUserSelectors";
+import { householdUsersFromChore, househouldUsersFromHousehold, isUserAdmin } from "../store/householdUser/householdUserSelectors";
 // import {
 //   householdUsersFromChore
 // } from "../store/householdUser/householdUserSelectors";
@@ -24,34 +24,34 @@ const ChoresScreen = ({ navigation }: any) => {
     
     const allHouseholdUsers = useAppSelector(househouldUsersFromHousehold(activeHouseholdState));
 
-  const householdUsersFromChore =
-  (choreId: string) => {
-    const newDate = new Date();
-    const filteredCompletedChores = completedChores
-      .filter((cc) => cc.choreId === choreId)
-      .filter(
-        (cc) =>
-          Date.UTC(
-            cc.date.getFullYear(),
-            cc.date.getMonth(),
-            cc.date.getDate()
-          ) ===
-          Date.UTC(newDate.getFullYear(), newDate.getMonth(), newDate.getDate())
-      );
-    const filteredHouseholdUsers: HouseholdUser[] = [];
-    for (const chore of filteredCompletedChores) {
-      const householdUser = householdUsers.find(
-        (user) => user.id === chore.householdUserId
-      );
-      if (householdUser && !householdUsers.find((hu) => hu === householdUser))
-        filteredHouseholdUsers.push(householdUser);
-    }
-    return householdUsers;
-  };
+  // const householdUsersFromChore =
+  // (choreId: string) => {
+  //   const newDate = new Date();
+  //   const filteredCompletedChores = completedChores
+  //     .filter((cc) => cc.choreId === choreId)
+  //     .filter(
+  //       (cc) =>
+  //         Date.UTC(
+  //           cc.date.getFullYear(),
+  //           cc.date.getMonth(),
+  //           cc.date.getDate()
+  //         ) ===
+  //         Date.UTC(newDate.getFullYear(), newDate.getMonth(), newDate.getDate())
+  //     );
+  //   const filteredHouseholdUsers: HouseholdUser[] = [];
+  //   for (const chore of filteredCompletedChores) {
+  //     const householdUser = householdUsers.find(
+  //       (user) => user.id === chore.householdUserId
+  //     );
+  //     if (householdUser && !householdUsers.find((hu) => hu === householdUser))
+  //       filteredHouseholdUsers.push(householdUser);
+  //   }
+  //   return householdUsers;
+  // };
   //Define states
   const allHouseholdChores = useAppSelector((state) => state.chore.chores);
   const [isEditPressed, setIsEditPressed] = useState(false);
-  // const completedBy = (choreId: string) => useAppSelector(householdUsersFromChore(choreId));
+  const completedBy = (choreId: string) => useAppSelector(householdUsersFromChore(choreId));
   
 
   var choreId = "";
@@ -119,7 +119,7 @@ const ChoresScreen = ({ navigation }: any) => {
           return (
             <View key={prop.id}>
               <ChoreSurface
-                completedBy={householdUsersFromChore(prop.id)}
+                completedBy={completedBy(prop.id)}
                 navigation={navigation}
                 choreId={prop.id}
                 isEditPressed={isEditPressed}

@@ -7,7 +7,7 @@ import { RootState } from "../store";
  * @return number
  */
 export const daysSinceLastDone = (choreId: string) => (state: RootState) => {
-  const filteredCompletedChores = state.completedChore.compltedChores.filter(
+  const filteredCompletedChores = state.completedChore.completedChores.filter(
     (chore) => chore.choreId === choreId
   );
   const _MS_PER_DAY = 1000 * 60 * 60 * 24;
