@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { LogBox, ScrollView, StyleSheet, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { LogBox, ScrollView, StyleSheet, Text, View } from "react-native";
 import BigThemedButton from "../components/BigThemedButton";
 import ChoreSurface from "../components/ChoreSurface";
 import RenderUserInfo from "../components/RenderUserInfo";
 import { HouseholdUser } from "../interfaces/householdUser";
-// import {
-//   householdUsersFromChore
-// } from "../store/householdUser/householdUserSelectors";
-import { RootState, useAppSelector } from "../store/store";
+import { getChoresAction } from "../store/chore/choreSlice";
+import { selectHouseholdById } from "../store/household/hoseholdSelector";
+import { househouldUsersFromHousehold, isUserAdmin } from "../store/householdUser/householdUserSelectors";
+import { useAppDispatch, useAppSelector } from "../store/store";
 
 const ChoresScreen = ({ navigation }: any) => {
-  const completedChores = useAppSelector(state => state.completedChore.compltedChores)
+  const completedChores = useAppSelector(state => state.completedChore.completedChores)
   const householdUsers = useAppSelector(state => state.householdUser.householdUsers)
 
   const householdUsersFromChore =
@@ -43,54 +43,30 @@ const ChoresScreen = ({ navigation }: any) => {
   const activeHouseholdState = useAppSelector(
     (state) => state.household.activeHouseholdId
   );
-  //Define states
+
   const allHouseholdChores = useAppSelector((state) => state.chore.chores);
   const [isEditPressed, setIsEditPressed] = useState(false);
   // const completedBy = (choreId: string) => useAppSelector(householdUsersFromChore(choreId));
   
 
-  var choreId = "";
-  // const setChoreId = (propId: string) => {
-  //   choreId = propId; 
-  // }
 
-// import { NativeStackScreenProps } from "@react-navigation/native-stack";
-// import React, { useEffect } from "react";
-// import { LogBox, ScrollView, StyleSheet, View, Text } from "react-native";
-// import BigThemedButton from "../components/BigThemedButton";
-// import ChoreSurface from "../components/ChoreSurface";
-// import RenderUserInfo from "../components/RenderUserInfo";
-// import { RootStackParamList } from "../navigation/RootNavigator";
-// import { getChoresAction } from "../store/chore/choreSlice";
-// import { selectHouseholdById } from "../store/household/hoseholdSelector";
-// import {
-//   househouldUsersFromHousehold,
-//   isUserAdmin,
-// } from "../store/householdUser/householdUserSelectors";
-// import { useAppDispatch, useAppSelector } from "../store/store";
+const dispatch = useAppDispatch();
 
-// const ChoresScreen = ({ navigation }: NativeStackScreenProps<RootStackParamList>) => {
-//   LogBox.ignoreLogs(["timer"]);
-//   const dispatch = useAppDispatch();
-//   const activeHouseholdState = useAppSelector(
-//     (state) => state.household.activeHouseholdId
-//   );
-//   const user = useAppSelector((state) => state.user.user);
-//   const allHouseholdChores = useAppSelector((state) => state.chore.chores);
-//   const allHouseholdUsers = useAppSelector(househouldUsersFromHousehold(activeHouseholdState));
-//   const household = useAppSelector(selectHouseholdById(activeHouseholdState));
-//   const [isEditPressed, setIsEditPressed] = React.useState(false);
+const user = useAppSelector((state) => state.user.user);
 
-//   const isChores = () => {
-//     if(allHouseholdChores.length) return true
-//     else return false
-//   }
+ const allHouseholdUsers = useAppSelector(househouldUsersFromHousehold(activeHouseholdState));
+const household = useAppSelector(selectHouseholdById(activeHouseholdState));
 
-//   const isAdmin = isUserAdmin(activeHouseholdState, allHouseholdUsers);
+  const isChores = () => {
+    if(allHouseholdChores.length) return true
+    else return false
+  }
 
-//   useEffect(() => {
-//     dispatch(getChoresAction(activeHouseholdState));
-//   }, [activeHouseholdState]);
+const isAdmin = isUserAdmin(activeHouseholdState, allHouseholdUsers);
+
+  useEffect(() => {
+    dispatch(getChoresAction(activeHouseholdState));
+  }, [activeHouseholdState]);
 
 
   //Toggle press on edit button
@@ -112,7 +88,6 @@ const ChoresScreen = ({ navigation }: any) => {
 
       <ScrollView style={{ flex: 1 }}>
         {allHouseholdChores.map((prop) => {
-          choreId = prop.id;
           return (
             <View key={prop.id}>
               <ChoreSurface
@@ -158,7 +133,7 @@ const ChoresScreen = ({ navigation }: any) => {
 
 export default ChoresScreen;
 
-const styles = StyleSheet.create({
+const localStyles = StyleSheet.create({
   root: {
     flex: 1,
     marginHorizontal: 10,

@@ -53,12 +53,8 @@ const ProfileScreen = ({ navigation }: Props) => {
     setVisible(true);
   };
 
-  const onSubmit = async (householdToUpdate?: Household) => {
+  const onSubmit = async () => {
     setVisible(false);
-    // if(householdToUpdate) {
-    //   console.log(householdToUpdate, "household")
-    //   await dispatch(updateHouseholdAction(householdToUpdate));
-    // }
   };
 
   return (

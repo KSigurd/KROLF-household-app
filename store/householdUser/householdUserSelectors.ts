@@ -59,14 +59,3 @@ export const availableAvatars =
 //     }
 //     return householdUsers;
 //   };
-
-
-export const availableAvatars = (householdUsers: HouseholdUser[]) =>  (state: RootState) => {
-  let availableAvatars: Avatar[] = [];
-  avatars.forEach(avatar => {
-    if(!householdUsers.find(householdUser => String(householdUser.avatarId) === avatar.id)) {
-      availableAvatars.push(avatar);
-    }
-  })
-  return availableAvatars;
-}
