@@ -67,11 +67,14 @@ const styles = StyleSheet.create({
   noAccountContainer: {
     flexDirection: "row",
     justifyContent: "center",
+    marginBottom: 20,
   },
   noAccountText: {
+    marginTop:10,
     fontWeight: "bold",
   },
   createAccountText: {
+    marginTop:10,
     fontWeight: "bold",
     alignSelf: "center",
     color: "#B8B8B8",

@@ -31,10 +31,10 @@ const Repeatability = ({ initialValue, getRepeatability }: Props) => {
               ]}
               onPress={() => {
                 getRepeatability(value),
-                  setRepeatability(value),
-                  setIsRepeatabilityValuePressed(true);
+                setRepeatability(value),
+                setIsRepeatabilityValuePressed(true);
               }}
-            >
+              >
               {value}
             </Text>
           );
@@ -61,11 +61,14 @@ const Repeatability = ({ initialValue, getRepeatability }: Props) => {
               </Text>
               <View style={stylesLocal.repeatBox}>
                 <Text style={{ fontSize: 16 }}>var </Text>
+                <View style={stylesLocal.repeatNumberBox}>
+
                 <Text
-                  style={stylesLocal.repeatabilityValue}
-                >
+                  style={{color: "white", fontSize: 18,}}
+                  >
                   {repeatability}
                 </Text>
+                  </View>
                 <Text style={{ fontSize: 16 }}> dag</Text>
               </View>
             </View>
@@ -87,6 +90,16 @@ const Repeatability = ({ initialValue, getRepeatability }: Props) => {
 export default Repeatability;
 
 const stylesLocal = StyleSheet.create({
+repeatNumberBox: {
+  borderRadius: 100,
+  backgroundColor: "#cd5d6f",
+  width: 30,
+  height:30,
+  flexDirection: "row",
+  justifyContent: "center",
+  alignItems: "center",
+
+},  
   repeatabilityValue: {
     backgroundColor: "#cd5d6f",
     color: "white",
@@ -101,7 +114,6 @@ const stylesLocal = StyleSheet.create({
     color: "black",
     fontSize: 18,
     marginLeft: 10,
-    height: 70,
     textAlign: "center",
     textAlignVertical: "center",
   },
