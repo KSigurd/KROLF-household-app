@@ -17,7 +17,6 @@ export const isUserAdmin = (householdId: string, householdUsers: HouseholdUser[]
         array.push(hu);
       }
     })
-    console.log("innan return", array)
     return array;
   }
 

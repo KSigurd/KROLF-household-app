@@ -285,7 +285,6 @@ export async function getHouseHolds(userId: string) {
       })
       .catch((err) => console.log(err));
   }
-  console.log("från databasen : ", households);
   return households;
 }
 
@@ -452,7 +451,7 @@ export async function getStatistics(householdId: string) {
         .get();
 
       for (const completedChore of completedChores.docs) {
-        console.log(completedChore.data().date.toDate());
+        // console.log(completedChore.data().date.toDate());
         completedChoresByUserDTO.completedChores.push({
           choreId: completedChore.data().choreId,
           date: completedChore.data().date.toDate(),
@@ -464,6 +463,6 @@ export async function getStatistics(householdId: string) {
     statisticsDTOs.push(choreStatisticsDTO);
   }
 
-  console.log("uuu" + statisticsDTOs);
+  
   return statisticsDTOs;
 }

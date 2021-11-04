@@ -6,14 +6,20 @@ import { avatars } from "../data/avatarData";
 
 interface Props {
     height: number;
-    data: ChoreStatisticsDTO;
+    label: string;
+    data: {
+      avatarId: string;
+      totalPoints: number;
+    }[];
 }
 
-const StatisticCircle: FC<Props> = ({ height, data }: Props) => {
 
-  const pieData = data.completedChores.map((dataObject, index ) => ({
+
+const StatisticCircle: FC<Props> = ({ height, data, label }: Props) => {
+
+  const pieData = data.map((dataObject, index ) => ({
     key: `pie-${avatars.find(avatar => avatar.id === String(dataObject.avatarId))?.avatar}`,
-      value: (data.points * dataObject.completedChores.length),
+      value: dataObject.totalPoints,
       svg: {
         fill: avatars.find(avatar => avatar.id === String(dataObject.avatarId))?.color,
         onPress: () => console.log('press', avatars.find(avatar => avatar.id === String(dataObject.avatarId))?.avatar),
@@ -30,7 +36,7 @@ const StatisticCircle: FC<Props> = ({ height, data }: Props) => {
         padAngle={0}
         >
       </PieChart>
-      <Text >{data.choreTitle}</Text>
+      <Text >{label}</Text>
     </View>
   );
 };
