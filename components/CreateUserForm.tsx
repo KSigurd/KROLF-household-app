@@ -7,6 +7,7 @@ import ThemedTextInput from "./ThemedTextInput";
 import { User } from "../interfaces/user";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { addUserAction } from "../store/user/userSlice";
+import BigThemedButton from "./BigThemedButton";
 
 
 
@@ -60,7 +61,7 @@ const CreateUserForm: FC<Props> = ({ onCreateAccountSucceded }: Props) => {
           <View>
             <ThemedTextInput
               style={styles.input}
-              label="Användarnamn"
+              label="E-postadress"
               onChangeText={handleChange<keyof User>("email")}
               onBlur={handleBlur<keyof User>("email")}
               value={values.email}
@@ -76,16 +77,13 @@ const CreateUserForm: FC<Props> = ({ onCreateAccountSucceded }: Props) => {
               helperText={touched.password && errors.password}
             />
           </View>
-          <NPbutton
-            //TODO: CHECK THIS
-            disabled={!values.password === true || !values.email === true}
-            icon="plus-circle-outline"
-            mode="contained"
-            style={styles.NPbutton}
+          <View style={styles.buttonContainer}>
+          <BigThemedButton
+            typeOfIcon="plus-circle-outline"
             onPress={() => handleSubmit()}
-          >
-            Bekräfta
-          </NPbutton>
+            buttonText="Bekräfta"
+          />
+          </View>
         </View>
       )}
     </Formik>
@@ -109,4 +107,7 @@ const styles = StyleSheet.create({
   input: {
     elevation: 4,
   },
+  buttonContainer: {
+    alignItems: "center"
+  }
 });
