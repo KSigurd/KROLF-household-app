@@ -5,22 +5,11 @@ import { StyleSheet, View } from "react-native";
 import { Button, Surface, Text, TouchableRipple } from "react-native-paper";
 import * as Yup from "yup";
 import ThemedTextInput from "../components/ThemedTextInput";
-import { getHouseHolds } from "../data/fireStoreModule";
 import { Avatar } from "../interfaces/avatar";
 import { Household } from "../interfaces/households";
-import {
-  CreateHouseholdUser,
-  HouseholdUser,
-} from "../interfaces/householdUser";
+import { CreateHouseholdUser } from "../interfaces/householdUser";
 import { RootStackParamList } from "../navigation/RootNavigator";
-import {
-  selectHouseholdById,
-  selectHouseholdByInviteCode,
-} from "../store/household/hoseholdSelector";
-import {
-  getHouseholdsAction,
-  setActiveHousholdAction,
-} from "../store/household/householdSlice";
+import { getHouseholdsAction } from "../store/household/householdSlice";
 import {
   availableAvatars,
   househouldUsersFromHousehold,
@@ -56,16 +45,7 @@ const AddHouseholdUserInfoModalScreen: FC<Props> = ({
     (state) => state.household.activeHouseholdId
   );
   let temporaryHouseholdState: Household = {} as Household;
-  let householdUserState: HouseholdUser[] = [];
   const inviteCode = route.params;
-
-  const householdIdFromInviteCode = useAppSelector(
-    selectHouseholdByInviteCode()
-  );
-
-  const errorState = useAppSelector((state) => state.household.error);
-
-  // let availableAvatarList: Avatar[] = [];
 
   temporaryHouseholdState = useAppSelector(
     (state) => state.household.temporaryHousehold
@@ -74,7 +54,6 @@ const AddHouseholdUserInfoModalScreen: FC<Props> = ({
   const householdUsersFromActiveHousehold = useAppSelector(
     househouldUsersFromHousehold(activehousehold)
   );
-  console.log("user", householdUsersFromActiveHousehold);
   const availableAvatarList = useAppSelector(
     availableAvatars(householdUsersFromActiveHousehold)
   );
@@ -85,40 +64,8 @@ const AddHouseholdUserInfoModalScreen: FC<Props> = ({
       temporaryHouseholdState = useAppSelector(
         (state) => state.household.temporaryHousehold
       );
-      console.log(temporaryHouseholdState, "tempo");
-
-      // householdUserState  = useAppSelector(
-      //     (state) => state.householdUser.householdUsers
-      //   );
-
-      // availableAvatarList = useAppSelector(
-      //   availableAvatars(
-      //     householdUserState.filter(
-      //       (hu) => hu.householdId === temporaryHouseholdState.id
-      //     )
-      //   )
     };
   }, [temporaryHouseholdState.id]);
-
-  console.log(householdUserState, "householduserState");
-  console.log(availableAvatarList, "availableAvatarList");
-
-  // const householdUsersFromActiveHousehold = useAppSelector(
-  //   househouldUsersFromHousehold(activeHouseholdId)
-  // );
-
-  // useEffect(() => {
-  //   if (householdIdFromInviteCode?.id)
-  //     dispatch(setActiveHousholdAction(householdIdFromInviteCode?.id));
-  // }, [householdIdFromInviteCode?.id]);
-
-  // const activeHouseholdId = useAppSelector(
-  //   (state) => state.household.activeHouseholdId
-  // ); //sätts i början innan useEffecten? eller?
-
-  // const householdObject = useAppSelector(
-  //   selectHouseholdById(activeHouseholdId)
-  // );
 
   const inputParams: ParamsToValidate = {
     name: "",
@@ -149,16 +96,6 @@ const AddHouseholdUserInfoModalScreen: FC<Props> = ({
     setAvatar(avatar.id);
   };
 
-  // console.log("activehousehold",activeHouseholdId);
-  // const householdUsersFromActiveHousehold = useAppSelector(
-  //   househouldUsersFromHousehold(activeHouseholdId)
-  // );
-  // // console.log(householdUsersFromActiveHousehold)
-
-  // const changeOnName = () => {
-  //   dispatch(getHouseholdUserAction(activeHouseholdId));
-  // };
-
   return (
     <Formik
       initialValues={inputParams}
@@ -187,7 +124,6 @@ const AddHouseholdUserInfoModalScreen: FC<Props> = ({
                   secureTextEntry={false}
                   label="Ditt namn i hushållet"
                   value={values.name}
-                  //onChange={() => changeOnName()}
                   onChangeText={handleChange<keyof ParamsToValidate>("name")}
                   onBlur={handleBlur<keyof ParamsToValidate>("name")}
                   helperText={touched.name && errors.name}
@@ -237,9 +173,11 @@ const AddHouseholdUserInfoModalScreen: FC<Props> = ({
               <View style={styles.titleView}>
                 <Text style={styles.title}>Någonting gick fel...</Text>
               </View>
-               <Surface style={styles.errorMessage}>
-                 <Text style={{fontSize: 16, textAlign: "center"}}>Hushållet är fullt, vänligen ta kontakt med hushållets ägare!</Text>
-                 </Surface>
+              <Surface style={styles.errorMessage}>
+                <Text style={{ fontSize: 16, textAlign: "center" }}>
+                  Hushållet är fullt, vänligen ta kontakt med hushållets ägare!
+                </Text>
+              </Surface>
               <Button
                 icon="close-circle-outline"
                 mode="contained"
@@ -256,21 +194,6 @@ const AddHouseholdUserInfoModalScreen: FC<Props> = ({
         </View>
       )}
     </Formik>
-
-    // <View style={styles.root}>
-    //   {errorState !== undefined ? (
-    //     <View>
-    //       <Text>inviteCode: {inviteCode}</Text>
-    //       <Text>
-    //         householdIdFromInviteCode: {house
-    //     </View>
-    //   ) : (
-    //     <View style={styles.root}>
-    //       <Text>Något gick fel...</Text>
-    //       <Button onPress={() => navigation.goBack()}>Stäng</Button>
-    //     </View>
-    //   )}
-    // </View>
   );
 };
 
