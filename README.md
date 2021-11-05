@@ -60,4 +60,3 @@ Extra features
 * Logga ut - funktionalitet
 * En användare kan registrera sig.
 * Om ett hushåll är fullt kan en ny användare inte gå med.
-* 
