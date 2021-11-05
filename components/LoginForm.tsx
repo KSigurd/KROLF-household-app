@@ -1,12 +1,11 @@
-import React, { FC } from "react";
 import { Formik } from "formik";
+import React, { FC } from "react";
+import { StyleSheet, View } from "react-native";
 import * as Yup from "yup";
-import { View, StyleSheet } from "react-native";
-import { Button as NPbutton } from "react-native-paper";
-import ThemedTextInput from "./ThemedTextInput";
 import { User } from "../interfaces/user";
 import { useAppSelector } from "../store/store";
 import BigThemedButton from "./BigThemedButton";
+import ThemedTextInput from "./ThemedTextInput";
 
 interface Props {
   onSubmit: (user: User) => void;

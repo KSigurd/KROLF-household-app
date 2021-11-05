@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { Surface, Title, TouchableRipple } from "react-native-paper";
+import { Surface, TouchableRipple } from "react-native-paper";
 
 interface Props {
   initialValue?: number;

@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
-import { Button, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import CreateHouseholdForm from "../components/CreateHouseholdForm";
 import { RootStackParamList } from "../navigation/RootNavigator";
 

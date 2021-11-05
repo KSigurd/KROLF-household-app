@@ -1,11 +1,10 @@
 import { Formik } from "formik";
 import React, { FC } from "react";
-import { Alert, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import * as Yup from "yup";
-import { getHouseholdUsersForLoggedInUser } from "../data/fireStoreModule";
 import { generateHouseholdInviteCode } from "../functions/generateHouseholdInviteCode";
 import { CreateHousehold } from "../interfaces/households";
-import { addHouseholdAction, getHouseholdsAction } from "../store/household/householdSlice";
+import { addHouseholdAction } from "../store/household/householdSlice";
 import { getHouseholdUserForLoggedInUserAction } from "../store/householdUser/householdUserSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import BigThemedButton from "./BigThemedButton";
@@ -29,7 +28,6 @@ const validationSchema = Yup.object().shape<PostSchemaType>({
 const CreateHouseholdForm: FC<Props> = ({ onCreateSucceded }: Props) => {
   //Define dispatch and states
   const dispatch = useAppDispatch();
-  const householdState = useAppSelector((state) => state.household);
   const user = useAppSelector((state) => state.user.user);
 
   //Get auto-generated invite code

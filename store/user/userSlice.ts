@@ -81,7 +81,6 @@ const userSlice = createSlice({
       builder.addCase(addUserAction.fulfilled, (state, action) => {
         state.user.email = action.payload.user.email;
         if (action.payload.response) {
-          //TODO: Något som talar om att användaren lagts till?
         } else {
           state.error =
             "Användaren finns redan. Gå tillbaka till inloggningsidan för att logga in!";
@@ -93,12 +92,11 @@ const userSlice = createSlice({
       builder.addCase(resetErrorAction, (state, action) => {
         state.error = undefined;
       }),
-      //TODO -> Ska denna bort?
       builder.addCase(logoutUserAction.fulfilled, (state, action) => {
         state.loggedIn = action.payload.response;
       }),
       builder.addCase(logoutUserAction.rejected, (state, action) => {
-        state.error = "Kunde inte ";
+        state.error = "Kunde inte logga ut";
       })
       
   },

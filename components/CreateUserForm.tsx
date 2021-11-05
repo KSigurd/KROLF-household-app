@@ -1,15 +1,12 @@
-import React, { FC } from "react";
 import { Formik } from "formik";
+import React, { FC } from "react";
+import { Alert, StyleSheet, View } from "react-native";
 import * as Yup from "yup";
-import { View, StyleSheet, Alert } from "react-native";
-import { Button as NPbutton } from "react-native-paper";
-import ThemedTextInput from "./ThemedTextInput";
 import { User } from "../interfaces/user";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { addUserAction } from "../store/user/userSlice";
 import BigThemedButton from "./BigThemedButton";
-
-
+import ThemedTextInput from "./ThemedTextInput";
 
 interface Props {
   onCreateAccountSucceded: () => void;
@@ -22,25 +19,20 @@ const validationSchema = Yup.object().shape<PostSchemaType>({
   email: Yup.string()
     .email("Mejladressen måste innehålla @ och .com eller .se")
     .required("Fyll i en giltlig mejladress"),
-  //ADD VALIDATION
   password: Yup.string().required("Du måste ange ett lösenord"),
 });
 
 const CreateUserForm: FC<Props> = ({ onCreateAccountSucceded }: Props) => {
   const dispatch = useAppDispatch();
-  const userState = useAppSelector(state => state.user);
+  const userState = useAppSelector((state) => state.user);
   const initialValues = userState.user;
 
   const handleSubmit = async (newUser: User) => {
     await dispatch(addUserAction(newUser)).then(() => {
-      if(!userState.error) {
+      if (!userState.error) {
         onCreateAccountSucceded();
-      }else
-      Alert.alert(
-        "Oooops!",
-        userState.error
-      );
-    })
+      } else Alert.alert("Oooops!", userState.error);
+    });
   };
 
   return (
@@ -78,11 +70,11 @@ const CreateUserForm: FC<Props> = ({ onCreateAccountSucceded }: Props) => {
             />
           </View>
           <View style={styles.buttonContainer}>
-          <BigThemedButton
-            typeOfIcon="plus-circle-outline"
-            onPress={() => handleSubmit()}
-            buttonText="Bekräfta"
-          />
+            <BigThemedButton
+              typeOfIcon="plus-circle-outline"
+              onPress={() => handleSubmit()}
+              buttonText="Bekräfta"
+            />
           </View>
         </View>
       )}
@@ -108,6 +100,6 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   buttonContainer: {
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });

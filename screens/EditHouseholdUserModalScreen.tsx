@@ -3,7 +3,9 @@ import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import {
-  Button as NPbutton, Surface, TouchableRipple
+  Button as NPbutton,
+  Surface,
+  TouchableRipple,
 } from "react-native-paper";
 import * as Yup from "yup";
 import ThemedTextInput from "../components/ThemedTextInput";
@@ -12,15 +14,16 @@ import { TabParamList } from "../navigation/ChoresStatisticsNavigator";
 import { getStatisticsAction } from "../store/completedChore/completedChoreSlice";
 import {
   availableAvatars,
-  househouldUsersFromHousehold
+  househouldUsersFromHousehold,
 } from "../store/householdUser/householdUserSelectors";
 import {
   getHouseholdUserAction,
-  updateHouseholdUserAction
+  updateHouseholdUserAction,
 } from "../store/householdUser/householdUserSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import {
-  selectAvatarById, selectHouseholdUserById
+  selectAvatarById,
+  selectHouseholdUserById,
 } from "../store/user/userSelector";
 
 type Props = NativeStackScreenProps<TabParamList>;
@@ -33,7 +36,10 @@ interface userInfo {
 type PostSchemaType = Record<keyof userInfo, Yup.AnySchema>;
 
 const validationSchema = Yup.object().shape<PostSchemaType>({
-  name: Yup.string().required("Du måste fylla i något här").min(2).max(20, "Ditt namn kan bara innehålla 20 tecken"),
+  name: Yup.string()
+    .required("Du måste fylla i något här")
+    .min(2)
+    .max(20, "Ditt namn kan bara innehålla 20 tecken"),
   avatar: Yup.object(),
 });
 
@@ -75,31 +81,14 @@ const EditHouseholdUserModalScreen = ({ navigation }: Props) => {
         avatarId: inputParams.avatar.id,
         name: inputParams.name,
       };
-      await dispatch(
-        updateHouseholdUserAction(updatedHouseholdUser)
-
-        
-        // ).then(() => {
-          //   setAvatar("");
-          //   navigation.navigate("Home");
-          );
-          await dispatch(getStatisticsAction(activeHouseholdId));
-
+      await dispatch(updateHouseholdUserAction(updatedHouseholdUser));
+      await dispatch(getStatisticsAction(activeHouseholdId));
       navigation.pop();
     }
-
-    //onClosed();
-    //ADD update TO FIREMODULE
-
-    //CLOSES MODAL
   };
 
   const onClosed = () => {
     navigation.navigate("Home");
-  };
-
-  const chooseAvatar = (avatar: Avatar) => {
-    setAvatar(avatar.id);
   };
 
   return (
@@ -131,11 +120,9 @@ const EditHouseholdUserModalScreen = ({ navigation }: Props) => {
               value={values.name}
               helperText={touched.name && errors.name}
             />
-
             <Text style={{ fontSize: 60, alignSelf: "center", padding: 5 }}>
               {values.avatar.avatar}
             </Text>
-
             <View style={styles.selectAvatar}>
               <Text style={styles.buttonText}>Välj din avatar</Text>
               <Surface style={styles.avatarContainer}>
@@ -152,10 +139,7 @@ const EditHouseholdUserModalScreen = ({ navigation }: Props) => {
                           : styles.unselectedAvatarBackground,
                       ]}
                       onPress={() => {
-                        //values.avatar.id = prop.id;
                         setFieldValue("avatar", prop);
-
-                        //chooseAvatar(prop);
                       }}
                     >
                       <Text style={styles.avatarStyle}>{prop.avatar}</Text>
