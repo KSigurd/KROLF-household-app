@@ -12,22 +12,21 @@ import SmallIconButton from "./SmallIconButton";
 import { daysSinceLastDone, getCompletedChoreByChoreId } from "../store/completedChore/completedChoreSelectors";
 import { removeChore } from "../data/fireStoreModule";
 import { Chore } from "../interfaces/chore";
+import { householdUsersFromChore } from "../store/householdUser/householdUserSelectors";
 
 
 interface Props {
   choreId: string;
   isEditPressed: boolean;
   navigation: any;
-  // completedBy: undefined[] | HouseholdUser[];
 }
 
 const ChoreSurface = ({
   navigation,
   choreId,
   isEditPressed,
-  // completedBy,
 }: Props) => {
-
+    const users = useAppSelector(householdUsersFromChore(choreId));
   //Define dispatch and states
   const dispatch = useAppDispatch();
   const activeHouseholdState = useAppSelector(
@@ -75,15 +74,15 @@ const ChoreSurface = ({
           <View />
         ) : (
           <View style={stylesLocal.avatarAndBadgeContainer}>
-            {/* {completedBy.length ? (
+            {users.length ? (
               <Text style={[styles.buttonText, styles.choresButtonAdditions]}>
 
-                {completedBy.map((user) => {                  
+                {users.map((user) => {                  
                   if (user) return avatars.find((avatar) => (avatar.id === user.avatarId))?.avatar;
                   
                 })}
               </Text>
-            ) : (  */}
+            ) : ( 
 
               <Surface
                 style={[
@@ -104,7 +103,7 @@ const ChoreSurface = ({
 
                 )}
               </Surface>
-            {/* )} */}
+         )}
           </View>
         )}
         {isEditPressed ? (
