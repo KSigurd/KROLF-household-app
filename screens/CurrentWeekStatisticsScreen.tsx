@@ -11,18 +11,6 @@ import { convertFromDTOToTotalChartData } from "../interfaces/statisticsDTO";
 import { getStatisticsAction } from "../store/completedChore/completedChoreSlice";
 import StatisticCircle from "../components/StatisticCircle";
 
-// interface UserStatisticsDTO {
-//   choreId: string;
-//   points: number;
-//   completedChores: ChoreStatisticsDTO[];
-// }
-
-// interface ChoreStatisticsDTO {
-//   completedChore: CompletedChore[];
-//   householdUserId: string;
-//   avatarId: string;
-// }
-
 const WeekNumber = (currentDate: Date) => {
   var oneJan = new Date(currentDate.getFullYear(), 0, 1);
   var currentdateToNumber = currentDate.getTime() - oneJan.getTime();
@@ -44,8 +32,6 @@ const CurrentWeekStatisticsScreen = () => {
   }, [activeHouseholdId]);
 
   const todayDate = new Date();
-
-  //   let filteredByWeek : UserStatisticsDTO[] = users.filter(d => WeekNumber(d.completedChores[].completedChore[].date) == WeekNumber(todayDate))
 
   const Labels = ({ slices, height, width }: any) => {
     return slices.map((slice: any, index: number) => {
@@ -95,7 +81,7 @@ const CurrentWeekStatisticsScreen = () => {
                 (chore) => chore.points * chore.completedChores.length > 0
               )
               .map((s) => (
-                <StatisticCircle key={s.choreTitle} height={100} data={s} />
+                <StatisticCircle key={s.choreTitle} data={s} />
               ))}
           </View>
         </View>

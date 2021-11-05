@@ -26,7 +26,6 @@ const LogoutButton = ({ onClick }: Props) => {
       icon="logout"
       color="black"
       style={styles.logOutButton}
-      //ADD NAVIGATION AND SET state to false
       onPress={() => logoutUser(user.user)}
     >
       <Text style={{fontWeight: "bold"}}>Logout</Text>
@@ -38,7 +37,6 @@ export default LogoutButton;
 
 const styles = StyleSheet.create({
   NPbutton: {
-    // flex: 1,
     height: "100%",
     borderRadius: 25,
     justifyContent: "center",
@@ -47,7 +45,6 @@ const styles = StyleSheet.create({
   logOutButton: {
     backgroundColor: "white",
     padding: 5,
-    // MELLANRUM TILL LOGOUTBUTTON
     marginBottom: 15,
     marginTop: 8,
     borderRadius: 10,

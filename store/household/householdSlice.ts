@@ -82,28 +82,12 @@ export const updateHouseholdAction = createAsyncThunk<
   ThunkConfig
 >("updateHousehold", async (household, { rejectWithValue }) => {
   try {
-    console.log(household, "thuuuunk")
     await updateHoushold(household);
     return household;
   } catch (e) {
     return rejectWithValue(false);
   }
 });
-
-
-// TODO: s'tt activehousehold i firestore, och kunna hämta ut det
-// export const setActiveHouseholdAction = createAsyncThunk<
-//   Household,
-//   Household,
-//   ThunkConfig
-// >("setActiveHousehold", async (newHousehold, { rejectWithValue }) => {
-//   try {
-//     await setActiveHousehold(newHousehold);
-//     return newHousehold;
-//   } catch (e) {
-//     return rejectWithValue(false);
-//   }
-// });
 
 const householdSlice = createSlice({
   name: "household",

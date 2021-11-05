@@ -18,14 +18,7 @@ type Props = NativeStackScreenProps<RootStackParamList, "CreateHousehold">;
 const LoginScreen = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
   const userState = useAppSelector((state) => state.user);
-  //TODO: Kalla på logga-ut-funktion när denna screen laddas
-  const activeHouseholdState = useAppSelector(
-    (state) => state.household.activeHouseholdId
-  );
-  const statisticsState = useAppSelector(
-    (state) => state.completedChore.statistics
-  );
-
+ 
   useEffect(() => {
     if (userState.loggedIn) navigation.navigate("Profile");
   }, [userState.loggedIn]);

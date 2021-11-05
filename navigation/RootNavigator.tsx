@@ -1,10 +1,10 @@
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createNativeStackNavigator,
-  NativeStackScreenProps,
+  NativeStackScreenProps
 } from "@react-navigation/native-stack";
 import React from "react";
-import { Chore } from "../interfaces/chore";
+import AddHouseholdUserInfoModalScreen from "../screens/AddHouseholdUserInfoModalScreen";
 import ChoreDescriptionModalScreen from "../screens/ChoreDescriptionModalScreen";
 import CreateAccountScreen from "../screens/CreateAccountScreen";
 import CreateChoreModalScreen from "../screens/CreateChoreModalScreen";
@@ -15,7 +15,6 @@ import JoinHouseholdScreen from "../screens/JoinHouseholdScreen";
 import LoginScreen from "../screens/LoginScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import ChoresStatisticsNavigator from "./ChoresStatisticsNavigator";
-import AddHouseholdUserInfoModalScreen from "../screens/AddHouseholdUserInfoModalScreen"
 
 export type RootStackParamList = {
   Login: undefined;

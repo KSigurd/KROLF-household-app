@@ -5,29 +5,17 @@ import { useDispatch } from "react-redux";
 import BigThemedButton from "../components/BigThemedButton";
 import ChoreSurface from "../components/ChoreSurface";
 import RenderUserInfo from "../components/RenderUserInfo";
-import { HouseholdUser } from "../interfaces/householdUser";
 import { getChoresAction } from "../store/chore/choreSlice";
 import { getCompletedChoresAction } from "../store/completedChore/completedChoreSlice";
-import { selectHouseholdById } from "../store/household/hoseholdSelector";
 import {
-  householdUsersFromChore,
   househouldUsersFromHousehold,
   isUserAdmin,
 } from "../store/householdUser/householdUserSelectors";
-import { RootState, useAppSelector, useAppDispatch } from "../store/store";
+import { useAppSelector, useAppDispatch } from "../store/store";
 
 const ChoresScreen = ({ navigation }: any) => {
   LogBox.ignoreLogs(["timer"]);
   const dispatch = useAppDispatch();
-
-  const completedChores = useAppSelector(
-    (state) => state.completedChore.completedChores
-  )
-  const householdUsers = useAppSelector(
-    (state) => state.householdUser.householdUsers
-  );
-
-  const filteredHouseholdUsers: HouseholdUser[] = [];
 
   const activeHouseholdState = useAppSelector(
     (state) => state.household.activeHouseholdId
@@ -41,13 +29,10 @@ const ChoresScreen = ({ navigation }: any) => {
     dispatch(getCompletedChoresAction(activeHouseholdState));
   }, [activeHouseholdState]);
 
-  const user = useAppSelector((state) => state.user.user);
-
   const allHouseholdUsers = useAppSelector(
     househouldUsersFromHousehold(activeHouseholdState)
   );
-  const household = useAppSelector(selectHouseholdById(activeHouseholdState));
-
+ 
   const isChores = () => {
     if (allHouseholdChores.length) return true;
     else return false;
@@ -68,9 +53,6 @@ const ChoresScreen = ({ navigation }: any) => {
           navigation.navigate("EditHouseholdUserModalScreen");
         }}
       />
-      {/* <Text style={{ fontSize: 20 }}>
-        {household?.inviteCode} är invitecode
-      </Text> */}
       <ScrollView style={{ flex: 1 }}>
         {allHouseholdChores.map((prop) => {
           return (

@@ -8,7 +8,7 @@ interface Props extends Omit<TextInputProps, "theme"> {
   helperText?: string | false;
 }
 
-//GÅR ATT ÅTERANVÄNDA TILL CHORES OCH SKAPA ANVÄNDARE
+//Reusable text input component
 const ThemedTextInput = ({ value, label, helperText, ...textInputProps }: Props) => {
   return (
     <View style={styles.root}>
@@ -16,8 +16,6 @@ const ThemedTextInput = ({ value, label, helperText, ...textInputProps }: Props)
       <Surface style={styles.surface}>
         <NPTextInput
           mode="outlined"
-          //mode="flat"
-          //theme={{ roundness: 10}}
           theme={{
             roundness: 10,
             colors: {
@@ -29,8 +27,6 @@ const ThemedTextInput = ({ value, label, helperText, ...textInputProps }: Props)
           value={value}
           {...textInputProps}
           style={[styles.input, helperText ? { borderColor: "red" } : null]}
-          //underlineColor="transparent"
-          //underlineColorAndroid="transparent"
         />
       </Surface>
 

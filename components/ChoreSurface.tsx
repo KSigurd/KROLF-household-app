@@ -2,17 +2,14 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Surface, Text, TouchableRipple } from "react-native-paper";
 import { avatars } from "../data/avatarData";
-import { HouseholdUser } from "../interfaces/householdUser";
+import { Chore } from "../interfaces/chore";
 import { selectChoreById } from "../store/chore/choreSelectors";
 import { getChoresAction, removeChoreAction } from "../store/chore/choreSlice";
-import { getCompletedChoresAction } from "../store/completedChore/completedChoreSlice";
+import { daysSinceLastDone } from "../store/completedChore/completedChoreSelectors";
+import { householdUsersFromChore } from "../store/householdUser/householdUserSelectors";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { styles } from "../styles/styles";
 import SmallIconButton from "./SmallIconButton";
-import { daysSinceLastDone, getCompletedChoreByChoreId } from "../store/completedChore/completedChoreSelectors";
-import { removeChore } from "../data/fireStoreModule";
-import { Chore } from "../interfaces/chore";
-import { householdUsersFromChore } from "../store/householdUser/householdUserSelectors";
 
 
 interface Props {
@@ -26,8 +23,8 @@ const ChoreSurface = ({
   choreId,
   isEditPressed,
 }: Props) => {
-    const users = useAppSelector(householdUsersFromChore(choreId));
   //Define dispatch and states
+    const users = useAppSelector(householdUsersFromChore(choreId));
   const dispatch = useAppDispatch();
   const activeHouseholdState = useAppSelector(
     (state) => state.household.activeHouseholdId);
@@ -39,7 +36,6 @@ const ChoreSurface = ({
     };
   
   const repeatability = chore().repeatability;
-
   const daysSinceLast = useAppSelector(daysSinceLastDone(choreId));
 
   //Check if chore is overdue
@@ -55,7 +51,6 @@ const ChoreSurface = ({
   const removeChore = async (choreId: string) => {
     await dispatch(removeChoreAction(choreId));
     await dispatch(getChoresAction(activeHouseholdState));
-    // await dispatch(getCompletedChoresAction(activeHouseholdState));
   };
 
   return (

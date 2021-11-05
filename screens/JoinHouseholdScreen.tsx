@@ -6,12 +6,9 @@ import { Button, Text } from "react-native-paper";
 import * as Yup from "yup";
 import BigThemedButton from "../components/BigThemedButton";
 import ThemedTextInput from "../components/ThemedTextInput";
-import { RootStackParamList } from "../navigation/RootNavigator";
-// import { selectHouseholdByInviteCode } from "../store/household/hoseholdSelector";
 import {
   getHouseholdsAction,
   getOneHouseholdAction,
-  setActiveHousholdAction,
 } from "../store/household/householdSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 
@@ -43,44 +40,17 @@ const validationSchema = Yup.object().shape<PostSchemaType>({
     .required(),
 });
 
-//type Props = NativeStackScreenProps<RootStackParamList, "JoinHousehold">;
-
 const JoinHouseholdScreen: FC<Props> = ({ navigation, inviteCode }: Props) => {
   const dispatch = useAppDispatch();
-  const errorState = useAppSelector(state => state.household);
+  const errorState = useAppSelector((state) => state.household);
   const inputParams: ParamsToValidate = {
     inviteCode: "",
   } as ParamsToValidate;
 
-  let inputValueOfInviteCode = " ";
-
-  // const change = (value: string) => {
-
-  //   inputValueOfInviteCode = value;
-  // // }
-
-  // useEffect(() => {
-  //   dispatch(setActiveHousholdAction(inviteCode));
-  //   console.log(inputValueOfInviteCode);
-  // }, [inviteCode]);
-
-  // const userState = useAppSelector((state) => state.user);
-
-  // useEffect(() => {
-  //   dispatch(getHouseholdsAction(userState.user.id));
-  // }, [userState.user]);
-
-
-
   const handleSubmit = async (inputParams: ParamsToValidate) => {
     inviteCode = inputParams.inviteCode;
-    await dispatch(getOneHouseholdAction(Number(inputParams.inviteCode)))
+    await dispatch(getOneHouseholdAction(Number(inputParams.inviteCode)));
 
-    
-    // if(errorState){navigation.navion}
-    
-
-    //console.log(response)
     navigation.navigate("AddHouseholdUserInfoModalScreen", inviteCode);
   };
 
@@ -89,7 +59,6 @@ const JoinHouseholdScreen: FC<Props> = ({ navigation, inviteCode }: Props) => {
       initialValues={inputParams}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
-      //handleChange={change}
     >
       {({
         handleChange,
@@ -98,7 +67,6 @@ const JoinHouseholdScreen: FC<Props> = ({ navigation, inviteCode }: Props) => {
         values,
         touched,
         errors,
-        setFieldValue,
       }) => (
         <View style={styles.root}>
           <View>
@@ -106,25 +74,18 @@ const JoinHouseholdScreen: FC<Props> = ({ navigation, inviteCode }: Props) => {
               secureTextEntry={false}
               label="Inbjudningskod"
               value={values.inviteCode}
-              // onChange={(value) => setFieldValue("inviteCode", Number(value))}
-              //onChange={() => change(values.inviteCode)}
-              onChangeText={
-                handleChange<keyof ParamsToValidate>("inviteCode")
-                //inviteCode= value
-                //setFieldValue("inviteCode", value);
-              }
+              onChangeText={handleChange<keyof ParamsToValidate>("inviteCode")}
               onBlur={handleBlur<keyof ParamsToValidate>("inviteCode")}
               helperText={touched.inviteCode && errors.inviteCode}
             />
           </View>
           <View style={styles.themedButtonContainer}>
-          <BigThemedButton
-            typeOfIcon="plus-circle-outline"
-            buttonText="Gå med"
-            onPress={() => handleSubmit()}
-          />
+            <BigThemedButton
+              typeOfIcon="plus-circle-outline"
+              buttonText="Gå med"
+              onPress={() => handleSubmit()}
+            />
           </View>
-
         </View>
       )}
     </Formik>
@@ -138,13 +99,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
     marginHorizontal: 10,
-    marginVertical: 10
+    marginVertical: 10,
   },
   selectAvatar: {
     alignItems: "flex-start",
     flexDirection: "column",
     marginHorizontal: 10,
-    marginVertical: 10
+    marginVertical: 10,
   },
   buttonText: {
     fontSize: 18,
@@ -195,6 +156,6 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   themedButtonContainer: {
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });

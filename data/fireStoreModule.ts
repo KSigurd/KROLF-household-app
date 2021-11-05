@@ -301,7 +301,6 @@ export async function getHouseHolds(userId: string) {
     .collection("householdUsers")
     .where("userId", "==", userId)
     .get();
-  // .catch((err) => console.log(err));
 
   for (var doc of first.docs) {
     await firebase
@@ -481,7 +480,6 @@ export async function getStatistics(householdId: string) {
         .get();
 
       for (const completedChore of completedChores.docs) {
-        // console.log(completedChore.data().date.toDate());
         completedChoresByUserDTO.completedChores.push({
           choreId: completedChore.data().choreId,
           date: completedChore.data().date.toDate(),

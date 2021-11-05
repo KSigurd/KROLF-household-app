@@ -16,15 +16,10 @@ const EditHouseholdModal = ({ household, onSubmit }: Props) => {
   const dispatch = useAppDispatch();
 
   const saveHousehold =  () => {
-    console.log("kommer vi ens in?????")
-   
-      console.log({...householdToEdit}, "household");
        dispatch(updateHouseholdAction(householdToEdit)).then(() => {
         onSubmit();
       });
   }
-
-    console.log(householdToEdit, "hus att redigera");
 
     return (
       <Surface style={styles.outerContainer}>

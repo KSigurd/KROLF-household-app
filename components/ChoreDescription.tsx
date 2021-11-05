@@ -3,8 +3,6 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Button as NPbutton } from "react-native-paper";
 import { Chore } from "../interfaces/chore";
-import { CompletedChore } from "../interfaces/completedChore";
-import { HouseholdUser } from "../interfaces/householdUser";
 import { addCompletedChoreAction, getStatisticsAction } from "../store/completedChore/completedChoreSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import ThemedTextInput from "./ThemedTextInput";

@@ -85,7 +85,6 @@ const ProfileScreen = ({ navigation }: Props) => {
                     setHousholdAndNavigate(householdId);
                   }}
                   />
-                 
               );
             })}
           </ScrollView>

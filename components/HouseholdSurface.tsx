@@ -1,16 +1,9 @@
 import React, { FC } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import {
-  Chip,
-  IconButton,
-  Modal,
-  Surface,
-  TextInput,
-  TouchableRipple,
+  IconButton, Surface, TouchableRipple
 } from "react-native-paper";
-import { Provider } from "react-native-paper/lib/typescript/core/settings";
 import { Household } from "../interfaces/households";
-import EditHouseholdModal from "./EditHouseholdModal";
 
 interface Props {
   householdObject: Household;

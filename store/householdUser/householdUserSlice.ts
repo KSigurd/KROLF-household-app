@@ -51,19 +51,6 @@ export const getHouseholdUserAction = createAsyncThunk<
   }
 });
 
-// export const updateHouseholdUserAction = createAsyncThunk<
-//   HouseholdUser,
-//   string,
-//   ThunkConfig
-// >("updateHouseholdUsers", async (householdId, { rejectWithValue }) => {
-//   try {
-//     const response = await updateHouseholdUser(householdId);
-//     return { response };
-//   } catch (e) {
-//     return rejectWithValue(false);
-//   }
-// });
-
 export const updateHouseholdUserAction = createAsyncThunk<
   HouseholdUser,
   HouseholdUser,
