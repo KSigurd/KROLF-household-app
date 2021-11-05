@@ -55,7 +55,7 @@ const ChoreSurface = ({
   const removeChore = async (choreId: string) => {
     await dispatch(removeChoreAction(choreId));
     await dispatch(getChoresAction(activeHouseholdState));
-    await dispatch(getCompletedChoresAction(activeHouseholdState));
+    // await dispatch(getCompletedChoresAction(activeHouseholdState));
   };
 
   return (
@@ -116,7 +116,7 @@ const ChoreSurface = ({
             />
             <SmallIconButton
               typeOfIcon="delete-outline"
-              onPress={() => removeChore(chore().id)}
+              onPress={() => removeChore(choreId)}
             />
           </View>
         ) : null}
