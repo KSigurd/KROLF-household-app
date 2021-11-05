@@ -16,6 +16,7 @@ Klona repot och kör `npm install` för att installera alla nödvändiga moduler
 
 #### Starta app
 Starta appen genom att köra `npm start`
+
 ## Krav
 Kravlista
 *	En logga, splashscreen och en appikon ska designas och användas. [JA]
@@ -52,3 +53,11 @@ Statistik
 *	En användare ska kunna se fördelningen av gjorda sysslor mellan användarna i sitt hushåll. [JA]
 *	Varje statistikvy ska visa den totala fördelningen (inräknat vikterna för sysslorna) samt fördelning av varje enskild syssla. [JA]
 *	Det ska finnas en statistikvy över ”nuvarande vecka”. [JA]
+
+Extra features
+* Användaren har möjlighet att byta namn.
+* Avändaren har möjlighet att ändra avatar.
+* Logga ut - funktionalitet
+* En användare kan registrera sig.
+* Om ett hushåll är fullt kan en ny användare inte gå med.
+* 
