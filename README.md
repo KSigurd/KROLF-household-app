@@ -9,7 +9,7 @@ Appens användningsområde sträcker sig långt utanför hemmets vrår och kan a
 
 ## Struktur
 Applikationen är skriven i Typescript. Filerna är placerade i olika mappar för att ge en tydligare förståelse och översikt av vad som finns var och vad som gör vad. 
-Funktionalitet är uppdelade i små komponenter som har sina egna ansvarsområden. 
+Funktionalitet är uppdelade i komponenter som har sina egna ansvarsområden. 
 
 ## Installation
 Klona repot och kör `npm install` för att installera alla nödvändiga moduler för appen.
